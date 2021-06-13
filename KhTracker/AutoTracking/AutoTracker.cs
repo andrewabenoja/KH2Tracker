@@ -92,6 +92,8 @@ namespace KhTracker
         private int magnetLevel;
         private int tornPageCount;
 
+        private bool usedHotkey = false;
+
         public void InitPCSX2Tracker(object sender, RoutedEventArgs e)
         {
             InitAutoTracker(true);
@@ -100,6 +102,26 @@ namespace KhTracker
         public void InitPCTracker(object sender, RoutedEventArgs e)
         {
             InitAutoTracker(false);
+        }
+        public void StartPCSX2Hotkey()
+        {
+            if (!usedHotkey)
+            {
+                usedHotkey = !usedHotkey;
+                InitAutoTracker(true);
+            }
+        }
+        public void StartPCHotkey()
+        {
+            if (!usedHotkey)
+            {
+                usedHotkey = !usedHotkey;
+                InitAutoTracker(false);
+            }
+        }
+        public void ResetHotkeyState()
+        {
+            usedHotkey = false;
         }
 
         public void InitAutoTracker(bool PCSX2)
@@ -116,6 +138,7 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Please start KH2 before loading the Auto Tracker.");
+                    usedHotkey = false;
                     return;
                 }
             } while (!memory.Hooked);
@@ -137,12 +160,14 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Unable to access KH2FM try running KHTracker as admin");
+                    usedHotkey = false;
                     return;
                 }
                 catch
                 {
                     memory = null;
                     MessageBox.Show("Error connecting to KH2FM");
+                    usedHotkey = false;
                     return;
                 }
             }
@@ -156,12 +181,14 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Unable to access PCSX2 try running KHTracker as admin");
+                    usedHotkey = false;
                     return;
                 }
                 catch
                 {
                     memory = null;
                     MessageBox.Show("Error connecting to PCSX2");
+                    usedHotkey = false;
                     return;
                 }
                 

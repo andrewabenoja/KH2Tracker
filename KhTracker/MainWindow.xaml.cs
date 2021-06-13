@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Windows.Documents;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using KhTracker.Hotkeys;
 
 namespace KhTracker
 {
@@ -36,6 +37,13 @@ namespace KhTracker
             collectedChecks = new List<ImportantCheck>();
             newChecks = new List<ImportantCheck>();
             previousChecks = new List<ImportantCheck>();
+
+            //hotkey stuff
+            HotkeysManager.SetupSystemHook();
+
+            GlobalHotkey startAutoTracker = new GlobalHotkey(ModifierKeys.None, Key.F7, StartPCHotkey);
+
+            HotkeysManager.AddHotkey(startAutoTracker);
         }
 
         private void InitData()
