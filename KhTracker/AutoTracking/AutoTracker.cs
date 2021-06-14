@@ -107,7 +107,7 @@ namespace KhTracker
         {
             if (!usedHotkey)
             {
-                usedHotkey = !usedHotkey;
+                usedHotkey = true;
                 InitAutoTracker(true);
             }
         }
@@ -115,7 +115,7 @@ namespace KhTracker
         {
             if (!usedHotkey)
             {
-                usedHotkey = !usedHotkey;
+                usedHotkey = true;
                 InitAutoTracker(false);
             }
         }
@@ -422,6 +422,7 @@ namespace KhTracker
             {
                 aTimer.Stop();
                 MessageBox.Show("KH2FM has exited. Stopping Auto Tracker.");
+                ResetHotkeyState();
                 return;
             }
 
