@@ -93,13 +93,10 @@ namespace KhTracker
         private int magnetLevel;
         private int tornPageCount;
 
-<<<<<<< Updated upstream
-=======
-        private bool usedHotkey = false;
-
         private bool storedDetectedVersion = false;
+        private bool isWorking = false;
+        private bool firstRun = true;
 
->>>>>>> Stashed changes
         public void InitPCSX2Tracker(object sender, RoutedEventArgs e)
         {
             InitAutoTracker(true);
@@ -110,21 +107,35 @@ namespace KhTracker
             InitAutoTracker(false);
         }
 
+
         private void SetAutoDetectTimer()
         {
+            if (isWorking)
+                return;
+
+            if (aTimer != null)
+                aTimer.Stop();
+
             autoTimer = new DispatcherTimer();
-            autoTimer.Tick -= searchVersion;
-            autoTimer.Tick += searchVersion;
-            autoTimer.Interval = new TimeSpan(0, 0, 0, 0, 2000);
+            if (firstRun)
+            {
+                autoTimer.Tick += searchVersion;
+                firstRun = false;
+            }
+            autoTimer.Interval = new TimeSpan(0, 0, 0, 1, 0);
             autoTimer.Start();
         }
 
         private bool alternateCheck = false;
         public void searchVersion(object sender, EventArgs e)
         {
+            if (isWorking || data.mode == Mode.None)
+                return;
+
             Console.WriteLine("searchVersion called");
 
             if (checkVersion(alternateCheck))
+            //if (checkVersion(alternateCheck))
             {
                 autoTimer.Stop();
 
@@ -134,10 +145,15 @@ namespace KhTracker
                     Console.WriteLine("PC Found, starting Auto-Tracker");
 
                 if (storedDetectedVersion != alternateCheck)
+                {
+                    //Console.WriteLine("storedDetectedVerison = " + storedDetectedVersion + " || alternateCheck = " + alternateCheck);
                     OnResetBody();
+                }
                 storedDetectedVersion = alternateCheck;
 
                 InitAutoTracker(alternateCheck);
+
+                isWorking = true;
 
                 return;
             }
@@ -145,8 +161,16 @@ namespace KhTracker
             alternateCheck = !alternateCheck;
         }
 
+        public void setWorking(bool state)
+        {
+            isWorking = state;
+        }
+
         public bool checkVersion(bool state)
         {
+            if (isWorking)
+                return true;
+
             int tries = 0;
             do
             {
@@ -201,22 +225,16 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Unable to access KH2FM try running KHTracker as admin");
-<<<<<<< Updated upstream
-=======
-                    usedHotkey = false;
+                    isWorking = false;
                     SetAutoDetectTimer();
->>>>>>> Stashed changes
                     return;
                 }
                 catch
                 {
                     memory = null;
                     MessageBox.Show("Error connecting to KH2FM");
-<<<<<<< Updated upstream
-=======
-                    usedHotkey = false;
+                    isWorking = false;
                     SetAutoDetectTimer();
->>>>>>> Stashed changes
                     return;
                 }
             }
@@ -230,22 +248,16 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Unable to access PCSX2 try running KHTracker as admin");
-<<<<<<< Updated upstream
-=======
-                    usedHotkey = false;
+                    isWorking = false;
                     SetAutoDetectTimer();
->>>>>>> Stashed changes
                     return;
                 }
                 catch
                 {
                     memory = null;
                     MessageBox.Show("Error connecting to PCSX2");
-<<<<<<< Updated upstream
-=======
-                    usedHotkey = false;
+                    isWorking = false;
                     SetAutoDetectTimer();
->>>>>>> Stashed changes
                     return;
                 }
                 
@@ -480,12 +492,9 @@ namespace KhTracker
             catch
             {
                 aTimer.Stop();
-                MessageBox.Show("KH2FM has exited. Stopping Auto Tracker.");
-<<<<<<< Updated upstream
-=======
-                ResetHotkeyState();
+                //MessageBox.Show("KH2FM has exited. Stopping Auto Tracker.");
+                isWorking = false;
                 SetAutoDetectTimer();
->>>>>>> Stashed changes
                 return;
             }
 

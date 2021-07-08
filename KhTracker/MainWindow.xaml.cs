@@ -36,18 +36,9 @@ namespace KhTracker
             collectedChecks = new List<ImportantCheck>();
             newChecks = new List<ImportantCheck>();
             previousChecks = new List<ImportantCheck>();
-<<<<<<< Updated upstream
-=======
 
-            //hotkey stuff
-            HotkeysManager.SetupSystemHook();
-
-            GlobalHotkey startAutoTracker = new GlobalHotkey(ModifierKeys.None, Key.F7, StartPCHotkey);
-
-            HotkeysManager.AddHotkey(startAutoTracker);
-
+            //Init auto-detect stuff
             SetAutoDetectTimer();
->>>>>>> Stashed changes
         }
 
         private void InitData()
