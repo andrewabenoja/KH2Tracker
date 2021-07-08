@@ -694,6 +694,11 @@ namespace KhTracker
 
         private void OnReset(object sender, RoutedEventArgs e)
         {
+            OnResetBody();
+        }
+
+        private void OnResetBody()
+        {
             ModeDisplay.Header = "";
             data.mode = Mode.None;
 
