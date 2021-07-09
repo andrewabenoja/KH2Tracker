@@ -116,13 +116,14 @@ namespace KhTracker
             if (aTimer != null)
                 aTimer.Stop();
 
-            autoTimer = new DispatcherTimer();
+            //autoTimer = new DispatcherTimer();
             if (firstRun)
             {
+                autoTimer = new DispatcherTimer();
                 autoTimer.Tick += searchVersion;
                 firstRun = false;
+                autoTimer.Interval = new TimeSpan(0, 0, 0, 1, 0);
             }
-            autoTimer.Interval = new TimeSpan(0, 0, 0, 1, 0);
             autoTimer.Start();
         }
 
@@ -192,6 +193,9 @@ namespace KhTracker
 
         public void InitAutoTracker(bool PCSX2)
         {
+            autoTimer.Stop();
+            isWorking = true;
+
             int tries = 0;
             do
             {
