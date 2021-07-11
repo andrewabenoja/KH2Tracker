@@ -699,8 +699,8 @@ namespace KhTracker
 
         private void OnResetBody()
         {
-            SetAutoDetectTimer();
             setWorking(false);
+            SetAutoDetectTimer();
 
             ModeDisplay.Header = "";
             data.mode = Mode.None;

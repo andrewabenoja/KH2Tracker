@@ -71,6 +71,9 @@
                 <MenuItem Name="BroadcastStartupOption" Header="Broadcast Window On Startup" IsCheckable="True" IsChecked="False" Click="BroadcastStartupToggle"/>
                 <MenuItem Name="FormsGrowthOption" Header="Forms and Growth Abilities" IsCheckable="True" IsChecked="True" Click="FormsGrowthToggle"/>
             </MenuItem>
+            <MenuItem Header="Controls" Focusable="False">
+                <MenuItem Name="AutoDetectOption" Header="Auto-Detect" IsCheckable="True" IsChecked="False" Click="AutoDetectToggle"/>
+            </MenuItem>
             <MenuItem Name="ModeDisplay" Header="" Focusable="False" IsHitTestVisible="False"/>
             <MenuItem Header="v2.6.5" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
         </Menu>

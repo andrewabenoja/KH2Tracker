@@ -118,18 +118,28 @@ namespace KhTracker
             //autoTimer = new DispatcherTimer();
             if (firstRun)
             {
+                //Console.WriteLine("Started search");
                 autoTimer = new DispatcherTimer();
                 autoTimer.Tick += searchVersion;
                 firstRun = false;
                 autoTimer.Interval = new TimeSpan(0, 0, 0, 1, 0);
             }
             autoTimer.Start();
+
+            //Console.WriteLine("AutoDetect Started");
         }
 
         private bool alternateCheck = false;
         private int alternateCheckInt = 1;
         public void searchVersion(object sender, EventArgs e)
         {
+            if (!AutoDetectOption.IsChecked)
+            {
+                Console.WriteLine("disabling auto-detect");
+                autoTimer.Stop();
+                return;
+            }
+
             if (isWorking || data.mode == Mode.None)
                 return;
 
@@ -548,13 +558,7 @@ namespace KhTracker
             pcsx2OffsetTimer.Tick += findAddressOffsetCheck;
             pcsx2OffsetTimer.Interval = new TimeSpan(0, 0, 0, 1, 0);
             pcsx2OffsetTimer.Start();
-            Console.WriteLine("Am I here?");
-        }
-
-        private bool doLoop = true;
-        private void testPleaseLOL(object sender, EventArgs e)
-        {
-            doLoop = false;
+            //Console.WriteLine("Am I here?");
         }
 
         private void findAddressOffsetCheck(object sender, EventArgs e)
@@ -566,13 +570,13 @@ namespace KhTracker
             Int32 testAddr = 0x0032EE36;
             string good = "F680";
             int i = 0;
-            while (!found && doLoop)
+            while (!found)
             {
                 i++;
                 string tester = BytesToHex(memory.ReadMemory(testAddr + offset, 2));
                 if (tester == "Service not started. Waiting for PCSX2")
                 {
-                    Console.WriteLine("am I here then?");
+                    //Console.WriteLine("am I here then?");
                     break;
                 }
                 else if (tester == good)
@@ -581,6 +585,7 @@ namespace KhTracker
 
                     found = true;
                     pcsx2OffsetTimer.Stop();
+                    pcsx2OffsetTimer.Tick -= findAddressOffsetCheck;
                     finishSetupPCSX2();
                     return;
                 }

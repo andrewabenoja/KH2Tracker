@@ -334,5 +334,21 @@ namespace KhTracker.Properties {
                 this["FormsGrowth"] = value;
             }
         }
+
+        //extra controls
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoDetect
+        {
+            get
+            {
+                return ((bool)(this["AutoDetect"]));
+            }
+            set
+            {
+                this["AutoDetect"] = value;
+            }
+        }
     }
 }

@@ -38,7 +38,8 @@ namespace KhTracker
             previousChecks = new List<ImportantCheck>();
 
             //Init auto-detect stuff
-            SetAutoDetectTimer();
+            if (AutoDetectOption.IsChecked)
+                SetAutoDetectTimer();
         }
 
         private void InitData()
@@ -388,6 +389,10 @@ namespace KhTracker
 
             FormsGrowthOption.IsChecked = Properties.Settings.Default.FormsGrowth;
             FormsGrowthToggle(null, null);
+
+            //extra controls
+            AutoDetectOption.IsChecked = Properties.Settings.Default.AutoDetect;
+            AutoDetectToggle(null, null);
 
             Top = Properties.Settings.Default.WindowY;
             Left = Properties.Settings.Default.WindowX;

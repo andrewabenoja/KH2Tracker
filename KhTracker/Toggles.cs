@@ -606,5 +606,13 @@ namespace KhTracker
             else
                 FormRow.Height = new GridLength(0, GridUnitType.Star);
         }
+
+        //Extra Controls toggles
+        private void AutoDetectToggle(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.AutoDetect = AutoDetectOption.IsChecked;
+            if (AutoDetectOption.IsChecked)
+                SetAutoDetectTimer();
+        }
     }
 }
