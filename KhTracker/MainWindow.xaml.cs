@@ -40,6 +40,13 @@ namespace KhTracker
             //Init auto-detect stuff
             if (AutoDetectOption.IsChecked)
                 SetAutoDetectTimer();
+
+            //hotkey stuff
+            HotkeysManager.SetupSystemHook();
+
+            GlobalHotkey startAutoTracker = new GlobalHotkey(ModifierKeys.None, Key.F7, StartPCHotkey);
+
+            HotkeysManager.AddHotkey(startAutoTracker);
         }
 
         private void InitData()

@@ -92,9 +92,12 @@ namespace KhTracker
         private int magnetLevel;
         private int tornPageCount;
 
+        //extra controls
         private int storedDetectedVersion = 0; //0 = nothing detected, 1 = PC, 2 = PCSX2
         private bool isWorking = false;
         private bool firstRun = true;
+
+        private bool usedHotkey = false;
 
         public void InitPCSX2Tracker(object sender, RoutedEventArgs e)
         {
@@ -106,6 +109,26 @@ namespace KhTracker
             InitAutoTracker(false);
         }
 
+        public void StartPCSX2Hotkey()
+        {
+            if (!usedHotkey)
+            {
+                usedHotkey = true;
+                InitAutoTracker(true);
+            }
+        }
+        public void StartPCHotkey()
+        {
+            if (!usedHotkey)
+            {
+                usedHotkey = true;
+                InitAutoTracker(false);
+            }
+        }
+        public void ResetHotkeyState()
+        {
+            usedHotkey = false;
+        }
 
         private void SetAutoDetectTimer()
         {
@@ -222,6 +245,7 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Please start KH2 before loading the Auto Tracker.");
+                    ResetHotkeyState();
                     return;
                 }
             } while (!memory.Hooked);
@@ -243,6 +267,7 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Unable to access KH2FM try running KHTracker as admin");
+                    ResetHotkeyState();
                     isWorking = false;
                     SetAutoDetectTimer();
                     return;
@@ -251,6 +276,7 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Error connecting to KH2FM");
+                    ResetHotkeyState();
                     isWorking = false;
                     SetAutoDetectTimer();
                     return;
@@ -518,6 +544,7 @@ namespace KhTracker
             {
                 memory = null;
                 MessageBox.Show("Unable to access PCSX2 try running KHTracker as admin");
+                ResetHotkeyState();
                 isWorking = false;
                 SetAutoDetectTimer();
                 return;
@@ -526,6 +553,7 @@ namespace KhTracker
             {
                 memory = null;
                 MessageBox.Show("Error connecting to PCSX2");
+                ResetHotkeyState();
                 isWorking = false;
                 SetAutoDetectTimer();
                 return;
@@ -713,6 +741,7 @@ namespace KhTracker
             {
                 aTimer.Stop();
                 //MessageBox.Show("KH2FM has exited. Stopping Auto Tracker.");
+                ResetHotkeyState();
                 isWorking = false;
                 SetAutoDetectTimer();
                 return;
