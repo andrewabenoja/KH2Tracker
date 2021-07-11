@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Windows.Documents;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using KhTracker.Hotkeys;
 
 namespace KhTracker
 {
@@ -43,10 +44,10 @@ namespace KhTracker
 
             //hotkey stuff
             HotkeysManager.SetupSystemHook();
-
-            GlobalHotkey startAutoTracker = new GlobalHotkey(ModifierKeys.None, Key.F7, StartPCHotkey);
-
-            HotkeysManager.AddHotkey(startAutoTracker);
+            GlobalHotkey startAutoTracker1 = new GlobalHotkey(ModifierKeys.Control, Key.F7, StartPCHotkey);
+            GlobalHotkey startAutoTracker2 = new GlobalHotkey(ModifierKeys.Control, Key.F8, StartPCSX2Hotkey);
+            HotkeysManager.AddHotkey(startAutoTracker1);
+            HotkeysManager.AddHotkey(startAutoTracker2);
         }
 
         private void InitData()

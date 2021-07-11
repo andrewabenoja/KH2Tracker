@@ -614,5 +614,10 @@ namespace KhTracker
             if (AutoDetectOption.IsChecked)
                 SetAutoDetectTimer();
         }
+
+        private void HotkeyToggle(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.Hotkey = HotkeyOption.IsChecked;
+        }
     }
 }

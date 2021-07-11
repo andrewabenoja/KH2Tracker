@@ -350,5 +350,20 @@ namespace KhTracker.Properties {
                 this["AutoDetect"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Hotkey
+        {
+            get
+            {
+                return ((bool)(this["Hotkey"]));
+            }
+            set
+            {
+                this["Hotkey"] = value;
+            }
+        }
     }
 }
