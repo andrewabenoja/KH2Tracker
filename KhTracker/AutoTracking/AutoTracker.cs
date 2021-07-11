@@ -111,7 +111,7 @@ namespace KhTracker
 
         public void StartPCSX2Hotkey()
         {
-            Console.WriteLine("Hotkey pressed");
+            Console.WriteLine("Hotkey pressed PCSX2");
 
             if (!HotkeyOption.IsChecked)
                 return;
@@ -124,7 +124,7 @@ namespace KhTracker
         }
         public void StartPCHotkey()
         {
-            Console.WriteLine("Hotkey pressed");
+            Console.WriteLine("Hotkey pressed PC");
 
             if (!HotkeyOption.IsChecked)
                 return;
@@ -486,8 +486,6 @@ namespace KhTracker
                     SetAutoDetectTimer();
                     return;
                 }
-
-                finishSetup(PCSX2, Now, Save, Bt10, BtlEnd, Slot1);
             }
             else
             {

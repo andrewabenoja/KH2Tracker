@@ -44,8 +44,8 @@ namespace KhTracker
 
             //hotkey stuff
             HotkeysManager.SetupSystemHook();
-            GlobalHotkey startAutoTracker1 = new GlobalHotkey(ModifierKeys.Control, Key.F7, StartPCHotkey);
-            GlobalHotkey startAutoTracker2 = new GlobalHotkey(ModifierKeys.Control, Key.F8, StartPCSX2Hotkey);
+            GlobalHotkey startAutoTracker1 = new GlobalHotkey(ModifierKeys.Shift, Key.F7, StartPCHotkey);
+            GlobalHotkey startAutoTracker2 = new GlobalHotkey(ModifierKeys.Shift, Key.F8, StartPCSX2Hotkey);
             HotkeysManager.AddHotkey(startAutoTracker1);
             HotkeysManager.AddHotkey(startAutoTracker2);
         }
