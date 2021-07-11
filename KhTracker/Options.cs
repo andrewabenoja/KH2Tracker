@@ -883,6 +883,8 @@ namespace KhTracker
 
             broadcast.OnReset();
             broadcast.UpdateNumbers();
+
+            ResetHotkeyState();
         }
         
         private void BroadcastWindow_Open(object sender, RoutedEventArgs e)
