@@ -9,6 +9,10 @@ namespace KhTracker
 {
     class Stats : INotifyPropertyChanged
     {
+        private int[] levelChecks50 = { 0, 2, 4, 7, 9, 10, 12, 14, 15, 17, 20, 23, 25, 28, 30, 32, 34, 36, 39, 41, 44, 46, 48, 50};
+        private int[] levelChecks99 = { 0, 2, 4, 7, 9, 10, 12, 14, 15, 17, 20, 23, 25, 28, 30, 31, 32, 33, 34, 36, 39, 41, 44, 46, 47, 48, 49, 50, 53, 59, 65, 73, 85, 99 };
+        private int nextLevelCheck = 0;
+
         public int[] previousLevels = new int[3];
         private int level;
         public int Level
@@ -61,6 +65,18 @@ namespace KhTracker
             }
         }
 
+        //show next level reward
+        private int levelReward;
+        public int LevelReward
+        {
+            get { return levelReward; }
+            set
+            {
+                levelReward = value;
+                OnPropertyChanged("LevelReward");
+            }
+        }
+
         public int form;
 
         private int levelAddress;
@@ -108,7 +124,10 @@ namespace KhTracker
             previousLevels[2] = Level;
             
             if (Level != levelData[1])
+            {
                 Level = levelData[1];
+                //Console.WriteLine("Level is now = " + Level);
+            }
 
             byte[] statsData = memory.ReadMemory(statsAddress + ADDRESS_OFFSET, 5);
             if (Strength != statsData[0])
@@ -120,6 +139,32 @@ namespace KhTracker
 
             byte[] modelData = memory.ReadMemory(formAddress + ADDRESS_OFFSET, 1);
             form = modelData[0];
+
+            //change levelreward number
+            if (level >= levelChecks50[levelChecks50.Length - 1])
+            {
+                LevelReward = levelChecks50[levelChecks50.Length - 1];
+                return;
+            }
+
+            if (Level >= levelChecks50[nextLevelCheck])
+            {
+                nextLevelCheck++;
+                LevelReward = levelChecks50[nextLevelCheck];
+            }
+        }
+
+        public void SetNextLevelCheck(int lvl)
+        {
+            for (int i = 0; i < levelChecks50.Length; i++)
+            {
+                if (lvl < levelChecks50[i])
+                {
+                    nextLevelCheck = i;
+                    LevelReward = levelChecks50[nextLevelCheck];
+                    break;
+                }
+            }
         }
     }
 }

@@ -602,6 +602,9 @@ namespace KhTracker
             Defense.Visibility = Visibility.Visible;
             Weapon.Visibility = Visibility.Visible;
 
+            LevelRewardIcon.Visibility = Visibility.Visible;
+            LevelReward.Visibility = Visibility.Visible;
+
             broadcast.LevelIcon.Visibility = Visibility.Visible;
             broadcast.Level.Visibility = Visibility.Visible;
             broadcast.StrengthIcon.Visibility = Visibility.Visible;
@@ -712,6 +715,9 @@ namespace KhTracker
             DefenseIcon.Visibility = Visibility.Visible;
             Defense.Visibility = Visibility.Visible;
             Weapon.Visibility = Visibility.Visible;
+
+            LevelRewardIcon.Visibility = Visibility.Visible;
+            LevelReward.Visibility = Visibility.Visible;
 
             broadcast.LevelIcon.Visibility = Visibility.Visible;
             broadcast.Level.Visibility = Visibility.Visible;
@@ -861,6 +867,8 @@ namespace KhTracker
             BindStats(Magic, "Magic", stats);
             BindStats(Defense, "Defense", stats);
 
+            BindStats(LevelReward, "LevelReward", stats);
+
             BindLevel(broadcast.ValorLevel, "Level", valor);
             BindLevel(broadcast.WisdomLevel, "Level", wisdom);
             BindLevel(broadcast.LimitLevel, "Level", limit);
@@ -947,6 +955,7 @@ namespace KhTracker
 
             UpdateCollectedItems();
             DetermineItemLocations();
+            stats.SetNextLevelCheck(stats.Level);
         }
 
         private void TrackItem(string itemName, WorldGrid world)
