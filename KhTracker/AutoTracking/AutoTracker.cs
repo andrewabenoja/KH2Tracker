@@ -296,7 +296,7 @@ namespace KhTracker
                     return;
                 }
 
-                finishSetup(PCSX2, Now, Save, Bt10, BtlEnd, Slot1);
+                finishSetup(PCSX2, Now, Save, Sys3, Bt10, BtlEnd, Slot1);
             }
             else
             {
@@ -462,6 +462,7 @@ namespace KhTracker
             // PC Address anchors
             int Now = 0x0714DB8;
             int Save = 0x09A7070;
+            int Sys3 = 0x2A59DB0;
             int Bt10 = 0x2A74840;
             int BtlEnd = 0x2A0D3A0;
             int Slot1 = 0x2A20C58;
@@ -639,7 +640,7 @@ namespace KhTracker
                 BtlEnd = 0x1D490C0;
                 Slot1 = 0x1C6C750;
          */
-        private void finishSetup(bool PCSX2, Int32 Now, Int32 Save, Int32 Bt10, Int32 BtlEnd, Int32 Slot1)
+        private void finishSetup(bool PCSX2, Int32 Now, Int32 Save, Int32 Sys3, Int32 Bt10, Int32 BtlEnd, Int32 Slot1)
         {
             importantChecks = new List<ImportantCheck>();
             importantChecks.Add(highJump = new Ability(memory, Save + 0x25CE, ADDRESS_OFFSET, 93, "HighJump"));
@@ -714,6 +715,9 @@ namespace KhTracker
             stats = new Stats(memory, ADDRESS_OFFSET, Save + 0x24FE, Slot1 + 0x188, Save + 0x3524);
             rewards = new Rewards(memory, ADDRESS_OFFSET, Bt10);
 
+            forcedFinal = false;
+            checkEveryCheck = new CheckEveryCheck(memory, ADDRESS_OFFSET, Save, Sys3, Bt10, world, stats, rewards);
+
             LevelIcon.Visibility = Visibility.Visible;
             Level.Visibility = Visibility.Visible;
             StrengthIcon.Visibility = Visibility.Visible;
@@ -774,11 +778,12 @@ namespace KhTracker
             // PCSX2 anchors 
             int Now = 0x032BAE0;
             int Save = 0x032BB30;
+            int Sys3 = 0x1CCB300;
             int Bt10 = 0x1CE5D80;
             int BtlEnd = 0x1D490C0;
             int Slot1 = 0x1C6C750;
 
-            finishSetup(true, Now, Save, Bt10, BtlEnd, Slot1);
+            finishSetup(true, Now, Save, Sys3, Bt10, BtlEnd, Slot1);
         }
 
         private void CheckPCOffset()
