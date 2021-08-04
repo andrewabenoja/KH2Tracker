@@ -24,7 +24,7 @@ namespace KhTracker
     /// </summary>
     public partial class MainWindow : Window
     {
-        MemoryReader memory;
+        MemoryReader memory, testMemory;
 
         private Int32 ADDRESS_OFFSET;
         private static DispatcherTimer aTimer, autoTimer, pcsx2OffsetTimer;
@@ -181,8 +181,7 @@ namespace KhTracker
 
             Console.WriteLine("searchVersion called");
 
-            if (checkVersion(alternateCheck))
-            //if (checkVersion(alternateCheck))
+            if (CheckVersion(alternateCheck))
             {
                 autoTimer.Stop();
 
@@ -212,12 +211,12 @@ namespace KhTracker
                 alternateCheckInt = 1;
         }
 
-        public void setWorking(bool state)
+        public void SetWorking(bool state)
         {
             isWorking = state;
         }
 
-        public bool checkVersion(bool state)
+        public bool CheckVersion(bool state)
         {
             if (isWorking)
                 return true;
@@ -225,18 +224,18 @@ namespace KhTracker
             int tries = 0;
             do
             {
-                memory = new MemoryReader(state);
+                testMemory = new MemoryReader(state);
                 if (tries < 20)
                 {
                     tries++;
                 }
                 else
                 {
-                    memory = null;
+                    testMemory = null;
                     Console.WriteLine("No game running");
                     return false;
                 }
-            } while (!memory.Hooked);
+            } while (!testMemory.Hooked);
 
             return true;
         }
@@ -273,30 +272,7 @@ namespace KhTracker
 
             if (PCSX2 == false)
             {
-                try
-                {
-                    CheckPCOffset();
-                }
-                catch (Win32Exception)
-                {
-                    memory = null;
-                    MessageBox.Show("Unable to access KH2FM try running KHTracker as admin");
-                    ResetHotkeyState();
-                    isWorking = false;
-                    SetAutoDetectTimer();
-                    return;
-                }
-                catch
-                {
-                    memory = null;
-                    MessageBox.Show("Error connecting to KH2FM");
-                    ResetHotkeyState();
-                    isWorking = false;
-                    SetAutoDetectTimer();
-                    return;
-                }
-
-                finishSetup(PCSX2, Now, Save, Sys3, Bt10, BtlEnd, Slot1);
+               finishSetup(PCSX2, Now, Save, Sys3, Bt10, BtlEnd, Slot1);
             }
             else
             {
@@ -642,6 +618,29 @@ namespace KhTracker
          */
         private void finishSetup(bool PCSX2, Int32 Now, Int32 Save, Int32 Sys3, Int32 Bt10, Int32 BtlEnd, Int32 Slot1)
         {
+            try
+            {
+                CheckPCOffset();
+            }
+            catch (Win32Exception)
+            {
+                memory = null;
+                MessageBox.Show("Unable to access KH2FM try running KHTracker as admin");
+                ResetHotkeyState();
+                isWorking = false;
+                SetAutoDetectTimer();
+                return;
+            }
+            catch
+            {
+                memory = null;
+                MessageBox.Show("Error connecting to KH2FM");
+                ResetHotkeyState();
+                isWorking = false;
+                SetAutoDetectTimer();
+                return;
+            }
+
             importantChecks = new List<ImportantCheck>();
             importantChecks.Add(highJump = new Ability(memory, Save + 0x25CE, ADDRESS_OFFSET, 93, "HighJump"));
             importantChecks.Add(quickRun = new Ability(memory, Save + 0x25D0, ADDRESS_OFFSET, 97, "QuickRun"));
