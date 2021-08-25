@@ -98,6 +98,8 @@ namespace KhTracker
         private bool firstRun = true;
 
         private bool usedHotkey = false;
+
+        public int levelCheckOption;
         
         private bool forcedFinal;
         private CheckEveryCheck checkEveryCheck;
@@ -479,7 +481,7 @@ namespace KhTracker
         private async void finishSetupHelper(bool PCSX2, Int32 Now, Int32 Save, Int32 Sys3, Int32 Bt10, Int32 BtlEnd, Int32 Slot1)
         {
             //Console.WriteLine("calling finishSetupHelper");
-            await Task.Delay(1000);
+            await Task.Delay(7000);
             finishSetup(PCSX2, Now, Save, Sys3, Bt10, BtlEnd, Slot1);
             //Console.WriteLine("delayed writeline finishSetupHelper");
         }
@@ -595,8 +597,18 @@ namespace KhTracker
             Defense.Visibility = Visibility.Visible;
             Weapon.Visibility = Visibility.Visible;
 
-            LevelRewardIcon.Visibility = Visibility.Visible;
-            LevelReward.Visibility = Visibility.Visible;
+            if (NextLevelRewardOption50.IsChecked || NextLevelRewardOption99.IsChecked)
+            {
+                LevelRewardIcon.Visibility = Visibility.Visible;
+                LevelReward.Visibility = Visibility.Visible;
+
+                if (NextLevelRewardOption50.IsChecked)
+                    stats.SetMaxLevelRewardCheck(50);
+                else
+                    stats.SetMaxLevelRewardCheck(99);
+            }
+            else
+                stats.SetMaxLevelRewardCheck(1);
 
             broadcast.LevelIcon.Visibility = Visibility.Visible;
             broadcast.Level.Visibility = Visibility.Visible;
