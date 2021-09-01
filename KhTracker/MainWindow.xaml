@@ -80,7 +80,7 @@
                 <MenuItem Name="HotkeyOption" Header="Enable Hotkey" IsCheckable="True" IsChecked="False" Click="HotkeyToggle"/>
             </MenuItem>
             <MenuItem Name="ModeDisplay" Header="" Focusable="False" IsHitTestVisible="False"/>
-            <MenuItem Header="v2.6.6" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
+            <MenuItem Header="v2.6.11" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
         </Menu>
 
         <Grid>
