@@ -374,7 +374,8 @@ namespace KhTracker
             }
             else if (mode == "OpenKHAltHints")
             {
-                var hintText = Encoding.UTF8.GetString(Convert.FromBase64String(reader.ReadLine()));
+                data.openKHHintText = reader.ReadLine();
+                var hintText = Encoding.UTF8.GetString(Convert.FromBase64String(data.openKHHintText));
                 var hintObject = JsonSerializer.Deserialize<Dictionary<string, object>>(hintText);
                 var worlds = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(hintObject["world"].ToString());
 
@@ -521,6 +522,9 @@ namespace KhTracker
             string TWTNWkey = data.ProgressKeys["TWTNW"][data.WorldsData["TWTNW"].progress];
             data.WorldsData["TWTNW"].progression.SetResourceReference(ContentProperty, TWTNWkey);
             broadcast.TWTNWProgression.SetResourceReference(ContentProperty, TWTNWkey);
+
+            string ATkey = data.ProgressKeys["Atlantica"][data.WorldsData["Atlantica"].progress];
+            data.WorldsData["Atlantica"].progression.SetResourceReference(ContentProperty, ATkey);
         }
 
         private void DropFile(object sender, DragEventArgs e)
