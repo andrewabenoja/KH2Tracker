@@ -879,6 +879,9 @@ namespace KhTracker
 
             broadcast.OnReset();
             broadcast.UpdateNumbers();
+
+            //better logic reset
+            ResetLocaLHintMemory();
         }
         
         private void BroadcastWindow_Open(object sender, RoutedEventArgs e)
