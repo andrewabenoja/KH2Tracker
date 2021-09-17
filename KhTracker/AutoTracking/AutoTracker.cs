@@ -99,6 +99,7 @@ namespace KhTracker
         //                                 0      1      2      3      4      5      6      7      8      9     10     11     12     13     14     15     16     17
         public int[] localHintMemory = {  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1   };
         public bool[] tornPageMemory = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+        public bool[] driveFormMemory = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
         public void InitPCSX2Tracker(object sender, RoutedEventArgs e)
         {
@@ -640,6 +641,9 @@ namespace KhTracker
                     // locally track if a torn page is found in the world
                     if (check.Name.Contains("TornPage"))
                         tornPageMemory[WorldNameToIndex("SorasHeart")] = true;
+                    // locally track if a form is found in the world
+                    if (check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
+                        driveFormMemory[WorldNameToIndex("SorasHeart")] = true;
 
 
                     // add check to levels
@@ -668,11 +672,36 @@ namespace KhTracker
                                 //Console.WriteLine("Found a report here!");
                             }
                         }
+
+                        // if a proof is found in forms, make every world that contains a form hinted
+                        for (int i = 0; i < driveFormMemory.Length; i++)
+                        {
+                            if (driveFormMemory[i]) // if the world has a form, set that world to be hinted
+                            {
+                                data.WorldsData[IndexToWorldName(i)].hinted = true;
+
+                                // loop through hinted world for reports to set their info as hinted hints
+                                for (int j = 0; i < data.WorldsData[IndexToWorldName(i)].worldGrid.Children.Count; ++j)
+                                {
+                                    Item gridItem = data.WorldsData[IndexToWorldName(i)].worldGrid.Children[j] as Item;
+                                    if (gridItem.Name.Contains("Report"))
+                                    {
+                                        int reportIndex = int.Parse(gridItem.Name.Substring(6)) - 1;
+                                        data.WorldsData[data.reportInformation[reportIndex].Item1].hintedHint = true;
+                                        SetReportValue(data.WorldsData[data.reportInformation[reportIndex].Item1].hint, data.reportInformation[reportIndex].Item2 + 1);
+                                        //Console.WriteLine("Found a report here!");
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     // locally track if a torn page is found in the world
                     if (check.Name.Contains("TornPage"))
                         tornPageMemory[WorldNameToIndex("DriveForms")] = true;
+                    // locally track if a form is found in the world
+                    if (check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
+                        driveFormMemory[WorldNameToIndex("SorasHeart")] = true;
 
                     // add check to drives
                     TrackItem(check.Name + count, DriveFormsGrid);
@@ -732,6 +761,9 @@ namespace KhTracker
                         // locally track if a torn page is found in the world
                         if (check.Name.Contains("TornPage"))
                             tornPageMemory[WorldNameToIndex(world.worldName)] = true;
+                        // locally track if a form is found in the world
+                        if (check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
+                            driveFormMemory[WorldNameToIndex("SorasHeart")] = true;
 
                         // add check to current world
                         TrackItem(check.Name + count, data.WorldsData[world.previousworldName].worldGrid);
@@ -1606,6 +1638,7 @@ namespace KhTracker
         {
             localHintMemory = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
             tornPageMemory = new bool[] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+            driveFormMemory = new bool[] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
         }
     }
 }
