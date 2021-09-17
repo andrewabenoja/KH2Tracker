@@ -135,6 +135,7 @@ namespace KhTracker
                 {
                     // hint text and resetting fail icons
                     window.SetHintText(Codes.GetHintTextName(data.reportInformation[index].Item1) + " has " + data.reportInformation[index].Item2 + " important checks");
+                    window.SetLocalHintValues(data.reportInformation[index].Item1, data.reportInformation[index].Item2);
                     data.ReportAttemptVisual[index].SetResourceReference(ContentControl.ContentProperty, "Fail0");
                     data.reportAttempts[index] = 3;
                     isreport = true;
