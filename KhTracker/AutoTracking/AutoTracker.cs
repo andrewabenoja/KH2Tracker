@@ -701,7 +701,7 @@ namespace KhTracker
                         tornPageMemory[WorldNameToIndex("DriveForms")] = true;
                     // locally track if a form is found in the world
                     if (check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
-                        driveFormMemory[WorldNameToIndex("SorasHeart")] = true;
+                        driveFormMemory[WorldNameToIndex("DriveForms")] = true;
 
                     // add check to drives
                     TrackItem(check.Name + count, DriveFormsGrid);
@@ -763,7 +763,7 @@ namespace KhTracker
                             tornPageMemory[WorldNameToIndex(world.worldName)] = true;
                         // locally track if a form is found in the world
                         if (check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
-                            driveFormMemory[WorldNameToIndex("SorasHeart")] = true;
+                            driveFormMemory[WorldNameToIndex(world.worldName)] = true;
 
                         // add check to current world
                         TrackItem(check.Name + count, data.WorldsData[world.previousworldName].worldGrid);
