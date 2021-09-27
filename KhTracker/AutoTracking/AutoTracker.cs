@@ -1114,12 +1114,12 @@ namespace KhTracker
                         // if a proof is found in forms, make every world that contains a form hinted
                         for (int i = 0; i < driveFormMemory.Length; i++)
                         {
-                            if (driveFormMemory[i]) // if the world has a form, set that world to be hinted
+                            if (driveFormMemory[i] && i != 1) // if the world has a form, set that world to be hinted
                             {
                                 data.WorldsData[IndexToWorldName(i)].hinted = true;
 
                                 // loop through hinted world for reports to set their info as hinted hints
-                                for (int j = 0; i < data.WorldsData[IndexToWorldName(i)].worldGrid.Children.Count; ++j)
+                                for (int j = 0; j < data.WorldsData[IndexToWorldName(i)].worldGrid.Children.Count; ++j)
                                 {
                                     Item gridItem = data.WorldsData[IndexToWorldName(i)].worldGrid.Children[j] as Item;
                                     if (gridItem.Name.Contains("Report"))
@@ -1175,12 +1175,12 @@ namespace KhTracker
                             {
                                 for (int i = 0; i < tornPageMemory.Length; i++)
                                 {
-                                    if (tornPageMemory[i]) // if the world has a torn page, set that world to be hinted
+                                    if (tornPageMemory[i] & i != 9) // if the world has a torn page, set that world to be hinted
                                     {
                                         data.WorldsData[IndexToWorldName(i)].hinted = true;
 
                                         // loop through hinted world for reports to set their info as hinted hints
-                                        for (int j = 0; i < data.WorldsData[IndexToWorldName(i)].worldGrid.Children.Count; ++j)
+                                        for (int j = 0; j < data.WorldsData[IndexToWorldName(i)].worldGrid.Children.Count; ++j)
                                         {
                                             Item gridItem = data.WorldsData[IndexToWorldName(i)].worldGrid.Children[j] as Item;
                                             if (gridItem.Name.Contains("Report"))
