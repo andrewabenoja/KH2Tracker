@@ -104,11 +104,12 @@ namespace KhTracker
         private bool forcedFinal;
         private CheckEveryCheck checkEveryCheck;
 
-        //                               Sora   Drive   STT    TT     HB     BC     OC     AG     LoD   100AW   PL     DC     HT     PR     SP   TWTNW    GoA    AT
-        //                                 0      1      2      3      4      5      6      7      8      9     10     11     12     13     14     15     16     17
-        public int[] localHintMemory = {  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1   };
-        public bool[] tornPageMemory = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
-        public bool[] driveFormMemory = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+        //                                 Sora   Drive   STT    TT     HB     BC     OC     AG     LoD   100AW   PL     DC     HT     PR     SP   TWTNW    GoA    AT
+        //                                   0      1      2      3      4      5      6      7      8      9     10     11     12     13     14     15     16     17
+        public int[] localHintMemory =   {  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1   };
+        public int[] localReportMemory = {  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1   };
+        public bool[] tornPageMemory =   { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+        public bool[] driveFormMemory =  { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
         public void InitPCSX2Tracker(object sender, RoutedEventArgs e)
         {
@@ -1074,6 +1075,24 @@ namespace KhTracker
                                 //Console.WriteLine("Found a report here!");
                             }
                         }
+
+                        // check and determine what world has the report for the world that just contained a proof
+                        if (localReportMemory[WorldNameToIndex("SorasHeart")] != -1 && localReportMemory[WorldNameToIndex("SorasHeart")] != 16)
+                        {
+                            string hintedWorld = IndexToWorldName(localReportMemory[WorldNameToIndex("SorasHeart")]);
+                            // loop through world for reports to set their info as hinted hints
+                            for (int i = 0; i < data.WorldsData[hintedWorld].worldGrid.Children.Count; ++i)
+                            {
+                                Item gridItem = data.WorldsData[hintedWorld].worldGrid.Children[i] as Item;
+                                if (gridItem.Name.Contains("Report"))
+                                {
+                                    int reportIndex = int.Parse(gridItem.Name.Substring(6)) - 1;
+                                    data.WorldsData[data.reportInformation[reportIndex].Item1].hintedHint = true;
+                                    SetReportValue(data.WorldsData[data.reportInformation[reportIndex].Item1].hint, data.reportInformation[reportIndex].Item2 + 1);
+                                    //Console.WriteLine("Found a report here!");
+                                }
+                            }
+                        }
                     }
 
                     // locally track if a torn page is found in the world
@@ -1132,6 +1151,24 @@ namespace KhTracker
                                 }
                             }
                         }
+
+                        // check and determine what world has the report for the world that just contained a proof
+                        if (localReportMemory[WorldNameToIndex("DriveForms")] != -1 && localReportMemory[WorldNameToIndex("DriveForms")] != 16)
+                        {
+                            string hintedWorld = IndexToWorldName(localReportMemory[WorldNameToIndex("DriveForms")]);
+                            // loop through world for reports to set their info as hinted hints
+                            for (int i = 0; i < data.WorldsData[hintedWorld].worldGrid.Children.Count; ++i)
+                            {
+                                Item gridItem = data.WorldsData[hintedWorld].worldGrid.Children[i] as Item;
+                                if (gridItem.Name.Contains("Report"))
+                                {
+                                    int reportIndex = int.Parse(gridItem.Name.Substring(6)) - 1;
+                                    data.WorldsData[data.reportInformation[reportIndex].Item1].hintedHint = true;
+                                    SetReportValue(data.WorldsData[data.reportInformation[reportIndex].Item1].hint, data.reportInformation[reportIndex].Item2 + 1);
+                                    //Console.WriteLine("Found a report here!");
+                                }
+                            }
+                        }
                     }
 
                     // locally track if a torn page is found in the world
@@ -1175,7 +1212,7 @@ namespace KhTracker
                             {
                                 for (int i = 0; i < tornPageMemory.Length; i++)
                                 {
-                                    if (tornPageMemory[i] & i != 9) // if the world has a torn page, set that world to be hinted
+                                    if (tornPageMemory[i] && i != 9) // if the world has a torn page, set that world to be hinted
                                     {
                                         data.WorldsData[IndexToWorldName(i)].hinted = true;
 
@@ -1191,6 +1228,24 @@ namespace KhTracker
                                                 //Console.WriteLine("Found a report here!");
                                             }
                                         }
+                                    }
+                                }
+                            }
+
+                            // check and determine what world has the report for the world that just contained a proof
+                            if (localReportMemory[WorldNameToIndex(world.worldName)] != -1 && localReportMemory[WorldNameToIndex(world.worldName)] != 16)
+                            {
+                                string hintedWorld = IndexToWorldName(localReportMemory[WorldNameToIndex(world.worldName)]);
+                                // loop through world for reports to set their info as hinted hints
+                                for (int i = 0; i < data.WorldsData[hintedWorld].worldGrid.Children.Count; ++i)
+                                {
+                                    Item gridItem = data.WorldsData[hintedWorld].worldGrid.Children[i] as Item;
+                                    if (gridItem.Name.Contains("Report"))
+                                    {
+                                        int reportIndex = int.Parse(gridItem.Name.Substring(6)) - 1;
+                                        data.WorldsData[data.reportInformation[reportIndex].Item1].hintedHint = true;
+                                        SetReportValue(data.WorldsData[data.reportInformation[reportIndex].Item1].hint, data.reportInformation[reportIndex].Item2 + 1);
+                                        //Console.WriteLine("Found a report here!");
                                     }
                                 }
                             }
@@ -1990,7 +2045,11 @@ namespace KhTracker
 
         public void SetLocalHintValues(string worldName, int value)
         {
+            //stores locally the value of a report for a world - i.e. remembers that TWTNW is a 5
             localHintMemory[WorldNameToIndex(worldName)] = value;
+
+            //stores locally what world hinted it - i.e. remembers that LoD was hinted by HB
+            localReportMemory[WorldNameToIndex(worldName)] = WorldNameToIndex(GetWorld());
         }
 
         private int WorldNameToIndex(string worldName)
@@ -2075,6 +2134,7 @@ namespace KhTracker
         public void ResetLocaLHintMemory()
         {
             localHintMemory = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+            localReportMemory = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
             tornPageMemory = new bool[] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
             driveFormMemory = new bool[] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
         }
