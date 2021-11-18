@@ -1123,7 +1123,11 @@ namespace KhTracker
                                     }
                                     ReportsToggle(true);
                                     data.hintsLoaded = true;
-                                    HintText.Content = "Hints Loaded";
+
+                                    if (AutoDetectOption.IsChecked)
+                                        HintText.Content = "Hints Loaded - Auto-Detecting Game";
+                                    else
+                                        HintText.Content = "Hints Loaded";
 
                                     break;
 

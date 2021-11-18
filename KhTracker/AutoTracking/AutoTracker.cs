@@ -1096,10 +1096,11 @@ namespace KhTracker
                     }
 
                     // locally track if a torn page is found in the world
-                    if (check.Name.Contains("TornPage"))
+                    if (check.Name.Contains("TornPage") && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints))
                         tornPageMemory[WorldNameToIndex("SorasHeart")] = true;
                     // locally track if a form is found in the world
-                    if (check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
+                    if ((check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
+                         && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints))
                         driveFormMemory[WorldNameToIndex("SorasHeart")] = true;
 
 
@@ -1172,10 +1173,11 @@ namespace KhTracker
                     }
 
                     // locally track if a torn page is found in the world
-                    if (check.Name.Contains("TornPage"))
+                    if (check.Name.Contains("TornPage") && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints))
                         tornPageMemory[WorldNameToIndex("DriveForms")] = true;
                     // locally track if a form is found in the world
-                    if (check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
+                    if ((check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
+                         && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints))
                         driveFormMemory[WorldNameToIndex("DriveForms")] = true;
 
                     // add check to drives
@@ -1252,10 +1254,11 @@ namespace KhTracker
                         }
 
                         // locally track if a torn page is found in the world
-                        if (check.Name.Contains("TornPage"))
+                        if (check.Name.Contains("TornPage") && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints))
                             tornPageMemory[WorldNameToIndex(world.worldName)] = true;
                         // locally track if a form is found in the world
-                        if (check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
+                        if ((check.Name.Contains("Valor") || check.Name.Contains("Wisdom") || check.Name.Contains("Limit") || check.Name.Contains("Master") || check.Name.Contains("Final"))
+                             && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints))
                             driveFormMemory[WorldNameToIndex(world.worldName)] = true;
 
                         // add check to current world
@@ -2045,6 +2048,9 @@ namespace KhTracker
 
         public void SetLocalHintValues(string worldName, int value)
         {
+            if (data.mode != Mode.Hints && data.mode != Mode.OpenKHHints)
+                return;
+
             //stores locally the value of a report for a world - i.e. remembers that TWTNW is a 5
             localHintMemory[WorldNameToIndex(worldName)] = value;
 
