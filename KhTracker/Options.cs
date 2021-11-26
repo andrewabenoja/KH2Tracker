@@ -1104,6 +1104,11 @@ namespace KhTracker
                                         SetReportValue(data.WorldsData[key].hint, 1);
                                     }
 
+                                    if (AutoDetectOption.IsChecked)
+                                        HintText.Content = "Alt-Hints - Auto-Detecting Game";
+                                    else
+                                        HintText.Content = "Hints Loaded";
+
                                     break;
 
                                 case "JSmartee":
@@ -1125,7 +1130,7 @@ namespace KhTracker
                                     data.hintsLoaded = true;
 
                                     if (AutoDetectOption.IsChecked)
-                                        HintText.Content = "Hints Loaded - Auto-Detecting Game";
+                                        HintText.Content = "Hints - Auto-Detecting Game";
                                     else
                                         HintText.Content = "Hints Loaded";
 

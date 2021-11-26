@@ -195,9 +195,15 @@ namespace KhTracker
                 autoTimer.Stop();
 
                 if (alternateCheck)
+                {
                     Console.WriteLine("PCSX2 Found, starting Auto-Tracker");
+                    HintText.Content = "PCSX2 Detected - Tracking";
+                }
                 else
+                {
                     Console.WriteLine("PC Found, starting Auto-Tracker");
+                    HintText.Content = "PC Detected - Connecting...";
+                }
 
                 if (storedDetectedVersion != alternateCheckInt && storedDetectedVersion != 0)
                 {
@@ -488,7 +494,7 @@ namespace KhTracker
         private async void finishSetupHelper(bool PCSX2, Int32 Now, Int32 Save, Int32 Sys3, Int32 Bt10, Int32 BtlEnd, Int32 Slot1)
         {
             //Console.WriteLine("calling finishSetupHelper");
-            await Task.Delay(7000);
+            await Task.Delay(8000);
             finishSetup(PCSX2, Now, Save, Sys3, Bt10, BtlEnd, Slot1);
             //Console.WriteLine("delayed writeline finishSetupHelper");
         }
@@ -517,6 +523,9 @@ namespace KhTracker
                 SetAutoDetectTimer();
                 return;
             }
+
+            HintText.Content = "PC Detected - Tracking";
+            SetHintTextDelayed("");
 
             importantChecks = new List<ImportantCheck>();
             importantChecks.Add(highJump = new Ability(memory, Save + 0x25CE, ADDRESS_OFFSET, 93, "HighJump"));
@@ -660,6 +669,8 @@ namespace KhTracker
                 SetAutoDetectTimer();
                 return;
             }
+
+            SetHintTextDelayed("");
 
             // PCSX2 anchors 
             int Now = 0x032BAE0;
@@ -2143,6 +2154,13 @@ namespace KhTracker
             localReportMemory = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
             tornPageMemory = new bool[] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
             driveFormMemory = new bool[] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+        }
+
+        public async void SetHintTextDelayed(string msg)
+        {
+            await Task.Delay(30000);
+            if ((string) HintText.Content == "PC Detected - Tracking" || (string) HintText.Content == "PCSX2 Detected - Tracking")
+                HintText.Content = msg;
         }
     }
 }
