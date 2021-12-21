@@ -600,7 +600,10 @@ namespace KhTracker
             }
 
             data.hintsLoaded = true;
-            HintText.Content = "Hints Loaded";
+            if (AutoDetectOption.IsChecked)
+                HintText.Content = "Hints - Auto-Detecting Game";
+            else
+                HintText.Content = "Hints Loaded";
         }
 
         private void ResetHints()
@@ -979,6 +982,11 @@ namespace KhTracker
                 data.WorldsData[key].worldGrid.WorldComplete();
                 SetReportValue(data.WorldsData[key].hint, 1);
             }
+
+            if (AutoDetectOption.IsChecked)
+                HintText.Content = "Alt-Hints - Auto-Detecting Game";
+            else
+                HintText.Content = "Hints Loaded";
         }
 
         private void SetMode(Mode mode)

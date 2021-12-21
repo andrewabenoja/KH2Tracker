@@ -494,7 +494,7 @@ namespace KhTracker
         private async void finishSetupHelper(bool PCSX2, Int32 Now, Int32 Save, Int32 Sys3, Int32 Bt10, Int32 BtlEnd, Int32 Slot1)
         {
             //Console.WriteLine("calling finishSetupHelper");
-            await Task.Delay(8000);
+            await Task.Delay(9000);
             finishSetup(PCSX2, Now, Save, Sys3, Bt10, BtlEnd, Slot1);
             //Console.WriteLine("delayed writeline finishSetupHelper");
         }
