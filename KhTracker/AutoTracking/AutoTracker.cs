@@ -2397,6 +2397,10 @@ namespace KhTracker
             {
                 lastEvent = new int[] { WorldNameToIndex(world.worldName), world.roomNumber, world.eventID1 };
                 stats.UpdateProgressPoints(GetProgressionPoints());
+
+                if (stats.hintIndex >= 13)
+                    return;
+
                 while (stats.ProgressPoints >= 7)
                 {
                     stats.UpdateProgressPoints(-7);
@@ -2759,11 +2763,11 @@ namespace KhTracker
             }
             else if (world.worldName == "TWTNW")
             {
-                if (world.roomNumber == 1 && world.eventID3 == 1) // Alley to Between
+                /*if (world.roomNumber == 1 && world.eventID3 == 1) // Alley to Between
                 {
                     return 7;
-                }
-                else if (world.roomNumber == 21 && world.eventID1 == 65 && world.eventComplete == 1) // Roxas finish
+                }*/
+                if (world.roomNumber == 21 && world.eventID1 == 65 && world.eventComplete == 1) // Roxas finish
                 {
                     return twtnw_Roxas;
                 }
