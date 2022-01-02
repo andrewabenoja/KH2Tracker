@@ -80,7 +80,7 @@
                 <MenuItem Name="HotkeyOption" Header="Enable Hotkey" IsCheckable="True" IsChecked="False" Click="HotkeyToggle"/>
             </MenuItem>
             <MenuItem Name="ModeDisplay" Header="" Focusable="False" IsHitTestVisible="False"/>
-            <MenuItem Header="v2.7 - Codename__Geek v1.4" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
+            <MenuItem Header="v2.8 - Codename__Geek v1.1" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
         </Menu>
 
         <Grid>
@@ -134,6 +134,8 @@
                                 <DynamicResource ResourceKey="SoraHeartImage"/>
                             </Button>
                             <Image Name="SorasHeartHint" Source="Images\Numbers\_QuestionMark.png" IsHitTestVisible="False" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                            <!-- <Image Name="LevelReward" Source="Images/Numbers/99.png" Grid.Row="1" Grid.Column="2" Height="18" RenderTransformOrigin="0.678,0.889" Margin="0,9,0,4" Visibility="Visible"/> -->
+                            <!-- Image Name="LevelReward" Source="Images\Numbers\99.png" Grid.Column="0" Visibility="Visible" Grid.ColumnSpan="3" Margin="21,7,17,5" RenderTransformOrigin="0.704,0.921"/ -->
                             <Image Name="SorasHeartBar" Source="Images\VerticalBarWhite.png" Grid.RowSpan="2" Grid.Column="4"/>
                         </Grid>
                         <local:WorldGrid x:Name="SorasHeartGrid" Grid.Column="1"/>

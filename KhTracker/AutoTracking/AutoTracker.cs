@@ -860,6 +860,8 @@ namespace KhTracker
                 ResetHotkeyState();
                 isWorking = false;
                 SetAutoDetectTimer();
+
+                HintText.Content = "Connection Lost, Reconnecting...";
                 return;
             }
 
