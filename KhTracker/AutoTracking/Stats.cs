@@ -209,5 +209,11 @@ namespace KhTracker
         {
             return hintIndex++;
         }
+
+        public void ResetProgressPoints()
+        {
+            ProgressPoints = 0;
+            hintIndex = 0;
+        }
     }
 }

@@ -2809,5 +2809,11 @@ namespace KhTracker
             
             return 0;
         }
+
+        public void ResetProgressionHints()
+        {
+            stats.SetProgressPoints(0);
+            stats.ResetProgressPoints();
+        }
     }
 }
