@@ -177,11 +177,11 @@ namespace KhTracker
             Properties.Settings.Default.NextLevelCheck50 = NextLevelRewardOption50.IsChecked;
             Properties.Settings.Default.NextLevelCheck99 = NextLevelRewardOption99.IsChecked;
 
-            if (LevelRewardIcon.Visibility == Visibility.Visible && memory != null)
+            /*if (LevelRewardIcon.Visibility == Visibility.Visible && memory != null)
             {
                 LevelRewardIcon.Visibility = Visibility.Hidden;
                 LevelReward.Visibility = Visibility.Hidden;
-            }
+            }*/
 
             HintText.Margin = new Thickness(-10, 0, 0, 0);
         }
@@ -202,11 +202,11 @@ namespace KhTracker
             Properties.Settings.Default.NextLevelCheck50 = NextLevelRewardOption50.IsChecked;
             Properties.Settings.Default.NextLevelCheck99 = NextLevelRewardOption99.IsChecked;
 
-            if (LevelRewardIcon.Visibility == Visibility.Hidden && memory != null)
+            /*if (LevelRewardIcon.Visibility == Visibility.Hidden && memory != null)
             {
                 LevelRewardIcon.Visibility = Visibility.Visible;
                 LevelReward.Visibility = Visibility.Visible;
-            }
+            }*/
 
             if (memory != null)
             {
@@ -233,11 +233,12 @@ namespace KhTracker
             Properties.Settings.Default.NextLevelCheck50 = NextLevelRewardOption50.IsChecked;
             Properties.Settings.Default.NextLevelCheck99 = NextLevelRewardOption99.IsChecked;
 
+            /*
             if (LevelRewardIcon.Visibility == Visibility.Hidden && memory != null)
             {
                 LevelRewardIcon.Visibility = Visibility.Visible;
                 LevelReward.Visibility = Visibility.Visible;
-            }
+            }*/
 
             if (memory != null)
             {

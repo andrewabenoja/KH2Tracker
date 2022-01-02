@@ -104,12 +104,116 @@ namespace KhTracker
         private bool forcedFinal;
         private CheckEveryCheck checkEveryCheck;
 
+        private int[] lastEvent = { 0, 0, 0 };
+
         //                                 Sora   Drive   STT    TT     HB     BC     OC     AG     LoD   100AW   PL     DC     HT     PR     SP   TWTNW    GoA    AT
         //                                   0      1      2      3      4      5      6      7      8      9     10     11     12     13     14     15     16     17
         public int[] localHintMemory =   {  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1   };
         public int[] localReportMemory = {  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1  ,  -1   };
         public bool[] tornPageMemory =   { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
         public bool[] driveFormMemory =  { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+
+        //progression hints chart
+        //Simulated Twilight Town
+        private int stt_TwilightThorn = 2;
+        private int stt_Struggle = 2;
+        private int stt_Axel = 3;
+        private int stt_DataRoxas = 4;
+        //Twilight Town
+        private int tt_Tower = 2;
+        private int tt_Sandlot = 2;
+        private int tt_Mansion = 3;
+        private int tt_Betwixt = 3;
+        private int tt_DataAxel = 4;
+        //Hallow Bastion
+        private int hb_Bailey = 2;
+        private int hb_Ansem = 1;
+        private int hb_Corridors = 2;
+        private int hb_Dancers = 2;
+        private int hb_Demyx = 3;
+        private int hb_FFFights = 3;
+        private int hb_1k = 4;
+        private int hb_Sephiroth = 4;
+        private int hb_DataDemyx = 5;
+        //Beasts Castle
+        private int bc_Thresholder = 2;
+        private int bc_Beast = 1;
+        private int bc_DarkThorn = 2;
+        private int bc_Dragoons = 2;
+        private int bc_Xaldin = 4;
+        private int bc_DataXaldin = 5;
+        //Olympus Coliseum
+        private int oc_Cerberus = 3;
+        private int oc_Demyx = 1;
+        private int oc_Pete = 1;
+        private int oc_Hydra = 3;
+        private int oc_Auron = 2;
+        private int oc_Hades = 3;
+        private int oc_Zexion = 4;
+        //Agrabah
+        private int ag_Abu = 1;
+        private int ag_Chasm = 2;
+        private int ag_Treasure = 2;
+        private int ag_Twins = 3;
+        private int ag_Carpet = 3;
+        private int ag_Jafar = 4;
+        private int ag_Lexaeus = 4;
+        //Land of Dragons
+        private int lod_Cave = 3;
+        private int lod_Summit = 1;
+        private int lod_ShanYu = 2;
+        private int lod_Throne = 3;
+        private int lod_StormRider = 4;
+        private int lod_DataXigbar = 5;
+        //100 AW
+        private int ha_Piglet = 1;
+        private int ha_Rabbit = 1;
+        private int ha_Kanga = 1;
+        private int ha_SpookyCave = 3;
+        private int ha_StarryHill = 4;
+        //Pride Lands
+        private int pl_Simba = 1;
+        private int pl_Scar = 3;
+        private int pl_Groundshaker = 4;
+        private int pl_DataSaix = 4;
+        //Atlantica
+        private int at_Tutorial = 1;
+        private int at_Ursula = 3;
+        private int at_NewDay = 4;
+        //Disney Castle
+        private int dc_Minnie = 1;
+        private int dc_OldPete = 1;
+        private int dc_Windows = 3;
+        private int dc_Steamboat = 1;
+        private int dc_NewPete = 3;
+        private int dc_Marluxia = 4;
+        private int dc_Terra = 5;
+        //Halloween Town
+        private int ht_CandyCaneLane = 1;
+        private int ht_PrisonKeeper = 3;
+        private int ht_Oogie = 2;
+        private int ht_Presents = 1;
+        private int ht_Experiment = 4;
+        private int ht_Vexen = 4;
+        //Port Royal
+        private int pr_Town = 2;
+        private int pr_Barbossa = 3;
+        private int pr_Gambler = 2;
+        private int pr_Grim2 = 4;
+        private int pr_DataLuxord = 5;
+        //Space Paranoids
+        private int sp_Screens = 3;
+        private int sp_HostileProgram = 3;
+        private int sp_SolarSailer = 3;
+        private int sp_MCP = 4;
+        private int sp_Larxene = 4;
+        //The World That Never Was
+        private int twtnw_Roxas = 2;
+        private int twtnw_Xigbar = 3;
+        private int twtnw_Luxord = 2;
+        private int twtnw_Saix = 2;
+        private int twtnw_Xemnas = 3;
+        private int twtnw_DataXemnas = 5;
 
         public void InitPCSX2Tracker(object sender, RoutedEventArgs e)
         {
@@ -469,8 +573,8 @@ namespace KhTracker
             Defense.Visibility = Visibility.Visible;
             Weapon.Visibility = Visibility.Visible;
 
-            LevelRewardIcon.Visibility = Visibility.Visible;
-            LevelReward.Visibility = Visibility.Visible;
+            //LevelRewardIcon.Visibility = Visibility.Visible;
+            //LevelReward.Visibility = Visibility.Visible;
 
             broadcast.LevelIcon.Visibility = Visibility.Visible;
             broadcast.Level.Visibility = Visibility.Visible;
@@ -615,8 +719,8 @@ namespace KhTracker
 
             if (NextLevelRewardOption50.IsChecked || NextLevelRewardOption99.IsChecked)
             {
-                LevelRewardIcon.Visibility = Visibility.Visible;
-                LevelReward.Visibility = Visibility.Visible;
+                //LevelRewardIcon.Visibility = Visibility.Visible;
+                //LevelReward.Visibility = Visibility.Visible;
 
                 if (NextLevelRewardOption50.IsChecked)
                     stats.SetMaxLevelRewardCheck(50);
@@ -643,6 +747,7 @@ namespace KhTracker
             SetBindings();
             SetTimer();
             OnTimedEvent(null, null);
+            stats.SetProgressPoints(0);
         }
 
         private void finishSetupPCSX2()
@@ -777,7 +882,9 @@ namespace KhTracker
             BindStats(Magic, "Magic", stats);
             BindStats(Defense, "Defense", stats);
 
-            BindStats(LevelReward, "LevelReward", stats);
+            //Addition Binds
+            //BindStats(LevelReward, "LevelReward", stats);
+            BindStats(ProgressPoints, "ProgressPoints", stats);
 
             BindLevel(broadcast.ValorLevel, "Level", valor);
             BindLevel(broadcast.WisdomLevel, "Level", wisdom);
@@ -1068,7 +1175,7 @@ namespace KhTracker
 
                 if (levelRewards.Exists(x => x == check.Name))
                 {
-                    if ((check.Name == "Peace" || check.Name == "Nonexistence" || check.Name == "Connection") && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints))
+                    if ((check.Name == "Peace" || check.Name == "Nonexistence" || check.Name == "Connection") && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints) && false)
                     {
                         data.WorldsData["SorasHeart"].hinted = true;
                         data.WorldsData["SorasHeart"].hintedHint = true;
@@ -1123,7 +1230,7 @@ namespace KhTracker
                 }
                 else if (driveRewards.Exists(x => x == check.Name))
                 {
-                    if ((check.Name == "Peace" || check.Name == "Nonexistence" || check.Name == "Connection") && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints))
+                    if ((check.Name == "Peace" || check.Name == "Nonexistence" || check.Name == "Connection") && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints) && false)
                     {
                         data.WorldsData["DriveForms"].hinted = true;
                         data.WorldsData["DriveForms"].hintedHint = true;
@@ -1201,7 +1308,7 @@ namespace KhTracker
                 {
                     if (data.WorldsData.ContainsKey(world.previousworldName))
                     {
-                        if ((check.Name == "Peace" || check.Name == "Nonexistence" || check.Name == "Connection") && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints))
+                        if ((check.Name == "Peace" || check.Name == "Nonexistence" || check.Name == "Connection") && (data.mode == Mode.Hints || data.mode == Mode.OpenKHHints) && false)
                         {
                             data.WorldsData[world.worldName].hinted = true;
                             data.WorldsData[world.worldName].hintedHint = true;
@@ -1290,36 +1397,42 @@ namespace KhTracker
                     broadcast.SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "STTChests");
                     SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "STTChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 34 && world.eventID1 == 157 && world.eventComplete == 1) // Twilight Thorn finish
                 {
                     broadcast.SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "TwilightThorn");
                     SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "TwilightThorn");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 5 && world.eventID1 == 88 && world.eventComplete == 1) // Setzer finish
                 {
                     broadcast.SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "Struggle");
                     SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "Struggle");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 1 && world.eventID3 == 55 && data.WorldsData[world.worldName].progress == 0) // Roxas' Room (Day 6)
                 {
                     broadcast.SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "STTChests");
                     SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "STTChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 21 && world.eventID3 == 1) // Mansion: Computer Room
                 {
                     broadcast.SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "ComputerRoom");
                     SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "ComputerRoom");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 20 && world.eventID1 == 137 && world.eventComplete == 1) // Axel finish
                 {
                     broadcast.SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "Axel");
                     SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "Axel");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "TwilightTown")
@@ -1329,30 +1442,35 @@ namespace KhTracker
                     broadcast.TwilightTownProgression.SetResourceReference(ContentProperty, "MysteriousTower");
                     TwilightTownProgression.SetResourceReference(ContentProperty, "MysteriousTower");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 4 && world.eventID1 == 80 && world.eventComplete == 1) // Sandlot finish
                 {
                     broadcast.TwilightTownProgression.SetResourceReference(ContentProperty, "Sandlot");
                     TwilightTownProgression.SetResourceReference(ContentProperty, "Sandlot");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 41 && world.eventID1 == 186 && world.eventComplete == 1) // Mansion fight finish
                 {
                     broadcast.TwilightTownProgression.SetResourceReference(ContentProperty, "Mansion");
                     TwilightTownProgression.SetResourceReference(ContentProperty, "Mansion");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 40 && world.eventID1 == 161 && world.eventComplete == 1) // Betwixt and Between finish
                 {
                     broadcast.TwilightTownProgression.SetResourceReference(ContentProperty, "BetwixtandBetween");
                     TwilightTownProgression.SetResourceReference(ContentProperty, "BetwixtandBetween");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 20 && world.eventID1 == 213 && world.eventComplete == 1) // Data Axel finish
                 {
                     broadcast.TwilightTownProgression.SetResourceReference(ContentProperty, "DataAxel");
                     TwilightTownProgression.SetResourceReference(ContentProperty, "DataAxel");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "HollowBastion")
@@ -1362,66 +1480,77 @@ namespace KhTracker
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "HBChests");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "HBChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 8 && world.eventID1 == 52 && world.eventComplete == 1) // Bailey finish
                 {
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "Bailey");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "Bailey");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 10 && world.eventID3 == 2 && data.WorldsData[world.worldName].progress == 0) // Marketplace (HB2)
                 {
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "HBChests");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "HBChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 5 && world.eventID3 == 20) // Ansem Study post Computer
                 {
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "AnsemStudy");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "AnsemStudy");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 20 && world.eventID1 == 86 && world.eventComplete == 1) // Corridor finish
                 {
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "Corridor");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "Corridor");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 18 && world.eventID1 == 73 && world.eventComplete == 1) // Dancers finish
                 {
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "Dancers");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "Dancers");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 4 && world.eventID1 == 55 && world.eventComplete == 1) // HB Demyx finish
                 {
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "HBDemyx");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "HBDemyx");
                     data.WorldsData[world.worldName].progress = 6;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 16 && world.eventID1 == 65 && world.eventComplete == 1) // FF Cloud finish
                 {
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "FinalFantasy");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "FinalFantasy");
                     data.WorldsData[world.worldName].progress = 7;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 17 && world.eventID1 == 66 && world.eventComplete == 1) // 1k Heartless finish
                 {
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "1000Heartless");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "1000Heartless");
                     data.WorldsData[world.worldName].progress = 8;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 1 && world.eventID1 == 75 && world.eventComplete == 1) // Sephiroth finish
                 {
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "Sephiroth");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "Sephiroth");
                     data.WorldsData[world.worldName].progress = 9;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 4 && world.eventID1 == 114 && world.eventComplete == 1) // Data Demyx finish
                 {
                     broadcast.HollowBastionProgression.SetResourceReference(ContentProperty, "DataDemyx");
                     HollowBastionProgression.SetResourceReference(ContentProperty, "DataDemyx");
                     data.WorldsData[world.worldName].progress = 10;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "BeastsCastle")
@@ -1431,48 +1560,56 @@ namespace KhTracker
                     broadcast.BeastsCastleProgression.SetResourceReference(ContentProperty, "BCChests");
                     BeastsCastleProgression.SetResourceReference(ContentProperty, "BCChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 11 && world.eventID1 == 72 && world.eventComplete == 1) // Thresholder finish
                 {
                     broadcast.BeastsCastleProgression.SetResourceReference(ContentProperty, "Thresholder");
                     BeastsCastleProgression.SetResourceReference(ContentProperty, "Thresholder");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 3 && world.eventID1 == 69 && world.eventComplete == 1) // Beast finish
                 {
                     broadcast.BeastsCastleProgression.SetResourceReference(ContentProperty, "Beast");
                     BeastsCastleProgression.SetResourceReference(ContentProperty, "Beast");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 5 && world.eventID1 == 79 && world.eventComplete == 1) // Dark Thorn finish
                 {
                     broadcast.BeastsCastleProgression.SetResourceReference(ContentProperty, "DarkThorn");
                     BeastsCastleProgression.SetResourceReference(ContentProperty, "DarkThorn");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 2 && world.eventID3 == 10 && data.WorldsData[world.worldName].progress == 0) // Belle's Room (BC2)
                 {
                     broadcast.BeastsCastleProgression.SetResourceReference(ContentProperty, "BCChests");
                     BeastsCastleProgression.SetResourceReference(ContentProperty, "BCChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 4 && world.eventID1 == 74 && world.eventComplete == 1) // Dragoons finish
                 {
                     broadcast.BeastsCastleProgression.SetResourceReference(ContentProperty, "Dragoons");
                     BeastsCastleProgression.SetResourceReference(ContentProperty, "Dragoons");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 15 && world.eventID1 == 82 && world.eventComplete == 1) // Xaldin finish
                 {
                     broadcast.BeastsCastleProgression.SetResourceReference(ContentProperty, "Xaldin");
                     BeastsCastleProgression.SetResourceReference(ContentProperty, "Xaldin");
                     data.WorldsData[world.worldName].progress = 6;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 15 && world.eventID1 == 97 && world.eventComplete == 1) // Data Xaldin finish
                 {
                     broadcast.BeastsCastleProgression.SetResourceReference(ContentProperty, "DataXaldin");
                     BeastsCastleProgression.SetResourceReference(ContentProperty, "DataXaldin");
                     data.WorldsData[world.worldName].progress = 7;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "OlympusColiseum")
@@ -1482,54 +1619,63 @@ namespace KhTracker
                     broadcast.OlympusColiseumProgression.SetResourceReference(ContentProperty, "OCChests");
                     OlympusColiseumProgression.SetResourceReference(ContentProperty, "OCChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 7 && world.eventID1 == 114 && world.eventComplete == 1) // Cerberus finish
                 {
                     broadcast.OlympusColiseumProgression.SetResourceReference(ContentProperty, "Cerberus");
                     OlympusColiseumProgression.SetResourceReference(ContentProperty, "Cerberus");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 17 && world.eventID1 == 123 && world.eventComplete == 1) // OC Demyx finish
                 {
                     broadcast.OlympusColiseumProgression.SetResourceReference(ContentProperty, "OCDemyx");
                     OlympusColiseumProgression.SetResourceReference(ContentProperty, "OCDemyx");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 8 && world.eventID1 == 116 && world.eventComplete == 1) // OC Pete finish
                 {
                     broadcast.OlympusColiseumProgression.SetResourceReference(ContentProperty, "OCPete");
                     OlympusColiseumProgression.SetResourceReference(ContentProperty, "OCPete");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 18 && world.eventID1 == 171 && world.eventComplete == 1) // Hydra finish
                 {
                     broadcast.OlympusColiseumProgression.SetResourceReference(ContentProperty, "Hydra");
                     OlympusColiseumProgression.SetResourceReference(ContentProperty, "Hydra");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 3 & world.eventID3 == 12 && data.WorldsData[world.worldName].progress == 0) // Underworld Entrance (OC2)
                 {
                     broadcast.OlympusColiseumProgression.SetResourceReference(ContentProperty, "OCChests");
                     OlympusColiseumProgression.SetResourceReference(ContentProperty, "OCChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 6 && world.eventID1 == 126 && world.eventComplete == 1) // Auron Statue fight finish
                 {
                     broadcast.OlympusColiseumProgression.SetResourceReference(ContentProperty, "AuronStatue");
                     OlympusColiseumProgression.SetResourceReference(ContentProperty, "AuronStatue");
                     data.WorldsData[world.worldName].progress = 6;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 19 && world.eventID1 == 202 && world.eventComplete == 1) // Hades finish
                 {
                     broadcast.OlympusColiseumProgression.SetResourceReference(ContentProperty, "Hades");
                     OlympusColiseumProgression.SetResourceReference(ContentProperty, "Hades");
                     data.WorldsData[world.worldName].progress = 7;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 34 && (world.eventID1 == 151 || world.eventID1 == 152) && world.eventComplete == 1) // Zexion finish
                 {
                     broadcast.OlympusColiseumProgression.SetResourceReference(ContentProperty, "Zexion");
                     OlympusColiseumProgression.SetResourceReference(ContentProperty, "Zexion");
                     data.WorldsData[world.worldName].progress = 8;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "Agrabah")
@@ -1539,54 +1685,63 @@ namespace KhTracker
                     broadcast.AgrabahProgression.SetResourceReference(ContentProperty, "AGChests");
                     AgrabahProgression.SetResourceReference(ContentProperty, "AGChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 9 && world.eventID1 == 2 && world.eventComplete == 1) // Abu finish
                 {
                     broadcast.AgrabahProgression.SetResourceReference(ContentProperty, "Abu");
                     AgrabahProgression.SetResourceReference(ContentProperty, "Abu");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 13 && world.eventID1 == 79 && world.eventComplete == 1) // Chasm fight finish
                 {
                     broadcast.AgrabahProgression.SetResourceReference(ContentProperty, "Chasm");
                     AgrabahProgression.SetResourceReference(ContentProperty, "Chasm");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 10 && world.eventID1 == 58 && world.eventComplete == 1) // Treasure Room finish
                 {
                     broadcast.AgrabahProgression.SetResourceReference(ContentProperty, "TreasureRoom");
                     AgrabahProgression.SetResourceReference(ContentProperty, "TreasureRoom");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 3 && world.eventID1 == 59 && world.eventComplete == 1) // Lords finish
                 {
                     broadcast.AgrabahProgression.SetResourceReference(ContentProperty, "Lords");
                     AgrabahProgression.SetResourceReference(ContentProperty, "Lords");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 4 && world.eventID3 == 10 && data.WorldsData[world.worldName].progress == 0) // The Vault (Ag2)
                 {
                     broadcast.AgrabahProgression.SetResourceReference(ContentProperty, "AGChests");
                     AgrabahProgression.SetResourceReference(ContentProperty, "AGChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 14 && world.eventID1 == 100 && world.eventComplete == 1) // Carpet finish
                 {
                     broadcast.AgrabahProgression.SetResourceReference(ContentProperty, "Carpet");
                     AgrabahProgression.SetResourceReference(ContentProperty, "Carpet");
                     data.WorldsData[world.worldName].progress = 6;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 5 && world.eventID1 == 62 && world.eventComplete == 1) // Genie Jafar finish
                 {
                     broadcast.AgrabahProgression.SetResourceReference(ContentProperty, "GenieJafar");
                     AgrabahProgression.SetResourceReference(ContentProperty, "GenieJafar");
                     data.WorldsData[world.worldName].progress = 7;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 33 && (world.eventID1 == 142 || world.eventID1 == 147) && world.eventComplete == 1) // Lexaeus finish
                 {
                     broadcast.AgrabahProgression.SetResourceReference(ContentProperty, "Lexaeus");
                     AgrabahProgression.SetResourceReference(ContentProperty, "Lexaeus");
                     data.WorldsData[world.worldName].progress = 8;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "LandofDragons")
@@ -1596,42 +1751,49 @@ namespace KhTracker
                     broadcast.LandofDragonsProgression.SetResourceReference(ContentProperty, "LoDChests");
                     LandofDragonsProgression.SetResourceReference(ContentProperty, "LoDChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 5 && world.eventID1 == 72 && world.eventComplete == 1) // Cave finish
                 {
                     broadcast.LandofDragonsProgression.SetResourceReference(ContentProperty, "Cave");
                     LandofDragonsProgression.SetResourceReference(ContentProperty, "Cave");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 7 && world.eventID1 == 73 && world.eventComplete == 1) // Summit finish
                 {
                     broadcast.LandofDragonsProgression.SetResourceReference(ContentProperty, "Summit");
                     LandofDragonsProgression.SetResourceReference(ContentProperty, "Summit");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 9 && world.eventID1 == 75 && world.eventComplete == 1) // Shan Yu finish
                 {
                     broadcast.LandofDragonsProgression.SetResourceReference(ContentProperty, "ShanYu");
                     LandofDragonsProgression.SetResourceReference(ContentProperty, "ShanYu");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 12 && world.eventID3 == 10 && data.WorldsData[world.worldName].progress == 0) // Village (LoD2)
                 {
                     broadcast.LandofDragonsProgression.SetResourceReference(ContentProperty, "LoDChests");
                     LandofDragonsProgression.SetResourceReference(ContentProperty, "LoDChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 10 && world.eventID1 == 78 && world.eventComplete == 1) // Antechamber fight finish
                 {
                     broadcast.LandofDragonsProgression.SetResourceReference(ContentProperty, "ThroneRoom");
                     LandofDragonsProgression.SetResourceReference(ContentProperty, "ThroneRoom");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 8 && world.eventID1 == 79 && world.eventComplete == 1) // Storm Rider finish
                 {
                     broadcast.LandofDragonsProgression.SetResourceReference(ContentProperty, "StormRider");
                     LandofDragonsProgression.SetResourceReference(ContentProperty, "StormRider");
                     data.WorldsData[world.worldName].progress = 6;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "HundredAcreWood")
@@ -1641,36 +1803,42 @@ namespace KhTracker
                     broadcast.HundredAcreWoodProgression.SetResourceReference(ContentProperty, "Pooh");
                     HundredAcreWoodProgression.SetResourceReference(ContentProperty, "Pooh");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 4 && world.eventID3 == 1) // Piglet's house
                 {
                     broadcast.HundredAcreWoodProgression.SetResourceReference(ContentProperty, "Piglet");
                     HundredAcreWoodProgression.SetResourceReference(ContentProperty, "Piglet");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 3 && world.eventID3 == 1) // Rabbit's house
                 {
                     broadcast.HundredAcreWoodProgression.SetResourceReference(ContentProperty, "Rabbit");
                     HundredAcreWoodProgression.SetResourceReference(ContentProperty, "Rabbit");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 5 && world.eventID3 == 1) // Kanga's house
                 {
                     broadcast.HundredAcreWoodProgression.SetResourceReference(ContentProperty, "Kanga");
                     HundredAcreWoodProgression.SetResourceReference(ContentProperty, "Kanga");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 9 && world.eventID3 == 1) // Spooky Cave
                 {
                     broadcast.HundredAcreWoodProgression.SetResourceReference(ContentProperty, "SpookyCave");
                     HundredAcreWoodProgression.SetResourceReference(ContentProperty, "SpookyCave");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 1 && world.eventID3 == 1) // Starry Hill
                 {
                     broadcast.HundredAcreWoodProgression.SetResourceReference(ContentProperty, "StarryHill");
                     HundredAcreWoodProgression.SetResourceReference(ContentProperty, "StarryHill");
                     data.WorldsData[world.worldName].progress = 6;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "PrideLands")
@@ -1680,30 +1848,35 @@ namespace KhTracker
                     broadcast.PrideLandsProgression.SetResourceReference(ContentProperty, "PLChests");
                     PrideLandsProgression.SetResourceReference(ContentProperty, "PLChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 12 && world.eventID3 == 1) // Oasis after talking to Simba
                 {
                     broadcast.PrideLandsProgression.SetResourceReference(ContentProperty, "Simba");
                     PrideLandsProgression.SetResourceReference(ContentProperty, "Simba");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 14 && world.eventID1 == 55 && world.eventComplete == 1) // Scar finish
                 {
                     broadcast.PrideLandsProgression.SetResourceReference(ContentProperty, "Scar");
                     PrideLandsProgression.SetResourceReference(ContentProperty, "Scar");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 4 && world.eventID3 == 10 && data.WorldsData[world.worldName].progress == 0) // Savannah (PL2)
                 {
                     broadcast.PrideLandsProgression.SetResourceReference(ContentProperty, "PLChests");
                     PrideLandsProgression.SetResourceReference(ContentProperty, "PLChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 15 && world.eventID1 == 59 && world.eventComplete == 1) // Groundshaker finish
                 {
                     broadcast.PrideLandsProgression.SetResourceReference(ContentProperty, "Groundshaker");
                     PrideLandsProgression.SetResourceReference(ContentProperty, "Groundshaker");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "Atlantica")
@@ -1712,16 +1885,19 @@ namespace KhTracker
                 {
                     AtlanticaProgression.SetResourceReference(ContentProperty, "Tutorial");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 9 && world.eventID1 == 65) // Ursula's Revenge
                 {
                     AtlanticaProgression.SetResourceReference(ContentProperty, "Ursula");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 4 && world.eventID1 == 55) // A New Day is Dawning
                 {
                     AtlanticaProgression.SetResourceReference(ContentProperty, "NewDay");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "DisneyCastle")
@@ -1731,54 +1907,63 @@ namespace KhTracker
                     broadcast.DisneyCastleProgression.SetResourceReference(ContentProperty, "DCChests");
                     DisneyCastleProgression.SetResourceReference(ContentProperty, "DCChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 0 && world.eventID1 == 51 && world.eventComplete == 1) // Minnie Escort finish
                 {
                     broadcast.DisneyCastleProgression.SetResourceReference(ContentProperty, "Minnie");
                     DisneyCastleProgression.SetResourceReference(ContentProperty, "Minnie");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 0 && world.eventID3 == 22 && data.WorldsData[world.worldName].progress == 0) // Cornerstone Hill (TR) (Audience Chamber has no Evt 0x16)
                 {
                     broadcast.DisneyCastleProgression.SetResourceReference(ContentProperty, "DCChests");
                     DisneyCastleProgression.SetResourceReference(ContentProperty, "DCChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 1 && world.eventID1 == 58 && world.eventComplete == 1) // Old Pete finish
                 {
                     broadcast.DisneyCastleProgression.SetResourceReference(ContentProperty, "OldPete");
                     DisneyCastleProgression.SetResourceReference(ContentProperty, "OldPete");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 0 && world.eventID3 == 6) // Windows popup (Audience Chamber has no Evt 0x06)
                 {
                     broadcast.DisneyCastleProgression.SetResourceReference(ContentProperty, "Windows");
                     DisneyCastleProgression.SetResourceReference(ContentProperty, "Windows");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 2 && world.eventID1 == 52 && world.eventComplete == 1) // Boat Pete finish
                 {
                     broadcast.DisneyCastleProgression.SetResourceReference(ContentProperty, "BoatPete");
                     DisneyCastleProgression.SetResourceReference(ContentProperty, "BoatPete");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 3 && world.eventID1 == 53 && world.eventComplete == 1) // DC Pete finish
                 {
                     broadcast.DisneyCastleProgression.SetResourceReference(ContentProperty, "DCPete");
                     DisneyCastleProgression.SetResourceReference(ContentProperty, "DCPete");
                     data.WorldsData[world.worldName].progress = 6;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 38 && (world.eventID1 == 145 || world.eventID1 == 150) && world.eventComplete == 1) // Marluxia finish
                 {
                     broadcast.DisneyCastleProgression.SetResourceReference(ContentProperty, "Marluxia");
                     DisneyCastleProgression.SetResourceReference(ContentProperty, "Marluxia");
                     data.WorldsData[world.worldName].progress = 7;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 7 && world.eventID1 == 67 && world.eventComplete == 1) // Lingering Will finish
                 {
                     broadcast.DisneyCastleProgression.SetResourceReference(ContentProperty, "LingeringWill");
                     DisneyCastleProgression.SetResourceReference(ContentProperty, "LingeringWill");
                     data.WorldsData[world.worldName].progress = 8;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "HalloweenTown")
@@ -1788,48 +1973,56 @@ namespace KhTracker
                     broadcast.HalloweenTownProgression.SetResourceReference(ContentProperty, "HTChests");
                     HalloweenTownProgression.SetResourceReference(ContentProperty, "HTChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 6 && world.eventID1 == 53 && world.eventComplete == 1) // Candy Cane Lane fight finish
                 {
                     broadcast.HalloweenTownProgression.SetResourceReference(ContentProperty, "CandyCaneLane");
                     HalloweenTownProgression.SetResourceReference(ContentProperty, "CandyCaneLane");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 3 && world.eventID1 == 52 && world.eventComplete == 1) // Prison Keeper finish
                 {
                     broadcast.HalloweenTownProgression.SetResourceReference(ContentProperty, "PrisonKeeper");
                     HalloweenTownProgression.SetResourceReference(ContentProperty, "PrisonKeeper");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 9 && world.eventID1 == 55 && world.eventComplete == 1) // Oogie Boogie finish
                 {
                     broadcast.HalloweenTownProgression.SetResourceReference(ContentProperty, "OogieBoogie");
                     HalloweenTownProgression.SetResourceReference(ContentProperty, "OogieBoogie");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 1 && world.eventID3 == 10 && data.WorldsData[world.worldName].progress == 0) // Dr. Finklestein's Lab (HT2)
                 {
                     broadcast.HalloweenTownProgression.SetResourceReference(ContentProperty, "HTChests");
                     HalloweenTownProgression.SetResourceReference(ContentProperty, "HTChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 10 && world.eventID1 == 63 && world.eventComplete == 1) // Presents minigame
                 {
                     broadcast.HalloweenTownProgression.SetResourceReference(ContentProperty, "Presents");
                     HalloweenTownProgression.SetResourceReference(ContentProperty, "Presents");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 7 && world.eventID1 == 64 && world.eventComplete == 1) // Experiment finish
                 {
                     broadcast.HalloweenTownProgression.SetResourceReference(ContentProperty, "Experiment");
                     HalloweenTownProgression.SetResourceReference(ContentProperty, "Experiment");
                     data.WorldsData[world.worldName].progress = 6;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 32 && (world.eventID1 == 115 || world.eventID1 == 146) && world.eventComplete == 1) // Vexen finish
                 {
                     broadcast.HalloweenTownProgression.SetResourceReference(ContentProperty, "Vexen");
                     HalloweenTownProgression.SetResourceReference(ContentProperty, "Vexen");
                     data.WorldsData[world.worldName].progress = 7;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "PortRoyal")
@@ -1839,36 +2032,42 @@ namespace KhTracker
                     broadcast.PortRoyalProgression.SetResourceReference(ContentProperty, "PRChests");
                     PortRoyalProgression.SetResourceReference(ContentProperty, "PRChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 2 && world.eventID1 == 55 && world.eventComplete == 1) // Town finish
                 {
                     broadcast.PortRoyalProgression.SetResourceReference(ContentProperty, "Town");
                     PortRoyalProgression.SetResourceReference(ContentProperty, "Town");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 10 && world.eventID1 == 60 && world.eventComplete == 1) // Barbossa finish
                 {
                     broadcast.PortRoyalProgression.SetResourceReference(ContentProperty, "Barbossa");
                     PortRoyalProgression.SetResourceReference(ContentProperty, "Barbossa");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 10 && world.eventID3 == 10 && data.WorldsData[world.worldName].progress == 0) // Treasure Heap (PR2)
                 {
                     broadcast.PortRoyalProgression.SetResourceReference(ContentProperty, "PRChests");
                     PortRoyalProgression.SetResourceReference(ContentProperty, "PRChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 14 && world.eventID1 == 62 && world.eventComplete == 1) // Gambler finish
                 {
                     broadcast.PortRoyalProgression.SetResourceReference(ContentProperty, "Gambler");
                     PortRoyalProgression.SetResourceReference(ContentProperty, "Gambler");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 1 && world.eventID1 == 54 && world.eventComplete == 1) // Grim Reaper finish
                 {
                     broadcast.PortRoyalProgression.SetResourceReference(ContentProperty, "GrimReaper");
                     PortRoyalProgression.SetResourceReference(ContentProperty, "GrimReaper");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "SpaceParanoids")
@@ -1878,42 +2077,49 @@ namespace KhTracker
                     broadcast.SpaceParanoidsProgression.SetResourceReference(ContentProperty, "SPChests");
                     SpaceParanoidsProgression.SetResourceReference(ContentProperty, "SPChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 3 && world.eventID1 == 54 && world.eventComplete == 1) // Screens finish
                 {
                     broadcast.SpaceParanoidsProgression.SetResourceReference(ContentProperty, "Screens");
                     SpaceParanoidsProgression.SetResourceReference(ContentProperty, "Screens");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 4 && world.eventID1 == 55 && world.eventComplete == 1) // Hostile Program finish
                 {
                     broadcast.SpaceParanoidsProgression.SetResourceReference(ContentProperty, "HostileProgram");
                     SpaceParanoidsProgression.SetResourceReference(ContentProperty, "HostileProgram");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 1 && world.eventID3 == 10 && data.WorldsData[world.worldName].progress == 0) // Canyon (SP2)
                 {
                     broadcast.SpaceParanoidsProgression.SetResourceReference(ContentProperty, "SPChests");
                     SpaceParanoidsProgression.SetResourceReference(ContentProperty, "SPChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 7 && world.eventID1 == 57 && world.eventComplete == 1) // Solar Sailer finish
                 {
                     broadcast.SpaceParanoidsProgression.SetResourceReference(ContentProperty, "SolarSailer");
                     SpaceParanoidsProgression.SetResourceReference(ContentProperty, "SolarSailer");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 9 && world.eventID1 == 59 && world.eventComplete == 1) // MCP finish
                 {
                     broadcast.SpaceParanoidsProgression.SetResourceReference(ContentProperty, "MCP");
                     SpaceParanoidsProgression.SetResourceReference(ContentProperty, "MCP");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 33 && (world.eventID1 == 143 || world.eventID1 == 148) && world.eventComplete == 1) // Larxene finish
                 {
                     broadcast.SpaceParanoidsProgression.SetResourceReference(ContentProperty, "Larxene");
                     SpaceParanoidsProgression.SetResourceReference(ContentProperty, "Larxene");
                     data.WorldsData[world.worldName].progress = 6;
+                    CheckLastEventProgression();
                 }
             }
             else if (world.worldName == "TWTNW")
@@ -1923,42 +2129,49 @@ namespace KhTracker
                     broadcast.TWTNWProgression.SetResourceReference(ContentProperty, "TWTNWChests");
                     TWTNWProgression.SetResourceReference(ContentProperty, "TWTNWChests");
                     data.WorldsData[world.worldName].progress = 1;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 21 && world.eventID1 == 65 && world.eventComplete == 1) // Roxas finish
                 {
                     broadcast.TWTNWProgression.SetResourceReference(ContentProperty, "Roxas");
                     TWTNWProgression.SetResourceReference(ContentProperty, "Roxas");
                     data.WorldsData[world.worldName].progress = 2;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 10 && world.eventID1 == 57 && world.eventComplete == 1) // Xigbar finish
                 {
                     broadcast.TWTNWProgression.SetResourceReference(ContentProperty, "Xigbar");
                     TWTNWProgression.SetResourceReference(ContentProperty, "Xigbar");
                     data.WorldsData[world.worldName].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 14 && world.eventID1 == 58 && world.eventComplete == 1) // Luxord finish
                 {
                     broadcast.TWTNWProgression.SetResourceReference(ContentProperty, "Luxord");
                     TWTNWProgression.SetResourceReference(ContentProperty, "Luxord");
                     data.WorldsData[world.worldName].progress = 4;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 15 && world.eventID1 == 56 && world.eventComplete == 1) // Saix finish
                 {
                     broadcast.TWTNWProgression.SetResourceReference(ContentProperty, "Saix");
                     TWTNWProgression.SetResourceReference(ContentProperty, "Saix");
                     data.WorldsData[world.worldName].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 19 && world.eventID1 == 59 && world.eventComplete == 1) // Xemnas 1 finish
                 {
                     broadcast.TWTNWProgression.SetResourceReference(ContentProperty, "Xemnas1");
                     TWTNWProgression.SetResourceReference(ContentProperty, "Xemnas1");
                     data.WorldsData[world.worldName].progress = 6;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 20 && world.eventID1 == 98 && world.eventComplete == 1) // Data Xemnas finish
                 {
                     broadcast.TWTNWProgression.SetResourceReference(ContentProperty, "DataXemnas");
                     TWTNWProgression.SetResourceReference(ContentProperty, "DataXemnas");
                     data.WorldsData[world.worldName].progress = 7;
+                    CheckLastEventProgression();
                 }
 
                 // Handle data fights
@@ -1967,26 +2180,33 @@ namespace KhTracker
                     broadcast.SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "DataRoxas");
                     SimulatedTwilightTownProgression.SetResourceReference(ContentProperty, "DataRoxas");
                     data.WorldsData["SimulatedTwilightTown"].progress = 3;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 10 && world.eventID1 == 100 && world.eventComplete == 1) // Data Xigbar finish
                 {
                     broadcast.LandofDragonsProgression.SetResourceReference(ContentProperty, "DataXigbar");
                     LandofDragonsProgression.SetResourceReference(ContentProperty, "DataXigbar");
                     data.WorldsData["LandofDragons"].progress = 7;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 15 && world.eventID1 == 102 && world.eventComplete == 1) // Data Saix finish
                 {
                     broadcast.PrideLandsProgression.SetResourceReference(ContentProperty, "DataSaix");
                     PrideLandsProgression.SetResourceReference(ContentProperty, "DataSaix");
                     data.WorldsData["PrideLands"].progress = 5;
+                    CheckLastEventProgression();
                 }
                 else if (world.roomNumber == 14 && world.eventID1 == 101 && world.eventComplete == 1) // Data Luxord finish
                 {
                     broadcast.PortRoyalProgression.SetResourceReference(ContentProperty, "DataLuxord");
                     PortRoyalProgression.SetResourceReference(ContentProperty, "DataLuxord");
                     data.WorldsData["PortRoyal"].progress = 6;
+                    CheckLastEventProgression();
                 }
             }
+
+            //progression hints call
+
         }
 
         private string BytesToHex(byte[] bytes)
@@ -2163,6 +2383,431 @@ namespace KhTracker
             await Task.Delay(30000);
             if ((string) HintText.Content == "PC Detected - Tracking" || (string) HintText.Content == "PCSX2 Detected - Tracking")
                 HintText.Content = msg;
+        }
+
+        //progression based hints
+        public void UpdateProgressPoints_H(int pp)
+        {
+            stats.UpdateProgressPoints(pp);
+        }
+
+        private void CheckLastEventProgression()
+        {
+            if (lastEvent[0] != WorldNameToIndex(world.worldName) || lastEvent[1] != world.roomNumber || lastEvent[2] != world.eventID1)
+            {
+                lastEvent = new int[] { WorldNameToIndex(world.worldName), world.roomNumber, world.eventID1 };
+                stats.UpdateProgressPoints(GetProgressionPoints());
+                while (stats.ProgressPoints >= 7)
+                {
+                    stats.UpdateProgressPoints(-7);
+                    int tempIndex = stats.GetNextHintIndex();
+                    SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
+                    SetLocalHintValues(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
+                    SetReportValue(data.WorldsData[data.reportInformation[tempIndex].Item1].hint, data.reportInformation[tempIndex].Item2 + 1);
+                }
+            }
+        }
+
+        //returns values of each progress spot
+        private int GetProgressionPoints()
+        {
+            if (world.worldName == "SimulatedTwilightTown")
+            {
+                if (world.roomNumber == 34 && world.eventID1 == 157 && world.eventComplete == 1) // Twilight Thorn finish
+                {
+                    return stt_TwilightThorn;
+                }
+                else if (world.roomNumber == 5 && world.eventID1 == 88 && world.eventComplete == 1) // Setzer finish
+                {
+                    return stt_Struggle;
+                }
+                else if (world.roomNumber == 20 && world.eventID1 == 137 && world.eventComplete == 1) // Axel finish
+                {
+                    return stt_Axel;
+                }
+            }
+            else if (world.worldName == "TwilightTown")
+            {
+                if (world.roomNumber == 27 && world.eventID3 == 4) // Yen Sid after new clothes
+                {
+                    return tt_Tower;
+                }
+                else if (world.roomNumber == 4 && world.eventID1 == 80 && world.eventComplete == 1) // Sandlot finish
+                {
+                    return tt_Sandlot;
+                }
+                else if (world.roomNumber == 41 && world.eventID1 == 186 && world.eventComplete == 1) // Mansion fight finish
+                {
+                    return tt_Mansion;
+                }
+                else if (world.roomNumber == 40 && world.eventID1 == 161 && world.eventComplete == 1) // Betwixt and Between finish
+                {
+                    return tt_Betwixt;
+                }
+                else if (world.roomNumber == 20 && world.eventID1 == 213 && world.eventComplete == 1) // Data Axel finish
+                {
+                    return tt_DataAxel;
+                }
+            }
+            else if (world.worldName == "HollowBastion")
+            {
+                if (world.roomNumber == 8 && world.eventID1 == 52 && world.eventComplete == 1) // Bailey finish
+                {
+                    return hb_Bailey;
+                }
+                if (world.roomNumber == 5 && world.eventID3 == 20) // Ansem Study post Computer
+                {
+                    return hb_Ansem;
+                }
+                else if (world.roomNumber == 20 && world.eventID1 == 86 && world.eventComplete == 1) // Corridor finish
+                {
+                    return hb_Corridors;
+                }
+                else if (world.roomNumber == 18 && world.eventID1 == 73 && world.eventComplete == 1) // Dancers finish
+                {
+                    return hb_Dancers;
+                }
+                else if (world.roomNumber == 4 && world.eventID1 == 55 && world.eventComplete == 1) // HB Demyx finish
+                {
+                    return hb_Demyx;
+                }
+                else if (world.roomNumber == 16 && world.eventID1 == 65 && world.eventComplete == 1) // FF Cloud finish
+                {
+                    return hb_FFFights;
+                }
+                else if (world.roomNumber == 17 && world.eventID1 == 66 && world.eventComplete == 1) // 1k Heartless finish
+                {
+                    return hb_1k;
+                }
+                else if (world.roomNumber == 1 && world.eventID1 == 75 && world.eventComplete == 1) // Sephiroth finish
+                {
+                    return hb_Sephiroth;
+                }
+                else if (world.roomNumber == 4 && world.eventID1 == 114 && world.eventComplete == 1) // Data Demyx finish
+                {
+                    return hb_DataDemyx;
+                }
+            }
+            else if (world.worldName == "BeastsCastle")
+            {
+                if (world.roomNumber == 11 && world.eventID1 == 72 && world.eventComplete == 1) // Thresholder finish
+                {
+                    return bc_Thresholder;
+                }
+                else if (world.roomNumber == 3 && world.eventID1 == 69 && world.eventComplete == 1) // Beast finish
+                {
+                    return bc_Beast;
+                }
+                else if (world.roomNumber == 5 && world.eventID1 == 79 && world.eventComplete == 1) // Dark Thorn finish
+                {
+                    return bc_DarkThorn;
+                }
+                if (world.roomNumber == 4 && world.eventID1 == 74 && world.eventComplete == 1) // Dragoons finish
+                {
+                    return bc_Dragoons;
+                }
+                else if (world.roomNumber == 15 && world.eventID1 == 82 && world.eventComplete == 1) // Xaldin finish
+                {
+                    return bc_Xaldin;
+                }
+                else if (world.roomNumber == 15 && world.eventID1 == 97 && world.eventComplete == 1) // Data Xaldin finish
+                {
+                    return bc_DataXaldin;
+                }
+            }
+            else if (world.worldName == "OlympusColiseum")
+            {
+                if (world.roomNumber == 7 && world.eventID1 == 114 && world.eventComplete == 1) // Cerberus finish
+                {
+                    return oc_Cerberus;
+                }
+                else if (world.roomNumber == 17 && world.eventID1 == 123 && world.eventComplete == 1) // OC Demyx finish
+                {
+                    return oc_Demyx;
+                }
+                else if (world.roomNumber == 8 && world.eventID1 == 116 && world.eventComplete == 1) // OC Pete finish
+                {
+                    return oc_Pete;
+                }
+                else if (world.roomNumber == 18 && world.eventID1 == 171 && world.eventComplete == 1) // Hydra finish
+                {
+                    return oc_Hydra;
+                }
+                if (world.roomNumber == 6 && world.eventID1 == 126 && world.eventComplete == 1) // Auron Statue fight finish
+                {
+                    return oc_Auron;
+                }
+                else if (world.roomNumber == 19 && world.eventID1 == 202 && world.eventComplete == 1) // Hades finish
+                {
+                    return oc_Hades;
+                }
+                else if (world.roomNumber == 34 && (world.eventID1 == 151 || world.eventID1 == 152) && world.eventComplete == 1) // Zexion finish
+                {
+                    return oc_Zexion;
+                }
+            }
+            else if (world.worldName == "Agrabah")
+            {
+                if (world.roomNumber == 9 && world.eventID1 == 2 && world.eventComplete == 1) // Abu finish
+                {
+                    return ag_Abu;
+                }
+                else if (world.roomNumber == 13 && world.eventID1 == 79 && world.eventComplete == 1) // Chasm fight finish
+                {
+                    return ag_Chasm;
+                }
+                else if (world.roomNumber == 10 && world.eventID1 == 58 && world.eventComplete == 1) // Treasure Room finish
+                {
+                    return ag_Treasure;
+                }
+                else if (world.roomNumber == 3 && world.eventID1 == 59 && world.eventComplete == 1) // Lords finish
+                {
+                    return ag_Twins;
+                }
+                if (world.roomNumber == 14 && world.eventID1 == 100 && world.eventComplete == 1) // Carpet finish
+                {
+                    return ag_Carpet;
+                }
+                else if (world.roomNumber == 5 && world.eventID1 == 62 && world.eventComplete == 1) // Genie Jafar finish
+                {
+                    return ag_Jafar;
+                }
+                else if (world.roomNumber == 33 && (world.eventID1 == 142 || world.eventID1 == 147) && world.eventComplete == 1) // Lexaeus finish
+                {
+                    return ag_Lexaeus;
+                }
+            }
+            else if (world.worldName == "LandofDragons")
+            {
+                if (world.roomNumber == 5 && world.eventID1 == 72 && world.eventComplete == 1) // Cave finish
+                {
+                    return lod_Cave;
+                }
+                else if (world.roomNumber == 7 && world.eventID1 == 73 && world.eventComplete == 1) // Summit finish
+                {
+                    return lod_Summit;
+                }
+                else if (world.roomNumber == 9 && world.eventID1 == 75 && world.eventComplete == 1) // Shan Yu finish
+                {
+                    return lod_ShanYu;
+                }
+                if (world.roomNumber == 10 && world.eventID1 == 78 && world.eventComplete == 1) // Antechamber fight finish
+                {
+                    return lod_Throne;
+                }
+                else if (world.roomNumber == 8 && world.eventID1 == 79 && world.eventComplete == 1) // Storm Rider finish
+                {
+                    return lod_StormRider;
+                }
+            }
+            else if (world.worldName == "HundredAcreWood")
+            {
+                if (world.roomNumber == 4 && world.eventID3 == 1) // Piglet's house
+                {
+                    return ha_Piglet;
+                }
+                else if (world.roomNumber == 3 && world.eventID3 == 1) // Rabbit's house
+                {
+                    return ha_Rabbit;
+                }
+                else if (world.roomNumber == 5 && world.eventID3 == 1) // Kanga's house
+                {
+                    return ha_Kanga;
+                }
+                else if (world.roomNumber == 9 && world.eventID3 == 1) // Spooky Cave
+                {
+                    return ha_SpookyCave;
+                }
+                else if (world.roomNumber == 1 && world.eventID3 == 1) // Starry Hill
+                {
+                    return ha_StarryHill;
+                }
+            }
+            else if (world.worldName == "PrideLands")
+            {
+                if (world.roomNumber == 12 && world.eventID3 == 1) // Oasis after talking to Simba
+                {
+                    return pl_Simba;
+                }
+                else if (world.roomNumber == 14 && world.eventID1 == 55 && world.eventComplete == 1) // Scar finish
+                {
+                    return pl_Scar;
+                }
+                else if (world.roomNumber == 4 && world.eventID3 == 10 && data.WorldsData[world.worldName].progress == 0) // Savannah (PL2)
+                {
+                    return pl_Groundshaker;
+                }
+                else if (world.roomNumber == 15 && world.eventID1 == 59 && world.eventComplete == 1) // Groundshaker finish
+                {
+                    return pl_DataSaix;
+                }
+            }
+            else if (world.worldName == "Atlantica")
+            {
+                if (world.roomNumber == 2 && world.eventID1 == 63) // Tutorial
+                {
+                    return at_Tutorial;
+                }
+                else if (world.roomNumber == 9 && world.eventID1 == 65) // Ursula's Revenge
+                {
+                    return at_Ursula;
+                }
+                else if (world.roomNumber == 4 && world.eventID1 == 55) // A New Day is Dawning
+                {
+                    return at_NewDay;
+                }
+            }
+            else if (world.worldName == "DisneyCastle")
+            {
+                if (world.roomNumber == 0 && world.eventID1 == 51 && world.eventComplete == 1) // Minnie Escort finish
+                {
+                    return dc_Minnie;
+                }
+                if (world.roomNumber == 1 && world.eventID1 == 58 && world.eventComplete == 1) // Old Pete finish
+                {
+                    return dc_OldPete;
+                }
+                else if (world.roomNumber == 0 && world.eventID3 == 6) // Windows popup (Audience Chamber has no Evt 0x06)
+                {
+                    return dc_Windows;
+                }
+                else if (world.roomNumber == 2 && world.eventID1 == 52 && world.eventComplete == 1) // Boat Pete finish
+                {
+                    return dc_Steamboat;
+                }
+                else if (world.roomNumber == 3 && world.eventID1 == 53 && world.eventComplete == 1) // DC Pete finish
+                {
+                    return dc_NewPete;
+                }
+                else if (world.roomNumber == 38 && (world.eventID1 == 145 || world.eventID1 == 150) && world.eventComplete == 1) // Marluxia finish
+                {
+                    return dc_Marluxia;
+                }
+                else if (world.roomNumber == 7 && world.eventID1 == 67 && world.eventComplete == 1) // Lingering Will finish
+                {
+                    return dc_Terra;
+                }
+            }
+            else if (world.worldName == "HalloweenTown")
+            {
+                if (world.roomNumber == 6 && world.eventID1 == 53 && world.eventComplete == 1) // Candy Cane Lane fight finish
+                {
+                    return ht_CandyCaneLane;
+                }
+                else if (world.roomNumber == 3 && world.eventID1 == 52 && world.eventComplete == 1) // Prison Keeper finish
+                {
+                    return ht_PrisonKeeper;
+                }
+                else if (world.roomNumber == 9 && world.eventID1 == 55 && world.eventComplete == 1) // Oogie Boogie finish
+                {
+                    return ht_Oogie;
+                }
+                if (world.roomNumber == 10 && world.eventID1 == 63 && world.eventComplete == 1) // Presents minigame
+                {
+                    return ht_Presents;
+                }
+                else if (world.roomNumber == 7 && world.eventID1 == 64 && world.eventComplete == 1) // Experiment finish
+                {
+                    return ht_Experiment;
+                }
+                else if (world.roomNumber == 32 && (world.eventID1 == 115 || world.eventID1 == 146) && world.eventComplete == 1) // Vexen finish
+                {
+                    return ht_Vexen;
+                }
+            }
+            else if (world.worldName == "PortRoyal")
+            {
+                if (world.roomNumber == 2 && world.eventID1 == 55 && world.eventComplete == 1) // Town finish
+                {
+                    return pr_Town;
+                }
+                else if (world.roomNumber == 10 && world.eventID1 == 60 && world.eventComplete == 1) // Barbossa finish
+                {
+                    return pr_Barbossa;
+                }
+                if (world.roomNumber == 14 && world.eventID1 == 62 && world.eventComplete == 1) // Gambler finish
+                {
+                    return pr_Gambler;
+                }
+                else if (world.roomNumber == 1 && world.eventID1 == 54 && world.eventComplete == 1) // Grim Reaper finish
+                {
+                    return pr_Grim2;
+                }
+            }
+            else if (world.worldName == "SpaceParanoids")
+            {
+                if (world.roomNumber == 3 && world.eventID1 == 54 && world.eventComplete == 1) // Screens finish
+                {
+                    return sp_Screens;
+                }
+                else if (world.roomNumber == 4 && world.eventID1 == 55 && world.eventComplete == 1) // Hostile Program finish
+                {
+                    return sp_HostileProgram;
+                }
+                else if (world.roomNumber == 7 && world.eventID1 == 57 && world.eventComplete == 1) // Solar Sailer finish
+                {
+                    return sp_SolarSailer;
+                }
+                else if (world.roomNumber == 9 && world.eventID1 == 59 && world.eventComplete == 1) // MCP finish
+                {
+                    return sp_MCP;
+                }
+                else if (world.roomNumber == 33 && (world.eventID1 == 143 || world.eventID1 == 148) && world.eventComplete == 1) // Larxene finish
+                {
+                    return sp_Larxene;
+                }
+            }
+            else if (world.worldName == "TWTNW")
+            {
+                if (world.roomNumber == 1 && world.eventID3 == 1) // Alley to Between
+                {
+                    return 7;
+                }
+                else if (world.roomNumber == 21 && world.eventID1 == 65 && world.eventComplete == 1) // Roxas finish
+                {
+                    return twtnw_Roxas;
+                }
+                else if (world.roomNumber == 10 && world.eventID1 == 57 && world.eventComplete == 1) // Xigbar finish
+                {
+                    return twtnw_Xigbar;
+                }
+                else if (world.roomNumber == 14 && world.eventID1 == 58 && world.eventComplete == 1) // Luxord finish
+                {
+                    return twtnw_Luxord;
+                }
+                else if (world.roomNumber == 15 && world.eventID1 == 56 && world.eventComplete == 1) // Saix finish
+                {
+                    return twtnw_Saix;
+                }
+                else if (world.roomNumber == 19 && world.eventID1 == 59 && world.eventComplete == 1) // Xemnas 1 finish
+                {
+                    return twtnw_Xemnas;
+                }
+                else if (world.roomNumber == 20 && world.eventID1 == 98 && world.eventComplete == 1) // Data Xemnas finish
+                {
+                    return twtnw_DataXemnas;
+                }
+
+                // Handle data fights
+                else if (world.roomNumber == 21 && world.eventID1 == 99 && world.eventComplete == 1) // Data Roxas finish
+                {
+                    return stt_DataRoxas;
+                }
+                else if (world.roomNumber == 10 && world.eventID1 == 100 && world.eventComplete == 1) // Data Xigbar finish
+                {
+                    return lod_DataXigbar;
+                }
+                else if (world.roomNumber == 15 && world.eventID1 == 102 && world.eventComplete == 1) // Data Saix finish
+                {
+                    return pl_DataSaix;
+                }
+                else if (world.roomNumber == 14 && world.eventID1 == 101 && world.eventComplete == 1) // Data Luxord finish
+                {
+                    return pr_DataLuxord;
+                }
+            }
+            
+            return 0;
         }
     }
 }

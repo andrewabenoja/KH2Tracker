@@ -821,8 +821,8 @@ namespace KhTracker
             Defense.Visibility = Visibility.Hidden;
             Weapon.Visibility = Visibility.Hidden;
 
-            LevelRewardIcon.Visibility = Visibility.Hidden;
-            LevelReward.Visibility = Visibility.Hidden;
+            //LevelRewardIcon.Visibility = Visibility.Hidden;
+            //LevelReward.Visibility = Visibility.Hidden;
 
             broadcast.LevelIcon.Visibility = Visibility.Hidden;
             broadcast.Level.Visibility = Visibility.Hidden;

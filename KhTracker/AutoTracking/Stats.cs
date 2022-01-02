@@ -79,6 +79,20 @@ namespace KhTracker
             }
         }
 
+        //track current progress points
+        private int progressPoints;
+        public int ProgressPoints
+        {
+            get { return progressPoints; }
+            set
+            {
+                progressPoints = value;
+                OnPropertyChanged("ProgressPoints");
+            }
+        }
+
+        public int hintIndex = 0;
+
         public int form;
 
         private int levelAddress;
@@ -179,6 +193,21 @@ namespace KhTracker
                     break;
                 }
             }
+        }
+
+        public void UpdateProgressPoints(int pp)
+        {
+            ProgressPoints += pp;
+        }
+
+        public void SetProgressPoints(int pp)
+        {
+            ProgressPoints = pp;
+        }
+
+        public int GetNextHintIndex()
+        {
+            return hintIndex++;
         }
     }
 }

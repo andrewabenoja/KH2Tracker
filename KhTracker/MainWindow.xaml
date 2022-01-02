@@ -80,7 +80,7 @@
                 <MenuItem Name="HotkeyOption" Header="Enable Hotkey" IsCheckable="True" IsChecked="False" Click="HotkeyToggle"/>
             </MenuItem>
             <MenuItem Name="ModeDisplay" Header="" Focusable="False" IsHitTestVisible="False"/>
-            <MenuItem Header="v2.8 - Codename__Geek v1.1" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
+            <MenuItem Header="Progression Hints v1.0b - Codename__Geek" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
         </Menu>
 
         <Grid>
@@ -696,12 +696,16 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <Viewbox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="16">
+                <Viewbox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="14">
                     <Label Name="HintText" Foreground="White" HorizontalAlignment="Center" FontSize="15" Padding="0" Margin="33,0,0,0"/>
                 </Viewbox>
 
-                <Image Name="LevelRewardIcon" Source="Images/Simple/level.png" Grid.Row="1" Height="18" VerticalAlignment="Bottom" RenderTransformOrigin="0.47,1.815" Grid.Column="1" Grid.ColumnSpan="2" Margin="12,0,33,4" Visibility="Hidden"/>
-                <Image Name="LevelReward" Source="Images/Numbers/99.png" Grid.Row="1" Grid.Column="2" Height="18" RenderTransformOrigin="0.678,0.889" Margin="0,9,0,4" Visibility="Hidden"/>
+                <!--Image Name="LevelRewardIcon" Source="Images/Simple/level.png" Grid.Row="1" Height="18" VerticalAlignment="Bottom" RenderTransformOrigin="0.47,1.815" Grid.Column="1" Grid.ColumnSpan="2" Margin="12,0,33,4" Visibility="Hidden"/>
+                <Image Name="LevelReward" Source="Images/Numbers/99.png" Grid.Row="1" Grid.Column="2" Height="18" RenderTransformOrigin="0.678,0.889" Margin="0,9,0,4" Visibility="Hidden"/-->
+
+                <Image Name="ProgressPoints" Source="Images/Numbers/0.png" Grid.Row="1" Grid.Column="15" Visibility="Visible" Grid.ColumnSpan="2" Margin="8,7,3,6.5"/>
+                <Image Name="CollectedBar2" Source="Images/Bar.png" Grid.Row="1" Grid.Column="16" Margin="0,7,0,6.5"/>
+                <Image Name="ProgressPointsTotal" Source="Images/Numbers/7.png" Grid.Row="1" Grid.Column="15" RenderTransformOrigin="0.678,0.889" Margin="30,7,2,6.5" Visibility="Visible" Grid.ColumnSpan="3"/>
 
                 <Image Name="LevelIcon" Source="Images/Simple/level.png" Grid.Row="3" Grid.Column="1" Visibility="Hidden"/>
                 <Image Name="Level" Source="Images/Numbers/1.png" Grid.Row="3" Grid.Column="2" Visibility="Hidden"/>

@@ -20,6 +20,8 @@ namespace KhTracker
     /// </summary>
     public partial class WorldGrid : UniformGrid
     {
+        private Stats stats;
+
         public WorldGrid()
         {
             InitializeComponent();
@@ -134,8 +136,9 @@ namespace KhTracker
                 if (data.reportLocations[index] == Name.Substring(0, Name.Length - 4))
                 {
                     // hint text and resetting fail icons
-                    window.SetHintText(Codes.GetHintTextName(data.reportInformation[index].Item1) + " has " + data.reportInformation[index].Item2 + " important checks");
-                    window.SetLocalHintValues(data.reportInformation[index].Item1, data.reportInformation[index].Item2);
+                    //window.SetHintText(Codes.GetHintTextName(data.reportInformation[index].Item1) + " has " + data.reportInformation[index].Item2 + " important checks");
+                    //window.SetLocalHintValues(data.reportInformation[index].Item1, data.reportInformation[index].Item2);
+                    window.UpdateProgressPoints_H(2);
                     data.ReportAttemptVisual[index].SetResourceReference(ContentControl.ContentProperty, "Fail0");
                     data.reportAttempts[index] = 3;
                     isreport = true;
@@ -156,12 +159,12 @@ namespace KhTracker
                         {
                             int reportIndex = int.Parse(gridItem.Name.Substring(6)) - 1;
                             data.WorldsData[data.reportInformation[reportIndex].Item1].hintedHint = true;
-                            window.SetReportValue(data.WorldsData[data.reportInformation[reportIndex].Item1].hint, data.reportInformation[reportIndex].Item2 + 1);
+                            //window.SetReportValue(data.WorldsData[data.reportInformation[reportIndex].Item1].hint, data.reportInformation[reportIndex].Item2 + 1);
                         }
                     }
 
                     // auto update world important check number
-                    window.SetReportValue(data.WorldsData[data.reportInformation[index].Item1].hint, data.reportInformation[index].Item2 + 1);
+                    //window.SetReportValue(data.WorldsData[data.reportInformation[index].Item1].hint, data.reportInformation[index].Item2 + 1);
                 }
                 else
                 {
