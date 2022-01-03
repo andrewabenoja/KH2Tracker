@@ -2389,6 +2389,18 @@ namespace KhTracker
         public void UpdateProgressPoints_H(int pp)
         {
             stats.UpdateProgressPoints(pp);
+
+            if (stats.hintIndex >= 13)
+                return;
+
+            while (stats.ProgressPoints >= 7)
+            {
+                stats.UpdateProgressPoints(-7);
+                int tempIndex = stats.GetNextHintIndex();
+                SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
+                SetLocalHintValues(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
+                SetReportValue(data.WorldsData[data.reportInformation[tempIndex].Item1].hint, data.reportInformation[tempIndex].Item2 + 1);
+            }
         }
 
         private void CheckLastEventProgression()

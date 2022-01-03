@@ -198,11 +198,15 @@ namespace KhTracker
         public void UpdateProgressPoints(int pp)
         {
             ProgressPoints += pp;
+            if (pp > 99)
+                pp = 99;
         }
 
         public void SetProgressPoints(int pp)
         {
             ProgressPoints = pp;
+            if (pp > 99)
+                pp = 99;
         }
 
         public int GetNextHintIndex()
