@@ -168,7 +168,7 @@ namespace KhTracker
         //100 AW
         private int ha_Piglet = 1;
         private int ha_Rabbit = 1;
-        private int ha_Kanga = 1;
+        private int ha_Kanga = 2;
         private int ha_SpookyCave = 3;
         private int ha_StarryHill = 4;
         //Pride Lands

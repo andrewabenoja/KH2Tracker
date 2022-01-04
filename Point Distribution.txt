@@ -61,7 +61,7 @@ Land of Dragons
 100 Acre Wood
 	Piglet			1
 	Rabbit			1
-	Kanga			1
+	Kanga			2
 	Spooky Cave		3
 	Starry Hill		4
 
