@@ -2393,9 +2393,9 @@ namespace KhTracker
             if (stats.hintIndex >= 13)
                 return;
 
-            while (stats.ProgressPoints >= 7)
+            while (stats.ProgressPoints >= 6)
             {
-                stats.UpdateProgressPoints(-7);
+                stats.UpdateProgressPoints(-6);
                 int tempIndex = stats.GetNextHintIndex();
                 SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
                 SetLocalHintValues(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
@@ -2413,9 +2413,9 @@ namespace KhTracker
                 if (stats.hintIndex >= 13)
                     return;
 
-                while (stats.ProgressPoints >= 7)
+                while (stats.ProgressPoints >= 6)
                 {
-                    stats.UpdateProgressPoints(-7);
+                    stats.UpdateProgressPoints(-6);
                     int tempIndex = stats.GetNextHintIndex();
                     SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
                     SetLocalHintValues(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);

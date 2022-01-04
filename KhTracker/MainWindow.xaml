@@ -80,7 +80,7 @@
                 <MenuItem Name="HotkeyOption" Header="Enable Hotkey" IsCheckable="True" IsChecked="False" Click="HotkeyToggle"/>
             </MenuItem>
             <MenuItem Name="ModeDisplay" Header="" Focusable="False" IsHitTestVisible="False"/>
-            <MenuItem Header="Progression Hints v1.1b - Codename__Geek" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
+            <MenuItem Header="Progression Hints v1.2b - Codename__Geek" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
         </Menu>
 
         <Grid>
@@ -705,7 +705,7 @@
 
                 <Image Name="ProgressPoints" Source="Images/Numbers/0.png" Grid.Row="1" Grid.Column="15" Visibility="Visible" Grid.ColumnSpan="2" Margin="8,7,3,6.5"/>
                 <Image Name="CollectedBar2" Source="Images/Bar.png" Grid.Row="1" Grid.Column="16" Margin="0,7,0,6.5"/>
-                <Image Name="ProgressPointsTotal" Source="Images/Numbers/7.png" Grid.Row="1" Grid.Column="15" RenderTransformOrigin="0.678,0.889" Margin="30,7,2,6.5" Visibility="Visible" Grid.ColumnSpan="3"/>
+                <Image Name="ProgressPointsTotal" Source="Images/Numbers/6.png" Grid.Row="1" Grid.Column="15" RenderTransformOrigin="0.678,0.889" Margin="30,7,2,6.5" Visibility="Visible" Grid.ColumnSpan="3"/>
 
                 <Image Name="LevelIcon" Source="Images/Simple/level.png" Grid.Row="3" Grid.Column="1" Visibility="Hidden"/>
                 <Image Name="Level" Source="Images/Numbers/1.png" Grid.Row="3" Grid.Column="2" Visibility="Hidden"/>
