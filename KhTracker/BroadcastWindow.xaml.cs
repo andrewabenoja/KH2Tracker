@@ -177,8 +177,9 @@ namespace KhTracker
                 if (world.Value < 52)
                 {
                     BitmapImage number = Numbers[world.Value + 1];
-                    if ((data.WorldsData.ContainsKey(world.Key) && world.Key != "GoA" && data.WorldsData[world.Key].hintedHint) 
+                    if (((data.WorldsData.ContainsKey(world.Key) && world.Key != "GoA" && data.WorldsData[world.Key].hintedHint) 
                         || (data.WorldsData.ContainsKey(world.Key) &&  world.Key != "GoA" && data.WorldsData[world.Key].complete))
+                        && false)
                     {
                         number = data.BlueNumbers[world.Value + 1];
                         Image bar = FindName(world.Key + "Bar") as Image;
@@ -212,7 +213,7 @@ namespace KhTracker
                 {
                     worldTotal.Source = data.SingleNumbers[0];
                 }
-                else if ((data.WorldsData.ContainsKey(total.Key) &&  total.Key != "GoA" && data.WorldsData[total.Key].hintedHint) 
+                else if (((data.WorldsData.ContainsKey(total.Key) &&  total.Key != "GoA" && data.WorldsData[total.Key].hintedHint) && false) 
                     || (data.WorldsData.ContainsKey(total.Key) &&  total.Key != "GoA" && data.WorldsData[total.Key].complete))
                 {
                     if (total.Value <= 10)

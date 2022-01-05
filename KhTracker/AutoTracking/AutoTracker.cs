@@ -214,6 +214,41 @@ namespace KhTracker
         private int twtnw_Saix = 2;
         private int twtnw_Xemnas = 3;
         private int twtnw_DataXemnas = 5;
+        //Level Points Stuff
+        private int sora_PreviousLevel = 1;
+        private int sora_NextPPLevel = 10;
+        //private bool sora_Update = false;
+        private int sora_Level10 = 1;
+        private int sora_Level20 = 1;
+        private int sora_Level30 = 2;
+        private int sora_Level40 = 2;
+        private int sora_Level50 = 3;
+        //Drive Points Stuff
+            //valor
+        private int valor_PreviousLevel = 1;
+        private int valor_Level5 = 1;
+        private int valor_Level7 = 3;
+        private int valor_NextLevel = 5;
+            //wisdom
+        private int wisdom_PreviousLevel = 1;
+        private int wisdom_Level5 = 1;
+        private int wisdom_Level7 = 3;
+        private int wisdom_NextLevel = 5;
+            //limit
+        private int limit_PreviousLevel = 1;
+        private int limit_Level5 = 1;
+        private int limit_Level7 = 3;
+        private int limit_NextLevel = 5;
+            //master
+        private int master_PreviousLevel = 1;
+        private int master_Level5 = 1;
+        private int master_Level7 = 3;
+        private int master_NextLevel = 5;
+            //final
+        private int final_PreviousLevel = 1;
+        private int final_Level5 = 1;
+        private int final_Level7 = 3;
+        private int final_NextLevel = 5;
 
         public void InitPCSX2Tracker(object sender, RoutedEventArgs e)
         {
@@ -628,7 +663,10 @@ namespace KhTracker
                 return;
             }
 
-            HintText.Content = "PC Detected - Tracking";
+            if (!PCSX2)
+                HintText.Content = "PC Detected - Tracking";
+            else
+                HintText.Content = "PCSX2 Detected - Tracking";
             SetHintTextDelayed("");
 
             importantChecks = new List<ImportantCheck>();
@@ -954,6 +992,9 @@ namespace KhTracker
                 UpdateMagicAddresses();
                 UpdateWorldProgress(world);
 
+                //check level/drive changes here
+                UpdateProgressPoints_H(ProgressionHintsSoraLevels());
+                UpdateProgressPoints_H(ProgressionHintsDriveLevels());
 
                 importantChecks.ForEach(delegate (ImportantCheck importantCheck)
                 {
@@ -974,7 +1015,7 @@ namespace KhTracker
 
             UpdateCollectedItems();
             DetermineItemLocations();
-            stats.SetNextLevelCheck(stats.Level);
+            //stats.SetNextLevelCheck(stats.Level);
         }
 
         private void TrackItem(string itemName, WorldGrid world)
@@ -2388,6 +2429,9 @@ namespace KhTracker
         //progression based hints
         public void UpdateProgressPoints_H(int pp)
         {
+            if (pp == 0)
+                return;
+
             stats.UpdateProgressPoints(pp);
 
             if (stats.hintIndex >= 13)
@@ -2822,7 +2866,127 @@ namespace KhTracker
                     return pr_DataLuxord;
                 }
             }
-            
+
+            return 0;
+        }
+
+        private int ProgressionHintsSoraLevels()
+        {
+            if (stats.Level > sora_PreviousLevel)
+            {
+                if (stats.Level >= 10 && sora_NextPPLevel == 10)
+                {
+                    sora_PreviousLevel = stats.Level;
+                    sora_NextPPLevel = 20;
+                    return sora_Level10;
+                }
+                else if (stats.Level >= 20 && sora_NextPPLevel == 20)
+                {
+                    sora_PreviousLevel = stats.Level;
+                    sora_NextPPLevel = 30;
+                    return sora_Level20;
+                }
+                else if (stats.Level >= 30 && sora_NextPPLevel == 30)
+                {
+                    sora_PreviousLevel = stats.Level;
+                    sora_NextPPLevel = 40;
+                    return sora_Level30;
+                }
+                else if (stats.Level >= 40 && sora_NextPPLevel == 40)
+                {
+                    sora_PreviousLevel = stats.Level;
+                    sora_NextPPLevel = 50;
+                    return sora_Level40;
+                }
+                else if (stats.Level >= 50 && sora_NextPPLevel == 50)
+                {
+                    sora_PreviousLevel = stats.Level;
+                    sora_NextPPLevel = 99;
+                    return sora_Level50;
+                }
+            }
+
+            return 0;
+        }
+
+        private int ProgressionHintsDriveLevels()
+        {
+            if (valor.Level > valor_PreviousLevel)
+            {
+                if (valor.Level >= 5 && valor_NextLevel == 5)
+                {
+                    valor_PreviousLevel = valor.Level;
+                    valor_NextLevel = 7;
+                    return valor_Level5;
+                }
+                else if (valor.Level >= 7 && valor_NextLevel == 7)
+                {
+                    valor_PreviousLevel = valor.Level;
+                    valor_NextLevel = 8;
+                    return valor_Level7;
+                }
+            }
+            if (wisdom.Level > wisdom_PreviousLevel)
+            {
+                if (wisdom.Level >= 5 && wisdom_NextLevel == 5)
+                {
+                    wisdom_PreviousLevel = wisdom.Level;
+                    wisdom_NextLevel = 7;
+                    return wisdom_Level5;
+                }
+                else if (wisdom.Level >= 7 && wisdom_NextLevel == 7)
+                {
+                    wisdom_PreviousLevel = wisdom.Level;
+                    wisdom_NextLevel = 8;
+                    return wisdom_Level7;
+                }
+            }
+            if (limit.Level > limit_PreviousLevel)
+            {
+                if (limit.Level >= 5 && limit_NextLevel == 5)
+                {
+                    limit_PreviousLevel = limit.Level;
+                    limit_NextLevel = 7;
+                    return limit_Level5;
+                }
+                else if (limit.Level >= 7 && limit_NextLevel == 7)
+                {
+                    limit_PreviousLevel = limit.Level;
+                    limit_NextLevel = 8;
+                    return limit_Level7;
+                }
+            }
+            if (master.Level > master_PreviousLevel)
+            {
+                if (master.Level >= 5 && master_NextLevel == 5)
+                {
+                    master_PreviousLevel = master.Level;
+                    master_NextLevel = 7;
+                    return master_Level5;
+                }
+                else if (master.Level >= 7 && master_NextLevel == 7)
+                {
+                    master_PreviousLevel = master.Level;
+                    master_NextLevel = 8;
+                    return master_Level7;
+                }
+            }
+            if (final.Level > final_PreviousLevel)
+            {
+                if (final.Level >= 5 && final_NextLevel == 5)
+                {
+                    final_PreviousLevel = final.Level;
+                    final_NextLevel = 7;
+                    return final_Level5;
+                }
+                else if (final.Level >= 7 && final_NextLevel == 7)
+                {
+                    final_PreviousLevel = final.Level;
+                    final_NextLevel = 8;
+                    return final_Level7;
+                }
+            }
+
             return 0;
         }
 
