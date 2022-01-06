@@ -536,7 +536,7 @@ namespace KhTracker
             var numList = data.Numbers;
 
             string location = Hint.Name.Substring(0, Hint.Name.Length - 4);
-            if (data.WorldsData[location].hintedHint || data.WorldsData[location].complete && false)
+            if (data.WorldsData[location].hintedHint || data.WorldsData[location].complete)
                 numList = data.BlueNumbers;
 
             if (value > 52)

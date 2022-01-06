@@ -1,19 +1,19 @@
 Current Point Distribution - 
 
-Simulated Twilight Town
+Simulated Twilight Town (11)
 	Twilight Thorn		2
 	Struggle Fights		2
 	Axel			3
 	Data Roxas		4
 
-Twilight Town
+Twilight Town (14)
 	Tower			2
 	Sandlot			2
 	Mickey Mansion		3
 	Betwixt			3
 	Data Axel		4
 
-Hallow Bastion
+Hallow Bastion (27)
 	Bailey			2
 	Ansem's Study		1
 	Corridors		2
@@ -24,7 +24,7 @@ Hallow Bastion
 	Sephiroth		4
 	Data Demyx		5
 
-Beast's Castle
+Beast's Castle (16)
 	Thresholder		2
 	Beast's Room		1
 	Dark Thorn		2
@@ -32,7 +32,7 @@ Beast's Castle
 	Xaldin			4
 	Data Xaldin		5
 
-Olympus Coliseum
+Olympus Coliseum (17)
 	Cerberus		3
 	Demyx			1
 	Pete			1
@@ -41,7 +41,7 @@ Olympus Coliseum
 	Hades			3
 	Zexion			4
 
-Agrabah
+Agrabah (19)
 	Abu			1
 	Chasm of Challenges	2
 	Treasure Room		2
@@ -50,7 +50,7 @@ Agrabah
 	Genie Jafar		4
 	Lexaeus			4
 
-Land of Dragons
+Land of Dragons (18)
 	Cave			3
 	Summit			1
 	Shan-Yu			2
@@ -58,25 +58,25 @@ Land of Dragons
 	Storm Rider		4
 	Data Xigbar		5
 
-100 Acre Wood
+100 Acre Wood (11)
 	Piglet			1
 	Rabbit			1
 	Kanga			2
 	Spooky Cave		3
 	Starry Hill		4
 
-Pride Lands
+Pride Lands (12)
 	Simba			1
 	Scar			3
-	Groundshaker		3
+	Groundshaker		4
 	Data Saix		4
 
-Atlantica
+Atlantica (8)
 	Tutorial		1
 	Ursula			3
 	New Day			4
 
-Disney Castle / Timeless River
+Disney Castle / Timeless River (18)
 	Minnie Escort		1
 	Old Pete		1
 	Windows			3
@@ -85,7 +85,7 @@ Disney Castle / Timeless River
 	Marluxia		4
 	Terra			5
 
-Halloween Town
+Halloween Town (15)
 	Candy Cane Lane		1
 	Prison Keeper		3
 	Oogie Boogie		2
@@ -93,25 +93,37 @@ Halloween Town
 	Experiment		4
 	Vexen			4
 
-Port Royal
+Port Royal (16)
 	Town			2
 	Barbossa		3
 	Gambler			2
 	Grim Reaper 2		4
 	Data Luxord		5
 
-Space Paranoids
+Space Paranoids (17)
 	Screens			3
 	Hostile Program		3
 	Solar Sailer		3
 	MCP			4
 	Larxene			4
 
-The World That Never Was
+The World That Never Was (17)
 	Roxas			2
 	Xigbar			3
 	Luxord			2
 	Saix			2
 	Xemnas			3
 	Data Xemnas		5
+
+Sora Level Ups (9)
+	Level 10		1
+	Level 20		1
+	Level 30		2
+	Level 40		2
+	Level 50		3
+
+Drive Level Ups (20)
+	(per form)
+	Drive Level 5		1
+	Drive Level 7		3
 

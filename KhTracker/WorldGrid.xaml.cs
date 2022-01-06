@@ -158,7 +158,7 @@ namespace KhTracker
                         if (gridItem.Name.Contains("Report"))
                         {
                             int reportIndex = int.Parse(gridItem.Name.Substring(6)) - 1;
-                            data.WorldsData[data.reportInformation[reportIndex].Item1].hintedHint = true;
+                            //data.WorldsData[data.reportInformation[reportIndex].Item1].hintedHint = true;
                             //window.SetReportValue(data.WorldsData[data.reportInformation[reportIndex].Item1].hint, data.reportInformation[reportIndex].Item2 + 1);
                         }
                     }

@@ -2444,6 +2444,10 @@ namespace KhTracker
                 SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
                 SetLocalHintValues(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
                 SetReportValue(data.WorldsData[data.reportInformation[tempIndex].Item1].hint, data.reportInformation[tempIndex].Item2 + 1);
+                data.WorldsData[data.reportInformation[tempIndex].Item1].hinted = true;
+
+                if (stats.hintIndex >= 13)
+                    SetNumbersBlue();
             }
         }
 
@@ -2464,6 +2468,10 @@ namespace KhTracker
                     SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
                     SetLocalHintValues(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
                     SetReportValue(data.WorldsData[data.reportInformation[tempIndex].Item1].hint, data.reportInformation[tempIndex].Item2 + 1);
+                    data.WorldsData[data.reportInformation[tempIndex].Item1].hinted = true;
+
+                    if (stats.hintIndex >= 13)
+                        SetNumbersBlue();
                 }
             }
         }
@@ -2994,6 +3002,23 @@ namespace KhTracker
         {
             stats.SetProgressPoints(0);
             stats.ResetProgressPoints();
+        }
+
+        public async void SetNumbersBlue()
+        {
+            await Task.Delay(500);
+            //Console.WriteLine("Where do I crash?");
+            for (int i = 0; i < 13; ++i)
+            {
+                //Console.WriteLine("Here? " + i);
+                if (data.WorldsData[data.reportInformation[i].Item1].hinted)
+                {
+                    //Console.WriteLine(data.WorldsData[data.reportInformation[i].Item1].checkCount);
+                    data.WorldsData[data.reportInformation[i].Item1].hintedHint = true;
+                    SetReportValue(data.WorldsData[data.reportInformation[i].Item1].hint, data.reportInformation[i].Item2 + 1);
+                    //Console.WriteLine("Found a report here!");
+                }
+            }
         }
     }
 }
