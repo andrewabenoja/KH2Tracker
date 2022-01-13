@@ -897,7 +897,9 @@ namespace KhTracker
             ResetHotkeyState();
             //better logic reset
             ResetLocaLHintMemory();
+            //progress hints reset
             ResetProgressionHints();
+            ResetProgressionData();
         }
         
         private void BroadcastWindow_Open(object sender, RoutedEventArgs e)

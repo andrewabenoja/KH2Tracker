@@ -113,7 +113,6 @@ namespace KhTracker
         public bool[] tornPageMemory =   { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
         public bool[] driveFormMemory =  { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
-        //progression hints chart
         //Simulated Twilight Town
         private int stt_TwilightThorn = 2;
         private int stt_Struggle = 2;
@@ -264,8 +263,8 @@ namespace KhTracker
         {
             Console.WriteLine("Hotkey pressed PCSX2");
 
-            if (!HotkeyOption.IsChecked)
-                return;
+            //if (!HotkeyOption.IsChecked)
+                //return;
 
             if (!usedHotkey)
             {
@@ -277,8 +276,8 @@ namespace KhTracker
         {
             Console.WriteLine("Hotkey pressed PC");
 
-            if (!HotkeyOption.IsChecked)
-                return;
+            //if (!HotkeyOption.IsChecked)
+                //return;
 
             if (!usedHotkey)
             {
@@ -755,19 +754,6 @@ namespace KhTracker
             Defense.Visibility = Visibility.Visible;
             Weapon.Visibility = Visibility.Visible;
 
-            if (NextLevelRewardOption50.IsChecked || NextLevelRewardOption99.IsChecked)
-            {
-                //LevelRewardIcon.Visibility = Visibility.Visible;
-                //LevelReward.Visibility = Visibility.Visible;
-
-                if (NextLevelRewardOption50.IsChecked)
-                    stats.SetMaxLevelRewardCheck(50);
-                else
-                    stats.SetMaxLevelRewardCheck(99);
-            }
-            else
-                stats.SetMaxLevelRewardCheck(1);
-
             broadcast.LevelIcon.Visibility = Visibility.Visible;
             broadcast.Level.Visibility = Visibility.Visible;
             broadcast.StrengthIcon.Visibility = Visibility.Visible;
@@ -785,7 +771,17 @@ namespace KhTracker
             SetBindings();
             SetTimer();
             OnTimedEvent(null, null);
-            stats.SetProgressPoints(0);
+            if (!data.startedProgression)
+            {
+                stats.SetProgressPoints(80);
+                stats.SetHintIndex(0);
+                data.startedProgression = true;
+            }
+            else
+            {
+                stats.SetProgressPoints(data.storedProgressPoints);
+                stats.SetHintIndex(data.storedProgressIndex);
+            }
         }
 
         private void finishSetupPCSX2()
@@ -1010,6 +1006,8 @@ namespace KhTracker
                 SetAutoDetectTimer();
 
                 HintText.Content = "Connection Lost, Reconnecting...";
+                data.storedProgressPoints = stats.ProgressPoints;
+                data.storedProgressIndex = stats.hintIndex;
                 return;
             }
 
@@ -2693,6 +2691,10 @@ namespace KhTracker
             }
             else if (world.worldName == "PrideLands")
             {
+                //if (world.roomNumber == 16 && world.eventID3 == 1) // Wildebeest Valley (PL1)
+                //{
+                //    return 7;
+                //}
                 if (world.roomNumber == 12 && world.eventID3 == 1) // Oasis after talking to Simba
                 {
                     return pl_Simba;
@@ -2827,11 +2829,11 @@ namespace KhTracker
             }
             else if (world.worldName == "TWTNW")
             {
-                /*if (world.roomNumber == 1 && world.eventID3 == 1) // Alley to Between
+                if (world.roomNumber == 1 && world.eventID3 == 1) // Alley to Between
                 {
-                    return 7;
-                }*/
-                if (world.roomNumber == 21 && world.eventID1 == 65 && world.eventComplete == 1) // Roxas finish
+                    return 1;
+                }
+                else if (world.roomNumber == 21 && world.eventID1 == 65 && world.eventComplete == 1) // Roxas finish
                 {
                     return twtnw_Roxas;
                 }
@@ -3018,6 +3020,8 @@ namespace KhTracker
                     SetReportValue(data.WorldsData[data.reportInformation[i].Item1].hint, data.reportInformation[i].Item2 + 1);
                     //Console.WriteLine("Found a report here!");
                 }
+
+                SetReportValue(data.WorldsData[data.reportInformation[i].Item1].hint, data.reportInformation[i].Item2 + 1);
             }
         }
     }

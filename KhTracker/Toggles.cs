@@ -160,95 +160,6 @@ namespace KhTracker
             HandleWorldToggle(toggle, SorasHeart, SorasHeartGrid);
         }
 
-        //level check toggles
-        private void NextLevelReward1Option(object sender, RoutedEventArgs e)
-        {
-            //mimic radio button
-            if (NextLevelRewardOption1.IsChecked == false)
-            {
-                NextLevelRewardOption1.IsChecked = true;
-                return;
-            }
-
-            NextLevelRewardOption50.IsChecked = false;
-            NextLevelRewardOption99.IsChecked = false;
-
-            Properties.Settings.Default.NextLevelCheck1 = NextLevelRewardOption1.IsChecked;
-            Properties.Settings.Default.NextLevelCheck50 = NextLevelRewardOption50.IsChecked;
-            Properties.Settings.Default.NextLevelCheck99 = NextLevelRewardOption99.IsChecked;
-
-            /*if (LevelRewardIcon.Visibility == Visibility.Visible && memory != null)
-            {
-                LevelRewardIcon.Visibility = Visibility.Hidden;
-                LevelReward.Visibility = Visibility.Hidden;
-            }*/
-
-            HintText.Margin = new Thickness(-10, 0, 0, 0);
-        }
-
-        private void NextLevelReward50Option(object sender, RoutedEventArgs e)
-        {
-            //mimic radio button
-            if (NextLevelRewardOption50.IsChecked == false)
-            {
-                NextLevelRewardOption50.IsChecked = true;
-                return;
-            }
-
-            NextLevelRewardOption1.IsChecked = false;
-            NextLevelRewardOption99.IsChecked = false;
-
-            Properties.Settings.Default.NextLevelCheck1 = NextLevelRewardOption1.IsChecked;
-            Properties.Settings.Default.NextLevelCheck50 = NextLevelRewardOption50.IsChecked;
-            Properties.Settings.Default.NextLevelCheck99 = NextLevelRewardOption99.IsChecked;
-
-            /*if (LevelRewardIcon.Visibility == Visibility.Hidden && memory != null)
-            {
-                LevelRewardIcon.Visibility = Visibility.Visible;
-                LevelReward.Visibility = Visibility.Visible;
-            }*/
-
-            if (memory != null)
-            {
-                stats.SetMaxLevelRewardCheck(50);
-                stats.SetNextLevelCheck(stats.Level);
-            }
-
-            HintText.Margin = new Thickness(33, 0, 0, 0);
-        }
-
-        private void NextLevelReward99Option(object sender, RoutedEventArgs e)
-        {
-            //mimic radio button
-            if (NextLevelRewardOption99.IsChecked == false)
-            {
-                NextLevelRewardOption99.IsChecked = true;
-                return;
-            }
-
-            NextLevelRewardOption1.IsChecked = false;
-            NextLevelRewardOption50.IsChecked = false;
-
-            Properties.Settings.Default.NextLevelCheck1 = NextLevelRewardOption1.IsChecked;
-            Properties.Settings.Default.NextLevelCheck50 = NextLevelRewardOption50.IsChecked;
-            Properties.Settings.Default.NextLevelCheck99 = NextLevelRewardOption99.IsChecked;
-
-            /*
-            if (LevelRewardIcon.Visibility == Visibility.Hidden && memory != null)
-            {
-                LevelRewardIcon.Visibility = Visibility.Visible;
-                LevelReward.Visibility = Visibility.Visible;
-            }*/
-
-            if (memory != null)
-            {
-                stats.SetMaxLevelRewardCheck(99);
-                stats.SetNextLevelCheck(stats.Level);
-            }
-
-            HintText.Margin = new Thickness(33, 0, 0, 0);
-        }
-
         private void SimulatedToggle(object sender, RoutedEventArgs e)
         {
             SimulatedToggle(SimulatedOption.IsChecked);
@@ -706,7 +617,7 @@ namespace KhTracker
 
         private void HotkeyToggle(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.Hotkey = HotkeyOption.IsChecked;
+            //Properties.Settings.Default.Hotkey = HotkeyOption.IsChecked;
         }
     }
 }

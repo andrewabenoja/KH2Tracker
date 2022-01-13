@@ -214,6 +214,14 @@ namespace KhTracker
             return hintIndex++;
         }
 
+        public void SetHintIndex(int i)
+        {
+            if (i > 12)
+                hintIndex = 12;
+            else
+                hintIndex = i;
+        }
+
         public void ResetProgressPoints()
         {
             ProgressPoints = 0;

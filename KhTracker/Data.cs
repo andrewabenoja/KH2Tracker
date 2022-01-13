@@ -16,6 +16,11 @@ namespace KhTracker
         public Button selected = null;
         public bool dragDrop = true;
 
+        //progress hints
+        public int storedProgressPoints = 0;
+        public int storedProgressIndex = 0;
+        public bool startedProgression = false;
+
         public string openKHHintText = "";
         public string[] hintFileText = new string[2];
         public Codes codes = new Codes();
@@ -40,6 +45,13 @@ namespace KhTracker
         public List<BitmapImage> BlueSingleNumbers = new List<BitmapImage>();
 
         public List<Item> Items = new List<Item>();
+
+        private void ResetProgressionData()
+        {
+            startedProgression = false;
+            storedProgressPoints = 0;
+            storedProgressIndex = 0;
+        }
     }
 
     public class WorldData

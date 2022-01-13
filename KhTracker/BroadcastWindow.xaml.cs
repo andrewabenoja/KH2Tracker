@@ -179,7 +179,7 @@ namespace KhTracker
                     BitmapImage number = Numbers[world.Value + 1];
                     if (((data.WorldsData.ContainsKey(world.Key) && world.Key != "GoA" && data.WorldsData[world.Key].hintedHint) 
                         || (data.WorldsData.ContainsKey(world.Key) &&  world.Key != "GoA" && data.WorldsData[world.Key].complete))
-                        && false)
+                        || (data.WorldsData.ContainsKey(world.Key) && world.Key != "GoA" && data.storedProgressIndex >= 12))
                     {
                         number = data.BlueNumbers[world.Value + 1];
                         Image bar = FindName(world.Key + "Bar") as Image;
@@ -214,7 +214,8 @@ namespace KhTracker
                     worldTotal.Source = data.SingleNumbers[0];
                 }
                 else if (((data.WorldsData.ContainsKey(total.Key) &&  total.Key != "GoA" && data.WorldsData[total.Key].hintedHint) && false) 
-                    || (data.WorldsData.ContainsKey(total.Key) &&  total.Key != "GoA" && data.WorldsData[total.Key].complete))
+                    || (data.WorldsData.ContainsKey(total.Key) &&  total.Key != "GoA" && data.WorldsData[total.Key].complete)
+                    || (data.WorldsData.ContainsKey(total.Key) && total.Key != "GoA" && data.storedProgressIndex >= 12))
                 {
                     if (total.Value <= 10)
                         worldTotal.Source = data.BlueSingleNumbers[total.Value];

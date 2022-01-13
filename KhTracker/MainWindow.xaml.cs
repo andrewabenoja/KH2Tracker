@@ -377,19 +377,6 @@ namespace KhTracker
             WorldProgressOption.IsChecked = Properties.Settings.Default.WorldProgress;
             WorldProgressToggle(null, null);
 
-            //level check
-            NextLevelRewardOption1.IsChecked = Properties.Settings.Default.NextLevelCheck1;
-            if (NextLevelRewardOption1.IsChecked)
-                NextLevelReward1Option(null, null);
-
-            NextLevelRewardOption50.IsChecked = Properties.Settings.Default.NextLevelCheck50;
-            if (NextLevelRewardOption50.IsChecked)
-                NextLevelReward50Option(null, null);
-
-            NextLevelRewardOption99.IsChecked = Properties.Settings.Default.NextLevelCheck99;
-            if (NextLevelRewardOption99.IsChecked)
-                NextLevelReward99Option(null, null);
-
             SoraHeartOption.IsChecked = Properties.Settings.Default.SoraHeart;
             SoraHeartToggle(SoraHeartOption.IsChecked);
             SimulatedOption.IsChecked = Properties.Settings.Default.Simulated;
@@ -605,6 +592,13 @@ namespace KhTracker
 
             broadcast.Width = 500;
             broadcast.Height = 680;
+        }
+
+        private void ResetProgressionData()
+        {
+            data.startedProgression = false;
+            data.storedProgressPoints = 0;
+            data.storedProgressIndex = 0;
         }
     }
 }
