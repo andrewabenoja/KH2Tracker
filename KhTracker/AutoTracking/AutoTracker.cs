@@ -410,7 +410,7 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Please start KH2 before loading the Auto Tracker.");
-                    ResetHotkeyState();
+                    //ResetHotkeyState();
                     return;
                 }
             } while (!memory.Hooked);
@@ -450,7 +450,7 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Please start KH2 before loading the Auto Tracker.");
-                    ResetHotkeyState();
+                    //ResetHotkeyState();
                     return;
                 }
             } while (!memory.Hooked);
@@ -473,7 +473,7 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Unable to access KH2FM try running KHTracker as admin");
-                    ResetHotkeyState();
+                    //ResetHotkeyState();
                     isWorking = false;
                     SetAutoDetectTimer();
                     return;
@@ -482,7 +482,7 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Error connecting to KH2FM");
-                    ResetHotkeyState();
+                    //ResetHotkeyState();
                     isWorking = false;
                     SetAutoDetectTimer();
                     return;
@@ -647,7 +647,7 @@ namespace KhTracker
             {
                 memory = null;
                 MessageBox.Show("Unable to access KH2FM try running KHTracker as admin");
-                ResetHotkeyState();
+                //ResetHotkeyState();
                 isWorking = false;
                 SetAutoDetectTimer();
                 return;
@@ -656,7 +656,7 @@ namespace KhTracker
             {
                 memory = null;
                 MessageBox.Show("Error connecting to KH2FM");
-                ResetHotkeyState();
+                //ResetHotkeyState();
                 isWorking = false;
                 SetAutoDetectTimer();
                 return;
@@ -773,7 +773,7 @@ namespace KhTracker
             OnTimedEvent(null, null);
             if (!data.startedProgression)
             {
-                stats.SetProgressPoints(80);
+                stats.SetProgressPoints(0);
                 stats.SetHintIndex(0);
                 data.startedProgression = true;
             }
@@ -794,7 +794,7 @@ namespace KhTracker
             {
                 memory = null;
                 MessageBox.Show("Unable to access PCSX2 try running KHTracker as admin");
-                ResetHotkeyState();
+                //ResetHotkeyState();
                 isWorking = false;
                 SetAutoDetectTimer();
                 return;
@@ -803,7 +803,7 @@ namespace KhTracker
             {
                 memory = null;
                 MessageBox.Show("Error connecting to PCSX2");
-                ResetHotkeyState();
+                //ResetHotkeyState();
                 isWorking = false;
                 SetAutoDetectTimer();
                 return;
@@ -988,6 +988,7 @@ namespace KhTracker
                 UpdateMagicAddresses();
                 UpdateWorldProgress(world);
 
+
                 //check level/drive changes here
                 UpdateProgressPoints_H(ProgressionHintsSoraLevels());
                 UpdateProgressPoints_H(ProgressionHintsDriveLevels());
@@ -1001,7 +1002,7 @@ namespace KhTracker
             {
                 aTimer.Stop();
                 //MessageBox.Show("KH2FM has exited. Stopping Auto Tracker.");
-                ResetHotkeyState();
+                //ResetHotkeyState();
                 isWorking = false;
                 SetAutoDetectTimer();
 

@@ -67,18 +67,6 @@ namespace KhTracker
             }
         }
 
-        //show next level reward
-        private int levelReward;
-        public int LevelReward
-        {
-            get { return levelReward; }
-            set
-            {
-                levelReward = value;
-                OnPropertyChanged("LevelReward");
-            }
-        }
-
         //track current progress points
         private int progressPoints;
         public int ProgressPoints
@@ -155,44 +143,6 @@ namespace KhTracker
 
             byte[] modelData = memory.ReadMemory(formAddress + ADDRESS_OFFSET, 1);
             form = modelData[0];
-
-            //change levelreward number
-            if (level >= currentCheckArray[currentCheckArray.Length - 1])
-            {
-                LevelReward = currentCheckArray[currentCheckArray.Length - 1];
-                return;
-            }
-
-            if (Level >= currentCheckArray[nextLevelCheck])
-            {
-                nextLevelCheck++;
-                LevelReward = currentCheckArray[nextLevelCheck];
-            }
-        }
-
-        public void SetMaxLevelRewardCheck(int lvl)
-        {
-            if (lvl == 1)
-                currentCheckArray = levelChecks1;
-
-            if (lvl == 50)
-                currentCheckArray = levelChecks50;
-
-            if (lvl == 99)
-                currentCheckArray = levelChecks99;
-        }
-
-        public void SetNextLevelCheck(int lvl)
-        {
-            for (int i = 0; i < currentCheckArray.Length; i++)
-            {
-                if (lvl < currentCheckArray[i])
-                {
-                    nextLevelCheck = i;
-                    LevelReward = currentCheckArray[nextLevelCheck];
-                    break;
-                }
-            }
         }
 
         public void UpdateProgressPoints(int pp)

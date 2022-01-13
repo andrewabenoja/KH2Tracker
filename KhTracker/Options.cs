@@ -894,7 +894,7 @@ namespace KhTracker
             broadcast.OnReset();
             broadcast.UpdateNumbers();
 
-            ResetHotkeyState();
+            //ResetHotkeyState();
             //better logic reset
             ResetLocaLHintMemory();
             //progress hints reset
