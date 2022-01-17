@@ -114,7 +114,7 @@ namespace KhTracker
         public bool[] driveFormMemory =  { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
         //Scaled Points Stuff
-        private int[] requiredPoints = { 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8 };
+        private int[] requiredPoints = { 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8};
         //Simulated Twilight Town
         private int stt_TwilightThorn = 2;
         private int stt_Struggle = 2;
@@ -778,13 +778,15 @@ namespace KhTracker
                 stats.SetProgressPoints(0);
                 stats.SetHintIndex(0);
                 data.startedProgression = true;
-                SetRequiredPoints(requiredPoints[stats.hintIndex]);
+                UpdateProgressPoints_H(90);
             }
             else
             {
                 stats.SetProgressPoints(data.storedProgressPoints);
                 stats.SetHintIndex(data.storedProgressIndex);
             }
+
+            SetRequiredPoints(requiredPoints[stats.hintIndex]);
         }
 
         private void finishSetupPCSX2()
@@ -2438,8 +2440,11 @@ namespace KhTracker
             if (stats.hintIndex >= 13)
                 return;
 
+            int i = 0;
             while (stats.ProgressPoints >= requiredPoints[stats.hintIndex])
             {
+                Console.WriteLine(i++);
+
                 stats.UpdateProgressPoints(-1 * requiredPoints[stats.hintIndex]);
                 int tempIndex = stats.GetNextHintIndex();
                 SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
@@ -2448,7 +2453,10 @@ namespace KhTracker
                 data.WorldsData[data.reportInformation[tempIndex].Item1].hinted = true;
 
                 if (stats.hintIndex >= 13)
+                {
                     SetNumbersBlue();
+                    return;
+                }
             }
 
             if (requiredTotal != requiredPoints[stats.hintIndex])
