@@ -78,6 +78,7 @@ namespace KhTracker
                 OnPropertyChanged("ProgressPoints");
             }
         }
+        private int nextPointGoal;
 
         public int hintIndex = 0;
 

@@ -25,6 +25,7 @@ namespace KhTracker
         private BroadcastWindow broadcast;
         public int collected;
         private int total = 51;
+        public int requiredTotal = 5;
 
         public MainWindow()
         {
@@ -578,6 +579,13 @@ namespace KhTracker
 
             CheckTotal.Source = data.Numbers[total + 1];
             broadcast.CheckTotal.Source = data.Numbers[total + 1];
+        }
+
+        public void SetRequiredPoints(int val)
+        {
+            requiredTotal = val;
+
+            NextPointGoal.Source = data.Numbers[requiredTotal + 1];
         }
 
         public void SetHintText(string text)

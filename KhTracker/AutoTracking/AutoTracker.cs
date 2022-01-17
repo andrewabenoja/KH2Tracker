@@ -113,6 +113,8 @@ namespace KhTracker
         public bool[] tornPageMemory =   { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
         public bool[] driveFormMemory =  { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
+        //Scaled Points Stuff
+        private int[] requiredPoints = { 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8 };
         //Simulated Twilight Town
         private int stt_TwilightThorn = 2;
         private int stt_Struggle = 2;
@@ -776,6 +778,7 @@ namespace KhTracker
                 stats.SetProgressPoints(0);
                 stats.SetHintIndex(0);
                 data.startedProgression = true;
+                SetRequiredPoints(requiredPoints[stats.hintIndex]);
             }
             else
             {
@@ -987,7 +990,6 @@ namespace KhTracker
                 world.UpdateMemory();
                 UpdateMagicAddresses();
                 UpdateWorldProgress(world);
-
 
                 //check level/drive changes here
                 UpdateProgressPoints_H(ProgressionHintsSoraLevels());
@@ -2436,9 +2438,9 @@ namespace KhTracker
             if (stats.hintIndex >= 13)
                 return;
 
-            while (stats.ProgressPoints >= 6)
+            while (stats.ProgressPoints >= requiredPoints[stats.hintIndex])
             {
-                stats.UpdateProgressPoints(-6);
+                stats.UpdateProgressPoints(-1 * requiredPoints[stats.hintIndex]);
                 int tempIndex = stats.GetNextHintIndex();
                 SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
                 SetLocalHintValues(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
@@ -2447,6 +2449,11 @@ namespace KhTracker
 
                 if (stats.hintIndex >= 13)
                     SetNumbersBlue();
+            }
+
+            if (requiredTotal != requiredPoints[stats.hintIndex])
+            {
+                SetRequiredPoints(requiredPoints[stats.hintIndex]);
             }
         }
 
@@ -2460,9 +2467,9 @@ namespace KhTracker
                 if (stats.hintIndex >= 13)
                     return;
 
-                while (stats.ProgressPoints >= 6)
+                while (stats.ProgressPoints >= requiredPoints[stats.hintIndex])
                 {
-                    stats.UpdateProgressPoints(-6);
+                    stats.UpdateProgressPoints(-1 * requiredPoints[stats.hintIndex]);
                     int tempIndex = stats.GetNextHintIndex();
                     SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
                     SetLocalHintValues(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
@@ -2472,6 +2479,11 @@ namespace KhTracker
                     if (stats.hintIndex >= 13)
                         SetNumbersBlue();
                 }
+            }
+
+            if (requiredTotal != requiredPoints[stats.hintIndex])
+            {
+                SetRequiredPoints(requiredPoints[stats.hintIndex]);
             }
         }
 
@@ -2694,7 +2706,7 @@ namespace KhTracker
             {
                 //if (world.roomNumber == 16 && world.eventID3 == 1) // Wildebeest Valley (PL1)
                 //{
-                //    return 7;
+                //    return 20;
                 //}
                 if (world.roomNumber == 12 && world.eventID3 == 1) // Oasis after talking to Simba
                 {
