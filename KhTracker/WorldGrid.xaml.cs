@@ -123,6 +123,8 @@ namespace KhTracker
         {
             bool isreport = false;
 
+            //Console.WriteLine("Handle_Report");
+
             // item is a report
             if (data.hintsLoaded && (int)item.GetValue(Grid.RowProperty) == 0)
             {
@@ -142,7 +144,7 @@ namespace KhTracker
                     data.ReportAttemptVisual[index].SetResourceReference(ContentControl.ContentProperty, "Fail0");
                     data.reportAttempts[index] = 3;
                     isreport = true;
-                    item.DragDropEventFire(data.reportInformation[index].Item1, data.reportInformation[index].Item2);
+                    //item.DragDropEventFire(data.reportInformation[index].Item1, data.reportInformation[index].Item2);
 
                     // set world report hints to as hinted then checks if the report location was hinted to set if its a hinted hint
                     //data.WorldsData[data.reportInformation[index].Item1].hinted = true;

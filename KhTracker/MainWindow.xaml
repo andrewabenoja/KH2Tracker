@@ -80,7 +80,7 @@
                 <!--MenuItem Name="HotkeyOption" Header="Enable Hotkey" IsCheckable="True" IsChecked="False" Click="HotkeyToggle"/-->
             </MenuItem>
             <MenuItem Name="ModeDisplay" Header="" Focusable="False" IsHitTestVisible="False"/>
-            <MenuItem Header="Progression Hints v2.2b - Codename__Geek" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
+            <MenuItem Header="Progression Hints v2.3b - Codename__Geek" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
         </Menu>
 
         <Grid>

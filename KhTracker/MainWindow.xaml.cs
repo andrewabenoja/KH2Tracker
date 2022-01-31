@@ -489,6 +489,8 @@ namespace KhTracker
         /// 
         private void HandleReportValue(Image Hint, int delta)
         {
+            //Console.WriteLine("Called HandleReportValue");
+
             if (data.mode != Mode.None)
                 return;
 
@@ -516,11 +518,13 @@ namespace KhTracker
             else
                 Hint.Source = data.Numbers[num];
 
-            broadcast.UpdateTotal(Hint.Name.Remove(Hint.Name.Length - 4, 4), num - 1);
+            //broadcast.UpdateTotal(Hint.Name.Remove(Hint.Name.Length - 4, 4), num - 1);
         }
 
         public void SetReportValue(Image Hint, int value)
         {
+            //Console.WriteLine("Called SetReportValue");
+
             var numList = data.Numbers;
 
             string location = Hint.Name.Substring(0, Hint.Name.Length - 4);
@@ -537,7 +541,7 @@ namespace KhTracker
             else
                 Hint.Source = numList[value];
             
-            broadcast.UpdateTotal(Hint.Name.Remove(Hint.Name.Length - 4, 4), value - 1);
+            //broadcast.UpdateTotal(Hint.Name.Remove(Hint.Name.Length - 4, 4), value - 1);
         }
 
         public void IncrementCollected()

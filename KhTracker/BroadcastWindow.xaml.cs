@@ -177,7 +177,7 @@ namespace KhTracker
                 if (world.Value < 52)
                 {
                     BitmapImage number = Numbers[world.Value + 1];
-                    if (((data.WorldsData.ContainsKey(world.Key) && world.Key != "GoA" && data.WorldsData[world.Key].hintedHint) 
+                    if (((data.WorldsData.ContainsKey(world.Key) && world.Key != "GoA" && data.WorldsData[world.Key].hintedHint && false) 
                         || (data.WorldsData.ContainsKey(world.Key) &&  world.Key != "GoA" && data.WorldsData[world.Key].complete))
                         || (data.WorldsData.ContainsKey(world.Key) && world.Key != "GoA" && data.storedProgressIndex >= 12))
                     {

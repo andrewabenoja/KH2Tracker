@@ -114,7 +114,7 @@ namespace KhTracker
         public bool[] driveFormMemory =  { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
         //Scaled Points Stuff
-        private int[] requiredPoints = { 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8};
+        private int[] requiredPoints = { 6, 6, 6, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8};
         //Simulated Twilight Town
         private int stt_TwilightThorn = 2;
         private int stt_Struggle = 2;
@@ -778,7 +778,7 @@ namespace KhTracker
                 stats.SetProgressPoints(0);
                 stats.SetHintIndex(0);
                 data.startedProgression = true;
-                UpdateProgressPoints_H(90);
+                //UpdateProgressPoints_H(90);
             }
             else
             {
@@ -2450,6 +2450,7 @@ namespace KhTracker
                 SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
                 SetLocalHintValues(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
                 SetReportValue(data.WorldsData[data.reportInformation[tempIndex].Item1].hint, data.reportInformation[tempIndex].Item2 + 1);
+                broadcast.UpdateTotal(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
                 data.WorldsData[data.reportInformation[tempIndex].Item1].hinted = true;
 
                 if (stats.hintIndex >= 13)
@@ -2482,6 +2483,7 @@ namespace KhTracker
                     SetHintText(Codes.GetHintTextName(data.reportInformation[tempIndex].Item1) + " has " + data.reportInformation[tempIndex].Item2 + " important checks");
                     SetLocalHintValues(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
                     SetReportValue(data.WorldsData[data.reportInformation[tempIndex].Item1].hint, data.reportInformation[tempIndex].Item2 + 1);
+                    broadcast.UpdateTotal(data.reportInformation[tempIndex].Item1, data.reportInformation[tempIndex].Item2);
                     data.WorldsData[data.reportInformation[tempIndex].Item1].hinted = true;
 
                     if (stats.hintIndex >= 13)
