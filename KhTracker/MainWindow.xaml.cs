@@ -971,6 +971,7 @@ namespace KhTracker
                     CustomProgFound = true;
             }
 
+            data.timedHintsTimer = 1;
         }
 
         private void InitOptions()
@@ -1096,6 +1097,7 @@ namespace KhTracker
             if (NextLevelCheckOption99.IsChecked)
                 NextLevelCheck99Option(null, null);
 
+            //Timed Hints Stuff
             TimedHintsOption.IsChecked = Properties.Settings.Default.TimedHints;
             if (TimedHintsOption.IsChecked)
                 TimedHintsToggle(TimedHintsOption.IsChecked);
@@ -1209,6 +1211,14 @@ namespace KhTracker
 
                 data.selected = button;
                 data.WorldsData[button.Name].selectedBar.Source = BarY;
+
+                int index = data.worldHintNumber[WorldNameToIndex(button.Name)];
+                //Console.WriteLine("index = " + index + " | " + button.Name);
+                if (data.WorldsData[button.Name].hinted && index > -1 && data.timedHintsEnabled)
+                {
+                    //Console.WriteLine(button.Name);
+                    SetHintText(Codes.GetHintTextName(data.reportInformation[index].Item1) + " has " + TimedHintCount(index) + " important checks (" + Codes.GetHintTextNameShort(data.reportLocations[index]) + ")");
+                }
             }
             else if (e.ChangedButton == MouseButton.Middle)
             {
@@ -1222,6 +1232,9 @@ namespace KhTracker
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
             Button button = sender as Button;
+
+            if (button.Name.Contains("GoA") && data.startedTimedHints)
+                return;
 
             if (data.WorldsData.ContainsKey(button.Name) && data.WorldsData[button.Name].hint != null)
             {
@@ -1239,7 +1252,7 @@ namespace KhTracker
                 if (!lastPart.Contains("Q"))
                 {
                     data.timedHintsTimer = Int32.Parse(lastPart);
-                    Console.WriteLine("Current Time = " + Int32.Parse(lastPart));
+                    //Console.WriteLine("Current Time = " + Int32.Parse(lastPart));
                 }
             }
         }

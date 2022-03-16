@@ -234,7 +234,8 @@ namespace KhTracker
                 if (data.reportLocations[index] == Name.Substring(0, Name.Length - 4))
                 {
                     // hint text and resetting fail icons
-                    window.SetHintText(Codes.GetHintTextName(data.pointreportInformation[index].Item1) + " has " + data.pointreportInformation[index].Item2);
+                    if (!data.timedHintsEnabled)
+                        window.SetHintText(Codes.GetHintTextName(data.pointreportInformation[index].Item1) + " has " + data.pointreportInformation[index].Item2);
                     data.ReportAttemptVisual[index].SetResourceReference(ContentControl.ContentProperty, "Fail0");
                     data.reportAttempts[index] = 3;
                     isreport = true;

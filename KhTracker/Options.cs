@@ -1259,6 +1259,8 @@ namespace KhTracker
 
             data.hintsLoaded = true;
             HintText.Content = "Hints Loaded";
+
+            //Console.WriteLine("Seed name: " + filename);
         }
 
         private void ResetHints()
@@ -1385,6 +1387,10 @@ namespace KhTracker
             //auto detect stuff
             SetWorking(false);
             SetAutoDetectTimer();
+            if (timedHintsText != null)
+                timedHintsText.Stop();
+            if (timedHintsRealTimer != null)
+                timedHintsRealTimer.Stop();
 
             if (LevelCheckIcon.Visibility == Visibility.Visible || LevelCheck.Visibility == Visibility.Visible)
             {
@@ -1395,6 +1401,9 @@ namespace KhTracker
                 else
                     LevelCheck.Source = data.OldNumbers[0 + 1];
             }
+
+            data.lastStoredSeedHash = data.lastStoredSeedHashTemp;
+            data.lastStoredSeedHashTemp = 0;
 
             ModeDisplay.Header = " ";
             data.mode = Mode.None;
@@ -1670,6 +1679,10 @@ namespace KhTracker
             broadcast.Score10.Visibility = Visibility.Hidden;
             broadcast.Score1.Visibility = Visibility.Hidden;
 
+            //hide next level check
+            LevelCheckIcon.Visibility = Visibility.Hidden;
+            LevelCheck.Visibility = Visibility.Hidden;
+
             broadcast.ChestIconCol.Width = new GridLength(0.3, GridUnitType.Star);
             broadcast.BarCol.Width = new GridLength(0.3, GridUnitType.Star);
 
@@ -1677,6 +1690,12 @@ namespace KhTracker
             broadcast.UpdateNumbers();
             UpdatePointScore(0);
 
+            //Timed Hints Reset Logic
+            data.startedTimedHints = false;
+            data.currentHint = 0;
+            data.ResetTimedHints();
+            GoATime.Source = GetDataNumber("Y")[2];
+            data.timedHintsTimer = 1;
         }
         
         private void BroadcastWindow_Open(object sender, RoutedEventArgs e)
@@ -1798,7 +1817,7 @@ namespace KhTracker
             }
             else if (mode == Mode.Hints || mode == Mode.OpenKHHints)
             {
-                ModeDisplay.Header = "Hints Mode";
+                ModeDisplay.Header = TimedHintsOption.IsChecked ? "Timed Mode" : "Hints Mode";
                 data.mode = mode;
                 ReportRow.Height = new GridLength(1, GridUnitType.Star);
             }
@@ -2018,6 +2037,7 @@ namespace KhTracker
                                     List<int> reportKeys = reports.Keys.Select(int.Parse).ToList();
                                     reportKeys.Sort();
 
+                                    int i = 0;
                                     foreach (var report in reportKeys)
                                     {
                                         var world = convertOpenKH[reports[report.ToString()]["World"].ToString()];
@@ -2025,10 +2045,35 @@ namespace KhTracker
                                         var location = convertOpenKH[reports[report.ToString()]["Location"].ToString()];
                                         data.reportInformation.Add(new Tuple<string, int>(world, int.Parse(count)));
                                         data.reportLocations.Add(location);
+
+                                        if (data.timedHintsEnabled)
+                                        {
+                                            //Console.WriteLine("report " + (i + 1) + " is in " + data.reportLocations[i]);
+
+                                            data.worldStoredHintCount[WorldNameToIndex(data.reportLocations[i])]++;
+                                            data.worldStoredOrigCount[WorldNameToIndex(world)] = int.Parse(count);
+                                            data.worldHintNumber[WorldNameToIndex(world)] = i;
+                                            i++;
+                                        }
                                     }
                                     ReportsToggle(true);
                                     data.hintsLoaded = true;
                                     //HintText.Content = "Hints Loaded";
+
+                                    if (data.timedHintsEnabled)
+                                    {
+                                        ReportsToggle(false);
+                                        string hintFileName = entry.FullName.Substring(0, entry.FullName.IndexOf("."));
+                                        //Console.WriteLine("Seed name: " + hintFileName);
+                                        //Console.WriteLine("Hashcode: " + hintFileName.GetHashCode());
+                                        data.ShuffleHintOrder(hintFileName.GetHashCode());
+                                        //Console.WriteLine(data.PrintHintOrder(data.worldHintNumber));
+                                        data.lastStoredSeedHashTemp = hintFileName.GetHashCode();
+                                        data.seedTimeLoaded = DateTime.UtcNow.GetHashCode();
+                                        Console.WriteLine("utc hashcode: " + data.seedTimeLoaded);
+
+                                        AlternateTimeText();
+                                    }
 
                                     break;
 
@@ -3611,6 +3656,79 @@ namespace KhTracker
             broadcast.Score10.Source = GetDataNumber("S")[FinalNum[1]];
             broadcast.Score1.Source = GetDataNumber("S")[FinalNum[0]];
         }
-    
+
+        static public int WorldNameToIndex(string worldName)
+        {
+            if (worldName == "SorasHeart")
+            {
+                return 0;
+            }
+            else if (worldName == "DriveForms")
+            {
+                return 1;
+            }
+            else if (worldName == "SimulatedTwilightTown")
+            {
+                return 2;
+            }
+            else if (worldName == "TwilightTown")
+            {
+                return 3;
+            }
+            else if (worldName == "HollowBastion")
+            {
+                return 4;
+            }
+            else if (worldName == "BeastsCastle")
+            {
+                return 5;
+            }
+            else if (worldName == "OlympusColiseum")
+            {
+                return 6;
+            }
+            else if (worldName == "Agrabah")
+            {
+                return 7;
+            }
+            else if (worldName == "LandofDragons")
+            {
+                return 8;
+            }
+            else if (worldName == "HundredAcreWood")
+            {
+                return 9;
+            }
+            else if (worldName == "PrideLands")
+            {
+                return 10;
+            }
+            else if (worldName == "DisneyCastle")
+            {
+                return 11;
+            }
+            else if (worldName == "HalloweenTown")
+            {
+                return 12;
+            }
+            else if (worldName == "PortRoyal")
+            {
+                return 13;
+            }
+            else if (worldName == "SpaceParanoids")
+            {
+                return 14;
+            }
+            else if (worldName == "TWTNW")
+            {
+                return 15;
+            }
+            else if (worldName == "GoA")
+            {
+                return 16;
+            }
+
+            return 17;
+        }
     }
 }

@@ -125,6 +125,9 @@ namespace KhTracker
             MainWindow window = ((MainWindow)Application.Current.MainWindow);
             int index = (int)GetValue(Grid.ColumnProperty);
 
+            if (data.timedHintsEnabled)
+                return;
+            
             if (data.mode == Mode.DAHints)
                 window.SetHintText(Codes.GetHintTextName(data.pointreportInformation[index].Item1) + " has " + data.pointreportInformation[index].Item2);
             else

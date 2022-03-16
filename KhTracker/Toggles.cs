@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 using System.Linq;
 using System.Windows.Data;
 using System.IO;
+using System.Windows.Threading;
 
 namespace KhTracker
 {
@@ -1711,7 +1712,7 @@ namespace KhTracker
                 LevelCheck.Visibility = Visibility.Hidden;
             }
 
-            HintTextParent.Margin = new Thickness(-33, 0, 0, 0);
+            HintTextParent.Margin = new Thickness(10, 0, 10, 0);
         }
 
         private void NextLevelCheck50Option(object sender, RoutedEventArgs e)
@@ -1797,19 +1798,61 @@ namespace KhTracker
 
         private void TimedHintsToggle(bool toggle)
         {
+            if (aTimer == null && isWorking)
+            {
+                Console.WriteLine("Tried to uncheck, ignoring");
+                TimedHintsOption.IsChecked = Properties.Settings.Default.TimedHints;
+                return;
+            }
+            else if (aTimer == null && !isWorking);
+            else if (aTimer.IsEnabled && isWorking)
+            {
+                Console.WriteLine("Tried to uncheck, ignoring");
+                TimedHintsOption.IsChecked = Properties.Settings.Default.TimedHints;
+                return;
+            }
+
             Properties.Settings.Default.TimedHints = toggle;
             TimedHintsOption.IsChecked = toggle;
+            data.timedHintsEnabled = toggle;
 
             if (TimedHintsOption.IsChecked)
             {
                 //Console.WriteLine("Timed Hints Enabled");
                 GoATime.Visibility = Visibility.Visible;
+                if (data.mode == Mode.OpenKHHints || data.mode == Mode.Hints)
+                    timedHintsText.Start();
             }
             else
             {
                 //Console.WriteLine("Timed Hints Disabled");
                 GoATime.Visibility = Visibility.Hidden;
+                if (timedHintsText != null)
+                    if (timedHintsText.IsEnabled)
+                        timedHintsText.Stop();
             }
+
+            if (data.mode == Mode.OpenKHHints || data.mode == Mode.Hints)
+                ModeDisplay.Header = TimedHintsOption.IsChecked ? "Timed Mode" : "Hints Mode";
+        }
+
+        private void AlternateTimeText()
+        {
+            if (timedHintsText != null)
+                timedHintsText.Stop();
+
+            timedHintsText = new DispatcherTimer();
+            timedHintsText.Tick += SwapText;
+            timedHintsText.Interval = new TimeSpan(0, 0, 0, 0, 5000);
+            timedHintsText.Start();
+        }
+
+        private void SwapText(object sender, EventArgs e)
+        {
+            if (ModeDisplay.Header.ToString() == "Timed Mode")
+                ModeDisplay.Header = "Time Hash - " + data.lastStoredSeedHashTemp;
+            else
+                ModeDisplay.Header = "Timed Mode";
         }
     }
 }

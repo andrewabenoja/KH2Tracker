@@ -28,7 +28,7 @@ namespace KhTracker
         MemoryReader memory, testMemory;
 
         private Int32 ADDRESS_OFFSET;
-        private static DispatcherTimer aTimer, autoTimer, pcsx2OffsetTimer;
+        private static DispatcherTimer aTimer, autoTimer, timedHintsText, timedHintsRealTimer;
         private List<ImportantCheck> importantChecks;
         private Ability highJump;
         private Ability quickRun;
@@ -120,7 +120,10 @@ namespace KhTracker
 
         private void SetAutoDetectTimer()
         {
-            HashText.Content = "Auto-Detecting...";
+            if (AutoDetectOption.IsChecked)
+                HashText.Content = "Auto-Detecting...";
+            else
+                HashText.Content = "Seed Hash:";
 
             if (isWorking)
                 return;
@@ -149,6 +152,7 @@ namespace KhTracker
             if (!AutoDetectOption.IsChecked)
             {
                 Console.WriteLine("disabling auto-detect");
+                HashText.Content = "Seed Hash:";
                 autoTimer.Stop();
                 return;
             }
@@ -569,8 +573,13 @@ namespace KhTracker
             previousChecks.AddRange(newChecks);
             newChecks.Clear();
 
+            int storedStrength, storedMagic;
+
             try
             {
+                storedStrength = stats.Strength;
+                storedMagic = stats.Magic;
+
                 stats.UpdateMemory();
                 world.UpdateMemory();
                 UpdateMagicAddresses();
@@ -582,6 +591,20 @@ namespace KhTracker
                 //Console.WriteLine("event id1 = " + world.eventID1);
                 //Console.WriteLine("event id2 = " + world.eventID2);
                 //Console.WriteLine("event id3 = " + world.eventID3);
+
+                if (data.timedHintsEnabled
+                    && (!data.startedTimedHints) && (storedStrength == 0 && storedMagic == 0) && (stats.Strength > 0 && stats.Magic > 0))
+                {
+                    data.startedTimedHints = true;
+                    data.currentHint = 0;
+
+                    SetHintText("Hint Timer Started", 30000, "");
+
+                    //CurrentHint.Source = data.Numbers[0 + 1];
+                    //broadcast.ReportFound.Source = data.Numbers[0 + 1];
+
+                    ShowHints();
+                }
 
                 importantChecks.ForEach(delegate (ImportantCheck importantCheck)
                 {
@@ -840,6 +863,9 @@ namespace KhTracker
                     }
                 }
             }
+
+            if (data.timedHintsEnabled)
+                broadcast.ReportFound.Source = data.Numbers[data.currentHint + 1];
         }
 
         void UpdateWorldProgress(World world)
@@ -1823,6 +1849,284 @@ namespace KhTracker
             broadcast.CheckTotal.Source = GetDataNumber("Y")[total + 1];
         }
 
+        //timed hints stuff
+        private void ShowHints()
+        {
+            if (timedHintsRealTimer != null)
+                timedHintsRealTimer.Stop();
 
+            timedHintsRealTimer = new DispatcherTimer();
+            timedHintsRealTimer.Tick += RevealHintReal;
+            timedHintsRealTimer.Interval = new TimeSpan(0, 0, 0, 0, data.timedHintsTimer * 59990);
+            //timedHintsRealTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000);
+            timedHintsRealTimer.Start();
+        }
+        public void RevealHintReal(object sender, EventArgs e)
+        {
+            RevealHintReal(data.hintOrder[data.currentHint], data.seedTimeLoaded);
+
+            if (data.currentHint < 13)
+            {
+                data.currentHint++;
+
+                //CurrentHint.Source = data.Numbers[data.currentHint + 1];
+                broadcast.ReportFound.Source = data.Numbers[data.currentHint + 1];
+
+                if (data.currentHint == 13)
+                    timedHintsRealTimer.Stop();
+
+                //Console.WriteLine("Did this work?");
+            }
+        }
+        public void RevealHintReal(int index, int hashCheck)
+        {
+            if (data.mode == Mode.None)
+            {
+                Console.WriteLine("Tracker was reset, ignoring");
+                return;
+            }
+            else if (data.seedTimeLoaded != hashCheck)
+            {
+                Console.WriteLine("Old time for seed command ran, ignoring");
+                return;
+            }
+
+            Console.WriteLine(index + 1);
+
+            //set the hint text to say the correct world value
+            Console.WriteLine(Codes.GetHintTextName(data.reportInformation[index].Item1) + " has " + TimedHintCount(index) + " important checks (" + Codes.GetHintTextNameShort(data.reportLocations[index]) + ")");
+            SetHintText(data.currentHint + 1 + " | " + Codes.GetHintTextName(data.reportInformation[index].Item1) + " has " + TimedHintCount(index) + " important checks (" + Codes.GetHintTextNameShort(data.reportLocations[index]) + ")");
+            //set the number
+            SetReportValue(data.WorldsData[data.reportInformation[index].Item1].hint, TimedHintCount(index) + 1);
+            //make the reported world now hinted
+            data.WorldsData[data.reportInformation[index].Item1].hinted = true;
+            //track that the hinted world was from this current world
+            //i.e. if TT hints TWTNW, then TWTNW isHintedBy TT
+            data.isHintedBy[Codes.WorldNameToIndex(data.reportInformation[index].Item1)] = data.reportLocations[index];
+
+            //Console.WriteLine(data.isHintedBy[0] + " | " + data.isHintedBy[1] + " | " + data.isHintedBy[2] + " | " + data.isHintedBy[3] + " | " + data.isHintedBy[4] + " | " + data.isHintedBy[5] + " | " + data.isHintedBy[6] + " | " + data.isHintedBy[7] + " | " + data.isHintedBy[8] + " | " + data.isHintedBy[9] + " | " + data.isHintedBy[10] + " | " + data.isHintedBy[11] + " | " + data.isHintedBy[12] + " | " + data.isHintedBy[13] + " | " + data.isHintedBy[14] + " | " + data.isHintedBy[15] + " | " + data.isHintedBy[16] + " | " + data.isHintedBy[17]);
+
+
+            //if the current world is hinted, then set the newly hinted world to blue
+            if (data.WorldsData[data.reportLocations[index]].hinted)
+            {
+                //Console.WriteLine(data.reportLocations[index] + " hints " + data.reportInformation[index].Item1);
+                data.isHintedHint[Codes.WorldNameToIndex(data.reportInformation[index].Item1)] = true;
+
+                //set number blue for the world immediately hinted
+                //Console.WriteLine("Setting " + data.reportInformation[index].Item1 + " blue");
+                data.WorldsData[data.reportInformation[index].Item1].hintedHint = true;
+                SetReportValue(data.WorldsData[data.reportInformation[index].Item1].hint, TimedHintCount(index) + 1);
+
+                //Console.WriteLine(data.isHintedBy[0] + " | " + data.isHintedBy[1] + " | " + data.isHintedBy[2] + " | " + data.isHintedBy[3] + " | " + data.isHintedBy[4] + " | " + data.isHintedBy[5] + " | " + data.isHintedBy[6] + " | " + data.isHintedBy[7] + " | " + data.isHintedBy[8] + " | " + data.isHintedBy[9] + " | " + data.isHintedBy[10] + " | " + data.isHintedBy[11] + " | " + data.isHintedBy[12] + " | " + data.isHintedBy[13] + " | " + data.isHintedBy[14] + " | " + data.isHintedBy[15] + " | " + data.isHintedBy[16] + " | " + data.isHintedBy[17]);
+
+
+                for (int i = 0; i < data.isHintedBy.Length; i++)
+                {
+                    //Console.WriteLine(data.reportLocations[index] + " is hinted by " + data.isHintedBy[i]);
+                    if (data.isHintedBy[i] == data.reportInformation[index].Item1)
+                    {
+                        //Console.WriteLine(Codes.IndexToWorldName(i) + " should be blue | ");
+                        data.WorldsData[Codes.IndexToWorldName(i)].hintedHint = true;
+                        SetReportValue(data.WorldsData[Codes.IndexToWorldName(i)].hint, TimedHintCount(Codes.IndexToWorldName(i)) + 1);
+                    }
+                }
+            }
+
+            for (int i = 0; i < data.isHintedBy.Length; i++)
+            {
+                //Console.WriteLine(data.reportLocations[index] + " is hinted by " + data.isHintedBy[i]);
+                if (data.isHintedBy[i] == data.reportInformation[index].Item1)
+                {
+                    //Console.WriteLine(Codes.IndexToWorldName(i) + " should be blue | " + i);
+                    data.WorldsData[Codes.IndexToWorldName(i)].hintedHint = true;
+                    SetReportValue(data.WorldsData[Codes.IndexToWorldName(i)].hint, TimedHintCount(Codes.IndexToWorldName(i)) + 1);
+                }
+            }
+
+            // set world report hints to as hinted then checks if the report location was hinted to set if its a hinted hint
+            data.WorldsData[data.reportInformation[index].Item1].hinted = true;
+            if (data.WorldsData[data.reportLocations[index]].hinted == true)
+            {
+                data.WorldsData[data.reportInformation[index].Item1].hintedHint = true;
+                //Console.WriteLine(data.reportInformation[index].Item1 + " is a blue world now");
+                data.isHintedHint[data.worldStoredHintCount[Codes.WorldNameToIndex(data.reportInformation[index].Item1)]] = true;
+            }
+
+            //Console.WriteLine(data.reportInformation[index].Item1);
+        }
+
+        /*
+        public async void WaitForNextHint(int hashCheck)
+        {
+            if (data.mode == Mode.None)
+            {
+                Console.WriteLine("Tracker was reset, ignoring");
+                return;
+            }
+            else if (data.seedTimeLoaded != hashCheck)
+            {
+                Console.WriteLine("Old time for seed command ran, ignoring");
+                return;
+            }
+
+            if (data.currentHint == 13)
+            {
+                return;
+            }
+
+            //Test Code
+            //await Task.Delay(600000);
+            //await Task.Delay(1000);
+
+            //Actual code - data.timedHintsTimer = single digit, 60000 = 1 minute
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " + data.timedHintsTimer);
+            await Task.Delay(data.timedHintsTimer * 60000);
+
+            RevealHint(data.hintOrder[data.currentHint], hashCheck);
+
+            if (data.mode == Mode.None)
+            {
+                Console.WriteLine("Tracker was reset, ignoring");
+                return;
+            }
+            else if (data.seedTimeLoaded != hashCheck)
+            {
+                Console.WriteLine("Old time for seed command ran, ignoring");
+                return;
+            }
+
+            if (data.currentHint < 13)
+            {
+                data.currentHint++;
+
+                //CurrentHint.Source = data.Numbers[data.currentHint + 1];
+                broadcast.ReportFound.Source = data.Numbers[data.currentHint + 1];
+
+                WaitForNextHint(hashCheck);
+                //Console.WriteLine("Did this work?");
+            }
+        }
+
+        public void RevealHint(int index, int hashCheck)
+        {
+            if (data.mode == Mode.None)
+            {
+                Console.WriteLine("Tracker was reset, ignoring");
+                return;
+            }
+            else if (data.seedTimeLoaded != hashCheck)
+            {
+                Console.WriteLine("Old time for seed command ran, ignoring");
+                return;
+            }
+
+            Console.WriteLine(index + 1);
+
+            //set the hint text to say the correct world value
+            Console.WriteLine(Codes.GetHintTextName(data.reportInformation[index].Item1) + " has " + TimedHintCount(index) + " important checks (" + Codes.GetHintTextNameShort(data.reportLocations[index]) + ")");
+            SetHintText(data.currentHint + 1 + " | " + Codes.GetHintTextName(data.reportInformation[index].Item1) + " has " + TimedHintCount(index) + " important checks (" + Codes.GetHintTextNameShort(data.reportLocations[index]) + ")");
+            //set the number
+            SetReportValue(data.WorldsData[data.reportInformation[index].Item1].hint, TimedHintCount(index) + 1);
+            //make the reported world now hinted
+            data.WorldsData[data.reportInformation[index].Item1].hinted = true;
+            //track that the hinted world was from this current world
+            //i.e. if TT hints TWTNW, then TWTNW isHintedBy TT
+            data.isHintedBy[Codes.WorldNameToIndex(data.reportInformation[index].Item1)] = data.reportLocations[index];
+
+            //Console.WriteLine(data.isHintedBy[0] + " | " + data.isHintedBy[1] + " | " + data.isHintedBy[2] + " | " + data.isHintedBy[3] + " | " + data.isHintedBy[4] + " | " + data.isHintedBy[5] + " | " + data.isHintedBy[6] + " | " + data.isHintedBy[7] + " | " + data.isHintedBy[8] + " | " + data.isHintedBy[9] + " | " + data.isHintedBy[10] + " | " + data.isHintedBy[11] + " | " + data.isHintedBy[12] + " | " + data.isHintedBy[13] + " | " + data.isHintedBy[14] + " | " + data.isHintedBy[15] + " | " + data.isHintedBy[16] + " | " + data.isHintedBy[17]);
+
+
+            //if the current world is hinted, then set the newly hinted world to blue
+            if (data.WorldsData[data.reportLocations[index]].hinted)
+            {
+                //Console.WriteLine(data.reportLocations[index] + " hints " + data.reportInformation[index].Item1);
+                data.isHintedHint[Codes.WorldNameToIndex(data.reportInformation[index].Item1)] = true;
+
+                //set number blue for the world immediately hinted
+                //Console.WriteLine("Setting " + data.reportInformation[index].Item1 + " blue");
+                data.WorldsData[data.reportInformation[index].Item1].hintedHint = true;
+                SetReportValue(data.WorldsData[data.reportInformation[index].Item1].hint, TimedHintCount(index) + 1);
+
+                //Console.WriteLine(data.isHintedBy[0] + " | " + data.isHintedBy[1] + " | " + data.isHintedBy[2] + " | " + data.isHintedBy[3] + " | " + data.isHintedBy[4] + " | " + data.isHintedBy[5] + " | " + data.isHintedBy[6] + " | " + data.isHintedBy[7] + " | " + data.isHintedBy[8] + " | " + data.isHintedBy[9] + " | " + data.isHintedBy[10] + " | " + data.isHintedBy[11] + " | " + data.isHintedBy[12] + " | " + data.isHintedBy[13] + " | " + data.isHintedBy[14] + " | " + data.isHintedBy[15] + " | " + data.isHintedBy[16] + " | " + data.isHintedBy[17]);
+
+
+                for (int i = 0; i < data.isHintedBy.Length; i++)
+                {
+                    //Console.WriteLine(data.reportLocations[index] + " is hinted by " + data.isHintedBy[i]);
+                    if (data.isHintedBy[i] == data.reportInformation[index].Item1)
+                    {
+                        //Console.WriteLine(Codes.IndexToWorldName(i) + " should be blue | ");
+                        data.WorldsData[Codes.IndexToWorldName(i)].hintedHint = true;
+                        SetReportValue(data.WorldsData[Codes.IndexToWorldName(i)].hint, TimedHintCount(Codes.IndexToWorldName(i)) + 1);
+                    }
+                }
+            }
+
+            for (int i = 0; i < data.isHintedBy.Length; i++)
+            {
+                //Console.WriteLine(data.reportLocations[index] + " is hinted by " + data.isHintedBy[i]);
+                if (data.isHintedBy[i] == data.reportInformation[index].Item1)
+                {
+                    //Console.WriteLine(Codes.IndexToWorldName(i) + " should be blue | " + i);
+                    data.WorldsData[Codes.IndexToWorldName(i)].hintedHint = true;
+                    SetReportValue(data.WorldsData[Codes.IndexToWorldName(i)].hint, TimedHintCount(Codes.IndexToWorldName(i)) + 1);
+                }
+            }
+
+            // set world report hints to as hinted then checks if the report location was hinted to set if its a hinted hint
+            data.WorldsData[data.reportInformation[index].Item1].hinted = true;
+            if (data.WorldsData[data.reportLocations[index]].hinted == true)
+            {
+                data.WorldsData[data.reportInformation[index].Item1].hintedHint = true;
+                //Console.WriteLine(data.reportInformation[index].Item1 + " is a blue world now");
+                data.isHintedHint[data.worldStoredHintCount[Codes.WorldNameToIndex(data.reportInformation[index].Item1)]] = true;
+            }
+
+            //Console.WriteLine(data.reportInformation[index].Item1);
+        }
+        */
+
+        public int TimedHintCount(int index)
+        {
+            //Console.WriteLine("Report " + (index + 1) + " says " + data.reportInformation[index].Item1 + " has " + data.reportInformation[index].Item2);
+            //Console.WriteLine(data.reportInformation[index].Item1 + " has " + data.worldStoredHintCount[Codes.WorldNameToIndex(data.reportInformation[index].Item1)] + " reports");
+            return data.reportInformation[index].Item2 - data.worldStoredHintCount[Codes.WorldNameToIndex(data.reportInformation[index].Item1)];
+        }
+
+        public int TimedHintCount(string world)
+        {
+            //Console.WriteLine(data.worldStoredOrigCount[Codes.WorldNameToIndex(world)] + "(" + Codes.WorldNameToIndex(world) + ") - " + data.worldStoredHintCount[Codes.WorldNameToIndex(world)] + "(" + Codes.WorldNameToIndex(world) + ")");
+            return data.worldStoredOrigCount[Codes.WorldNameToIndex(world)] - data.worldStoredHintCount[Codes.WorldNameToIndex(world)];
+        }
+
+        //can be toggled on if needed for something?
+        public async void SetNumbersBlue()
+        {
+            //Console.WriteLine("Did this work?");
+
+            await Task.Delay(100);
+            //Console.WriteLine("Where do I crash?");
+            for (int i = 0; i < 13; ++i)
+            {
+                //Console.WriteLine("Here? " + i);
+                if (data.WorldsData[data.reportInformation[i].Item1].hinted)
+                {
+                    //Console.WriteLine(data.WorldsData[data.reportInformation[i].Item1].checkCount);
+                    data.WorldsData[data.reportInformation[i].Item1].hintedHint = true;
+                    SetReportValue(data.WorldsData[data.reportInformation[i].Item1].hint, data.reportInformation[i].Item2 + 1);
+                    //Console.WriteLine("Found a report here!");
+                }
+
+                SetReportValue(data.WorldsData[data.reportInformation[i].Item1].hint, data.reportInformation[i].Item2 + 1);
+            }
+        }
+
+        public async void SetHintTextWithDelay(string text, int delay)
+        {
+            Console.WriteLine(text);
+            await Task.Delay(delay);
+            HintText.Content = text;
+        }
     }
 }

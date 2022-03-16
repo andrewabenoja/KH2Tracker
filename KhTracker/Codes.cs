@@ -148,6 +148,220 @@ namespace KhTracker
             return worldName;
         }
 
+        static public string GetHintTextNameShort(string worldName)
+        {
+            if (worldName == "SimulatedTwilightTown")
+            {
+                return "STT";
+            }
+            else if (worldName == "TwilightTown")
+            {
+                return "TT";
+            }
+            else if (worldName == "HollowBastion")
+            {
+                return "HB";
+            }
+            else if (worldName == "LandofDragons")
+            {
+                return "LoD";
+            }
+            else if (worldName == "BeastsCastle")
+            {
+                return "BC";
+            }
+            else if (worldName == "OlympusColiseum")
+            {
+                return "OC";
+            }
+            else if (worldName == "DisneyCastle")
+            {
+                return "DC";
+            }
+            else if (worldName == "PortRoyal")
+            {
+                return "PR";
+            }
+            else if (worldName == "HalloweenTown")
+            {
+                return "HT";
+            }
+            else if (worldName == "PrideLands")
+            {
+                return "PL";
+            }
+            else if (worldName == "HundredAcreWood")
+            {
+                return "100AW";
+            }
+            else if (worldName == "SpaceParanoids")
+            {
+                return "SP";
+            }
+            else if (worldName == "DriveForms")
+            {
+                return "Drives";
+            }
+            else if (worldName == "SorasHeart")
+            {
+                return "Sora";
+            }
+            else if (worldName == "Agrabah")
+            {
+                return "AG";
+            }
+
+            return worldName;
+        }
+
+        static public int WorldNameToIndex(string worldName)
+        {
+            if (worldName == "SorasHeart")
+            {
+                return 0;
+            }
+            else if (worldName == "DriveForms")
+            {
+                return 1;
+            }
+            else if (worldName == "SimulatedTwilightTown")
+            {
+                return 2;
+            }
+            else if (worldName == "TwilightTown")
+            {
+                return 3;
+            }
+            else if (worldName == "HollowBastion")
+            {
+                return 4;
+            }
+            else if (worldName == "BeastsCastle")
+            {
+                return 5;
+            }
+            else if (worldName == "OlympusColiseum")
+            {
+                return 6;
+            }
+            else if (worldName == "Agrabah")
+            {
+                return 7;
+            }
+            else if (worldName == "LandofDragons")
+            {
+                return 8;
+            }
+            else if (worldName == "HundredAcreWood")
+            {
+                return 9;
+            }
+            else if (worldName == "PrideLands")
+            {
+                return 10;
+            }
+            else if (worldName == "DisneyCastle")
+            {
+                return 11;
+            }
+            else if (worldName == "HalloweenTown")
+            {
+                return 12;
+            }
+            else if (worldName == "PortRoyal")
+            {
+                return 13;
+            }
+            else if (worldName == "SpaceParanoids")
+            {
+                return 14;
+            }
+            else if (worldName == "TWTNW")
+            {
+                return 15;
+            }
+            else if (worldName == "GoA")
+            {
+                return 16;
+            }
+
+            return 17;
+        }
+
+        static public string IndexToWorldName(int worldIndex)
+        {
+            if (worldIndex == 0)
+            {
+                return "SorasHeart";
+            }
+            else if (worldIndex == 1)
+            {
+                return "DriveForms";
+            }
+            else if (worldIndex == 2)
+            {
+                return "SimulatedTwilightTown";
+            }
+            else if (worldIndex == 3)
+            {
+                return "TwilightTown";
+            }
+            else if (worldIndex == 4)
+            {
+                return "HollowBastion";
+            }
+            else if (worldIndex == 5)
+            {
+                return "BeastsCastle";
+            }
+            else if (worldIndex == 6)
+            {
+                return "OlympusColiseum";
+            }
+            else if (worldIndex == 7)
+            {
+                return "Agrabah";
+            }
+            else if (worldIndex == 8)
+            {
+                return "LandofDragons";
+            }
+            else if (worldIndex == 9)
+            {
+                return "HundredAcreWood";
+            }
+            else if (worldIndex == 10)
+            {
+                return "PrideLands";
+            }
+            else if (worldIndex == 11)
+            {
+                return "DisneyCastle";
+            }
+            else if (worldIndex == 12)
+            {
+                return "HalloweenTown";
+            }
+            else if (worldIndex == 13)
+            {
+                return "PortRoyal";
+            }
+            else if (worldIndex == 14)
+            {
+                return "SpaceParanoids";
+            }
+            else if (worldIndex == 15)
+            {
+                return "TWTNW";
+            }
+            else if (worldIndex == 16)
+            {
+                return "GoA";
+            }
+
+            return "Atlantica";
+        }
+
         public string GetDefault(int index)
         {
             return Default[index];
