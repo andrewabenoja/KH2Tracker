@@ -25,10 +25,10 @@ namespace KhTracker
     /// </summary>
     public partial class MainWindow : Window
     {
-        MemoryReader memory;
+        MemoryReader memory, testMemory;
 
         private Int32 ADDRESS_OFFSET;
-        private static DispatcherTimer aTimer;
+        private static DispatcherTimer aTimer, autoTimer, pcsx2OffsetTimer;
         private List<ImportantCheck> importantChecks;
         private Ability highJump;
         private Ability quickRun;
@@ -44,7 +44,7 @@ namespace KhTracker
         private DriveForm master;
         private DriveForm limit;
         private DriveForm final;
-        
+
         private Magic fire;
         private Magic blizzard;
         private Magic thunder;
@@ -101,6 +101,11 @@ namespace KhTracker
         public static bool pcsx2tracking = false;
         //public static bool StartTracking = false;
 
+        //Auto-Detect Control Stuff
+        private int storedDetectedVersion = 0; //0 = nothing detected, 1 = PC, 2 = PCSX2
+        private bool isWorking = false;
+        private bool firstRun = true;
+
         public void InitPCSX2Tracker(object sender, RoutedEventArgs e)
         {
             pcsx2tracking = true;
@@ -111,6 +116,111 @@ namespace KhTracker
         {
             pcsx2tracking = false;
             InitAutoTracker(false);
+        }
+
+        private void SetAutoDetectTimer()
+        {
+            HashText.Content = "Auto-Detecting...";
+
+            if (isWorking)
+                return;
+
+            if (aTimer != null)
+                aTimer.Stop();
+
+            //autoTimer = new DispatcherTimer();
+            if (firstRun)
+            {
+                //Console.WriteLine("Started search");
+                autoTimer = new DispatcherTimer();
+                autoTimer.Tick += searchVersion;
+                firstRun = false;
+                autoTimer.Interval = new TimeSpan(0, 0, 0, 1, 0);
+            }
+            autoTimer.Start();
+
+            //Console.WriteLine("AutoDetect Started");
+        }
+
+        private bool alternateCheck = false; //true = PCSX2, false = PC
+        private int alternateCheckInt = 1;
+        public void searchVersion(object sender, EventArgs e)
+        {
+            if (!AutoDetectOption.IsChecked)
+            {
+                Console.WriteLine("disabling auto-detect");
+                autoTimer.Stop();
+                return;
+            }
+
+            if (isWorking || data.mode == Mode.None)
+                return;
+
+            Console.WriteLine("searchVersion called");
+
+            if (CheckVersion(alternateCheck))
+            {
+                autoTimer.Stop();
+
+                if (alternateCheck)
+                {
+                    Console.WriteLine("PCSX2 Found, starting Auto-Tracker");
+                    SetHintText("PCSX2 Detected - Tracking");
+                }
+                else
+                {
+                    Console.WriteLine("PC Found, starting Auto-Tracker");
+                    SetHintText("PC Detected - Connecting...");
+                }
+
+                if (storedDetectedVersion != alternateCheckInt && storedDetectedVersion != 0)
+                {
+                    //Console.WriteLine("storedDetectedVerison = " + storedDetectedVersion + " || alternateCheck = " + alternateCheck);
+                    OnReset();
+                }
+                storedDetectedVersion = alternateCheckInt;
+
+                InitAutoTracker(alternateCheck);
+
+                isWorking = true;
+
+                return;
+            }
+
+            alternateCheck = !alternateCheck;
+            if (alternateCheckInt == 1)
+                alternateCheckInt = 2;
+            else
+                alternateCheckInt = 1;
+        }
+
+        public bool CheckVersion(bool state)
+        {
+            if (isWorking)
+                return true;
+
+            int tries = 0;
+            do
+            {
+                testMemory = new MemoryReader(state);
+                if (tries < 20)
+                {
+                    tries++;
+                }
+                else
+                {
+                    testMemory = null;
+                    Console.WriteLine("No game running");
+                    return false;
+                }
+            } while (!testMemory.Hooked);
+
+            return true;
+        }
+
+        public void SetWorking(bool state)
+        {
+            isWorking = state;
         }
 
         public void InitAutoTracker(bool PCSX2)
@@ -141,22 +251,7 @@ namespace KhTracker
 
             if (PCSX2 == false)
             {
-                try
-                {
-                    CheckPCOffset();
-                }
-                catch (Win32Exception)
-                {
-                    memory = null;
-                    MessageBox.Show("Unable to access KH2FM try running KHTracker as admin");
-                    return;
-                }
-                catch
-                {
-                    memory = null;
-                    MessageBox.Show("Error connecting to KH2FM");
-                    return;
-                }
+                FinishSetupPC(PCSX2, Now, Save, Sys3, Bt10, BtlEnd, Slot1);
             }
             else
             {
@@ -168,15 +263,19 @@ namespace KhTracker
                 {
                     memory = null;
                     MessageBox.Show("Unable to access PCSX2 try running KHTracker as admin");
+                    isWorking = false;
+                    SetAutoDetectTimer();
                     return;
                 }
                 catch
                 {
                     memory = null;
                     MessageBox.Show("Error connecting to PCSX2");
+                    isWorking = false;
+                    SetAutoDetectTimer();
                     return;
                 }
-                
+
                 // PCSX2 anchors 
                 Now = 0x032BAE0;
                 Save = 0x032BB30;
@@ -184,8 +283,44 @@ namespace KhTracker
                 Bt10 = 0x1CE5D80;
                 BtlEnd = 0x1D490C0;
                 Slot1 = 0x1C6C750;
+
+                SetHintText("PCSX2 Detected - Tracking", 30000, "");
+
+                FinishSetup(PCSX2, Now, Save, Sys3, Bt10, BtlEnd, Slot1);
+            }
+        }
+
+        private async void FinishSetupPC(bool PCSX2, Int32 Now, Int32 Save, Int32 Sys3, Int32 Bt10, Int32 BtlEnd, Int32 Slot1)
+        {
+            await Task.Delay(10000);
+            try
+            {
+                CheckPCOffset();
+            }
+            catch (Win32Exception)
+            {
+                memory = null;
+                MessageBox.Show("Unable to access KH2FM try running KHTracker as admin");
+                isWorking = false;
+                SetAutoDetectTimer();
+                return;
+            }
+            catch
+            {
+                memory = null;
+                MessageBox.Show("Error connecting to KH2FM");
+                isWorking = false;
+                SetAutoDetectTimer();
+                return;
             }
 
+            SetHintText("PC Detected - Tracking", 30000, "");
+
+            FinishSetup(PCSX2, Now, Save, Sys3, Bt10, BtlEnd, Slot1);
+        }
+
+        private void FinishSetup(bool PCSX2, Int32 Now, Int32 Save, Int32 Sys3, Int32 Bt10, Int32 BtlEnd, Int32 Slot1)
+        {
             importantChecks = new List<ImportantCheck>();
             importantChecks.Add(highJump = new Ability(memory, Save + 0x25CE, ADDRESS_OFFSET, 93, "HighJump"));
             importantChecks.Add(quickRun = new Ability(memory, Save + 0x25D0, ADDRESS_OFFSET, 97, "QuickRun"));
@@ -195,7 +330,7 @@ namespace KhTracker
 
             importantChecks.Add(secondChance = new Ability(memory, Save + 0x2544, ADDRESS_OFFSET, "SecondChance", Save));
             importantChecks.Add(onceMore = new Ability(memory, Save + 0x2544, ADDRESS_OFFSET, "OnceMore", Save));
-            
+
             importantChecks.Add(valor = new DriveForm(memory, Save + 0x36C0, ADDRESS_OFFSET, 1, Save + 0x32F6, Save + 0x06B2, "Valor"));
             importantChecks.Add(wisdom = new DriveForm(memory, Save + 0x36C0, ADDRESS_OFFSET, 2, Save + 0x332E, "Wisdom"));
             importantChecks.Add(limit = new DriveForm(memory, Save + 0x36CA, ADDRESS_OFFSET, 3, Save + 0x3366, "Limit"));
@@ -272,7 +407,7 @@ namespace KhTracker
             Defense.Visibility = Visibility.Visible;
 
             //TEMP EDIT CORRECTLY LATER
-           // if (data.mode != Mode.DAHints)
+            // if (data.mode != Mode.DAHints)
             Weapon.Visibility = Visibility.Visible;
 
             broadcast.LevelIcon.Visibility = Visibility.Visible;
@@ -299,6 +434,20 @@ namespace KhTracker
 
             if (FormsGrowthOption.IsChecked)
                 FormRow.Height = new GridLength(0.65, GridUnitType.Star);
+
+            //levelcheck visibility
+            if (NextLevelCheckOption50.IsChecked || NextLevelCheckOption99.IsChecked)
+            {
+                LevelCheckIcon.Visibility = Visibility.Visible;
+                LevelCheck.Visibility = Visibility.Visible;
+
+                if (NextLevelCheckOption50.IsChecked)
+                    stats.SetMaxLevelCheck(50);
+                else
+                    stats.SetMaxLevelCheck(99);
+            }
+            else
+                stats.SetMaxLevelCheck(1);
 
             SetBindings();
             SetTimer();
@@ -442,13 +591,20 @@ namespace KhTracker
             catch
             {
                 aTimer.Stop();
-                MessageBox.Show("KH2FM has exited. Stopping Auto Tracker.");
+                //MessageBox.Show("KH2FM has exited. Stopping Auto Tracker.");
+                SetHintText("Connection Lost, Reconnecting...");
+                isWorking = false;
+                SetAutoDetectTimer();
                 return;
             }
 
             UpdateCollectedItems();
             DetermineItemLocations();
-
+            stats.SetNextLevelCheck(stats.Level);
+            if (MinNumOption.IsChecked)
+                LevelCheck.Source = data.Numbers[stats.LevelCheck + 1];
+            else
+                LevelCheck.Source = data.OldNumbers[stats.LevelCheck + 1];
         }
 
         private void TrackItem(string itemName, WorldGrid world)

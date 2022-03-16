@@ -502,5 +502,81 @@ namespace KhTracker.Properties {
                 this["SeedHash"] = value;
             }
         }
+
+        //extra controls
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoDetect
+        {
+            get
+            {
+                return ((bool)(this["AutoDetect"]));
+            }
+            set
+            {
+                this["AutoDetect"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NextLevelCheck1
+        {
+            get
+            {
+                return ((bool)(this["NextLevelCheck1"]));
+            }
+            set
+            {
+                this["NextLevelCheck1"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NextLevelCheck50
+        {
+            get
+            {
+                return ((bool)(this["NextLevelCheck50"]));
+            }
+            set
+            {
+                this["NextLevelCheck50"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NextLevelCheck99
+        {
+            get
+            {
+                return ((bool)(this["NextLevelCheck99"]));
+            }
+            set
+            {
+                this["NextLevelCheck99"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TimedHints
+        {
+            get
+            {
+                return ((bool)(this["TimedHints"]));
+            }
+            set
+            {
+                this["TimedHints"] = value;
+            }
+        }
     }
 }

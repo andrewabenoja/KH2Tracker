@@ -32,6 +32,8 @@
                     <MenuItem Header="Load JSmartee Hints" Click="LoadHints"/>
                     <MenuItem Header="Load Shananas Hintless Seed" Click="ParseSeed"/>
                     <MenuItem Header="Load OpenKH Seed" Click="OpenKHSeed"/>
+                    <Separator/>
+                    <MenuItem Name="TimedHintsOption" Header="Enable Timed Hints" IsCheckable="True" IsChecked="False" Click="TimedHintsToggle"/>
                 </MenuItem>
                 <!--MenuItem Name="PointsTestOption" Header="Points Mode Test" IsCheckable="True" IsChecked="False"/-->
                 <MenuItem Header="Save Progress" Click="SaveProgress"/>
@@ -72,6 +74,10 @@
                 <MenuItem Name="FormsGrowthOption"   	Header="Forms and Growth Abilities" IsCheckable="True" IsChecked="True" Click="FormsGrowthToggle"/>
                 <MenuItem Name="BroadcastGrowthOption"  Header="Broadcast Window Growth Abilities" IsCheckable="True" IsChecked="False" Click="BroadcastGrowthToggle"/>
                 <MenuItem Name="BroadcastStatsOption"   Header="Broadcast Window Player Stats" IsCheckable="True" IsChecked="False" Click="BroadcastStatsToggle"/>
+                <Separator/>
+                <MenuItem Name="NextLevelCheckOption1" Header="Disable Level Check" IsCheckable="True" IsChecked="True" Click="NextLevelCheck1Option"/>
+                <MenuItem Name="NextLevelCheckOption50" Header="Show Level Check (50)" IsCheckable="True" IsChecked="False" Click="NextLevelCheck50Option"/>
+                <MenuItem Name="NextLevelCheckOption99" Header="Show Level Check (99)" IsCheckable="True" IsChecked="False" Click="NextLevelCheck99Option"/>
             </MenuItem>
             <MenuItem Header="Visuals" Focusable="False">
                 <MenuItem Name="MinWorldOption" Header="Simple World Icons" IsCheckable="True" IsChecked="True"  Click="MinWorldToggle"/>
@@ -102,8 +108,11 @@
                     <MenuItem Name="BroadcastImg3Option" Header="Custom Image (No Scaling)" IsCheckable="True" IsChecked="False" Click="BroadcastBG_Img3Toggle"/>
                 </MenuItem>
             </MenuItem>
+            <MenuItem Header="Controls" Focusable="False">
+                <MenuItem Name="AutoDetectOption" Header="Auto-Detect" IsCheckable="True" IsChecked="False" Click="AutoDetectToggle"/>
+            </MenuItem>
             <MenuItem Name="ModeDisplay" Header=" " Focusable="False" IsHitTestVisible="False"/>
-            <MenuItem Header="v2.7 -DA 1.5-" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
+            <MenuItem Header="v2.7 -DA 1.5- Codename__Geek v1.1" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
         </Menu>
 
         <Grid>
@@ -186,7 +195,7 @@
                             <Button Name="SimulatedTwilightTown" Background="Transparent" PreviewMouseDown="OnMouseDown" MouseWheel="OnMouseWheel" Template="{StaticResource DefaultButton}" FocusVisualStyle="{x:Null}" Grid.RowSpan="2" Grid.ColumnSpan="2">
                                 <DynamicResource ResourceKey="Min-SimulatedImage"/>
                             </Button>
-                            
+
                             <Image Name="SimulatedTwilightTownHint" Source="Images\Numbers\Kh2\Yellow\_QuestionMark.png" IsHitTestVisible="False" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Panel.ZIndex="1"/>
                             <!-- <Image Name="SimulatedTwilightTownReport" Source="Images\ReportTest1.png" IsHitTestVisible="False" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/> -->
                             <ContentControl Name="SimulatedTwilightTownProgression" IsHitTestVisible="False" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"/>
@@ -401,9 +410,10 @@
                                 <ColumnDefinition Width=".3*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Button Name="GoA" Background="Transparent" PreviewMouseDown="OnMouseDown" BorderThickness="0" Template="{StaticResource DefaultButton}" Grid.RowSpan="2" Grid.ColumnSpan="2" FocusVisualStyle="{x:Null}">
+                            <Button Name="GoA" Background="Transparent" PreviewMouseDown="OnMouseDown" MouseWheel="OnMouseWheel" BorderThickness="0" Template="{StaticResource DefaultButton}" Grid.RowSpan="2" Grid.ColumnSpan="2" FocusVisualStyle="{x:Null}">
                                 <DynamicResource ResourceKey="Min-GardenofAssemblageImage"/>
                             </Button>
+                            <Image Name="GoATime" Source="Images\Numbers\Kh2\Yellow\_1.png" Visibility="Hidden" IsHitTestVisible="False" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Panel.ZIndex="1"/>
                             <Image Name="GoABar" Source="Images\VerticalBarWhite.png" Grid.RowSpan="2" Grid.Column="4"/>
                         </Grid>
                         <local:WorldGrid x:Name="GoAGrid" Grid.Column="1"/>
@@ -739,8 +749,8 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <Viewbox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="15">
-                    <Label Name="HintText" Foreground="White" HorizontalAlignment="Center" FontSize="16" Padding="0"/>
+                <Viewbox Name="HintTextParent" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="17" Margin="0,0,10,0">
+                    <Label Name="HintText" Foreground="White" HorizontalAlignment="Center" FontSize="16" Padding="0" Margin="33,0,0,0"/>
                 </Viewbox>
 
                 <!--Image Name="LevelIcon" Source="Images/Other/level.png" Grid.Row="3" Grid.Column="1" Visibility="Visible"/>
@@ -760,6 +770,16 @@
                             <SkewTransform/>
                             <RotateTransform/>
                             <TranslateTransform/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
+                <Image Name="LevelCheck" Source="Images/Numbers/Kh2/Yellow/_QuestionMark.png" Grid.Row="1" Grid.RowSpan="1" Grid.Column="2"  Visibility="Hidden" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="0.65" ScaleY="0.65"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform X="-5"/>
                         </TransformGroup>
                     </Image.RenderTransform>
                 </Image>
@@ -801,6 +821,16 @@
                             <SkewTransform/>
                             <RotateTransform/>
                             <TranslateTransform Y="-5"/>
+                        </TransformGroup>
+                    </ContentControl.RenderTransform>
+                </ContentControl>
+                <ContentControl Content="{DynamicResource LevelIcon}"    Name="LevelCheckIcon"    Grid.Row="1" Grid.RowSpan="2" Grid.Column="1"  Grid.ColumnSpan="1" Visibility="Hidden" RenderTransformOrigin="0.5,0.5">
+                    <ContentControl.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="0.6" ScaleY="0.6"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform X="4" Y="-5"/>
                         </TransformGroup>
                     </ContentControl.RenderTransform>
                 </ContentControl>
@@ -864,7 +894,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="14*"/>
-                    
+
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
@@ -888,8 +918,10 @@
                     <RowDefinition Height="0.9*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3.*"/>
-                    
+                    <ColumnDefinition Width="0.25"/>
+
+                    <ColumnDefinition Width="5*"/>
+
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
@@ -897,21 +929,21 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
-                     
-                    <ColumnDefinition Width="1*"/>
+
+                    <ColumnDefinition Width="0.25*"/>
                 </Grid.ColumnDefinitions>
 
-                <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1">
+                <Viewbox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1">
                     <Label Name="HashText" Foreground="White" HorizontalAlignment="Center" FontSize="16" Padding="2" Content="Seed Hash:"/>
                 </Viewbox>
 
-                <local:Item x:Name="HashIcon1" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
                 <local:Item x:Name="HashIcon2" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
                 <local:Item x:Name="HashIcon3" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="3"/>
                 <local:Item x:Name="HashIcon4" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="4"/>
                 <local:Item x:Name="HashIcon5" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="5"/>
                 <local:Item x:Name="HashIcon6" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="6"/>
                 <local:Item x:Name="HashIcon7" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="7"/>
+                <local:Item x:Name="HashIcon1" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="8"/>
             </Grid>
 
             <!-- Drive Forms & Growth Abilities-->
@@ -1037,7 +1069,7 @@
                 <local:Item x:Name="Cure2" Content="{DynamicResource Min-Cure}" Grid.Row="1" Grid.Column="10"/>
                 <local:Item x:Name="Cure3" Content="{DynamicResource Min-Cure}" Grid.Row="1" Grid.Column="11"/>
                 <!--local:Item x:Name="HadesCup" Content="{DynamicResource Min-HadesCup}" Grid.Row="1" Grid.Column="12"/-->
-                
+
                 <!-- Row 3 -->
                 <local:Item x:Name="Reflect1" Content="{DynamicResource Min-Reflect}" Grid.Row="2" Grid.Column="0"/>
                 <local:Item x:Name="Reflect2" Content="{DynamicResource Min-Reflect}" Grid.Row="2" Grid.Column="1"/>

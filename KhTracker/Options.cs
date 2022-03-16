@@ -1377,6 +1377,25 @@ namespace KhTracker
 
         private void OnReset(object sender, RoutedEventArgs e)
         {
+            OnReset();
+        }
+
+        private void OnReset()
+        {
+            //auto detect stuff
+            SetWorking(false);
+            SetAutoDetectTimer();
+
+            if (LevelCheckIcon.Visibility == Visibility.Visible || LevelCheck.Visibility == Visibility.Visible)
+            {
+                NextLevelCheck1Option();
+
+                if (MinNumOption.IsChecked)
+                    LevelCheck.Source = data.Numbers[0 + 1];
+                else
+                    LevelCheck.Source = data.OldNumbers[0 + 1];
+            }
+
             ModeDisplay.Header = " ";
             data.mode = Mode.None;
 

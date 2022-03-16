@@ -12,6 +12,7 @@ namespace KhTracker
     public class Data
     {
         public Mode mode = Mode.None;
+        public int timedHintsTimer = 0;
         public bool hintsLoaded = false;
         public Button selected = null;
         public bool dragDrop = true;

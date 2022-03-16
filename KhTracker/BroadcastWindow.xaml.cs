@@ -240,6 +240,13 @@ namespace KhTracker
             foreach (KeyValuePair<string, int> total in totals)
             {
                 Image worldTotal = this.FindName(total.Key + "Total") as Image;
+
+                if (total.Key == "GoA")
+                {
+                    //Console.WriteLine("breaking out of broadcastwindowxaml");
+                    continue;
+                }
+
                 if (total.Value <= -1)
                 {
                     worldTotal.Source = GetDataNumber("S")[0];

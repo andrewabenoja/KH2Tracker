@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Windows.Documents;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace KhTracker
 {
@@ -59,6 +60,10 @@ namespace KhTracker
             previousChecks = new List<ImportantCheck>();
 
             InitOptions();
+
+            //Init auto-detect
+            if (AutoDetectOption.IsChecked)
+                SetAutoDetectTimer();
         }
 
         private void InitData()
@@ -866,7 +871,7 @@ namespace KhTracker
             data.WorldsData.Add("PortRoyal", new WorldData(PortRoyalTop, PortRoyal, PortRoyalProgression, PortRoyalHint, PortRoyalGrid, PortRoyalBar, false));
             data.WorldsData.Add("SpaceParanoids", new WorldData(SpaceParanoidsTop, SpaceParanoids, SpaceParanoidsProgression, SpaceParanoidsHint, SpaceParanoidsGrid, SpaceParanoidsBar, false));
             data.WorldsData.Add("TWTNW", new WorldData(TWTNWTop, TWTNW, TWTNWProgression, TWTNWHint, TWTNWGrid, TWTNWBar, false));
-            data.WorldsData.Add("GoA", new WorldData(GoATop, GoA, null, null, GoAGrid, GoABar, true));
+            data.WorldsData.Add("GoA", new WorldData(GoATop, GoA, null, GoATime, GoAGrid, GoABar, true));
             data.WorldsData.Add("Atlantica", new WorldData(AtlanticaTop, Atlantica, AtlanticaProgression, AtlanticaHint, AtlanticaGrid, AtlanticaBar, false));
 
             data.ProgressKeys.Add("SimulatedTwilightTown", new List<string>() { "", "STTChests", "TwilightThorn", "Struggle", "ComputerRoom", "Axel", "DataRoxas" });
@@ -1074,6 +1079,27 @@ namespace KhTracker
             BroadcastStatsOption.IsChecked = Properties.Settings.Default.BroadcastStats;
             BroadcastStatsToggle(null, null);
 
+            //Auto Detect
+            AutoDetectOption.IsChecked = Properties.Settings.Default.AutoDetect;
+            AutoDetectToggle(null, null);
+
+            //Next Level Check
+            NextLevelCheckOption1.IsChecked = Properties.Settings.Default.NextLevelCheck1;
+            if (NextLevelCheckOption1.IsChecked)
+                NextLevelCheck1Option(null, null);
+
+            NextLevelCheckOption50.IsChecked = Properties.Settings.Default.NextLevelCheck50;
+            if (NextLevelCheckOption50.IsChecked)
+                NextLevelCheck50Option(null, null);
+
+            NextLevelCheckOption99.IsChecked = Properties.Settings.Default.NextLevelCheck99;
+            if (NextLevelCheckOption99.IsChecked)
+                NextLevelCheck99Option(null, null);
+
+            TimedHintsOption.IsChecked = Properties.Settings.Default.TimedHints;
+            if (TimedHintsOption.IsChecked)
+                TimedHintsToggle(TimedHintsOption.IsChecked);
+
             Top = Properties.Settings.Default.WindowY;
             Left = Properties.Settings.Default.WindowX;
 
@@ -1200,6 +1226,21 @@ namespace KhTracker
             if (data.WorldsData.ContainsKey(button.Name) && data.WorldsData[button.Name].hint != null)
             {
                 HandleReportValue(data.WorldsData[button.Name].hint, e.Delta);
+                if (GoATime.Source == GetDataNumber("Y")[1])
+                    GoATime.Source = GetDataNumber("Y")[2];
+            }
+
+            if (button.Name.Contains("GoA"))
+            {
+                string lastPart = (GoATime.Source.ToString()).Substring((GoATime.Source.ToString()).LastIndexOf("/") + 1);
+                lastPart = lastPart.Substring(0, lastPart.LastIndexOf("."));
+                if (lastPart.Contains("_"))
+                    lastPart = lastPart.Substring(1);
+                if (!lastPart.Contains("Q"))
+                {
+                    data.timedHintsTimer = Int32.Parse(lastPart);
+                    Console.WriteLine("Current Time = " + Int32.Parse(lastPart));
+                }
             }
         }
 
@@ -1286,6 +1327,9 @@ namespace KhTracker
                 Hint.Source = GetDataNumber("Y")[0];
             else
                 Hint.Source = GetDataNumber("Y")[num];
+
+            if (num < 1 && Hint.Name.Contains("GoA"))
+                Hint.Source = GetDataNumber("Y")[2];
 
             broadcast.UpdateTotal(Hint.Name.Remove(Hint.Name.Length - 4, 4), num - 1);
         }
@@ -1376,6 +1420,14 @@ namespace KhTracker
             }
 
             HintText.Content = text;
+        }
+
+        public async void SetHintText(string text1, int ms, string text2)
+        {
+            SetHintText(text1);
+            await Task.Delay(ms);
+            if ((string) HintText.Content == text1)
+                SetHintText(text2);
         }
 
         private void ResetSize(object sender, RoutedEventArgs e)
