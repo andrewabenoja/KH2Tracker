@@ -834,7 +834,7 @@ namespace KhTracker
                 SeedHashVisible = false;
             }
 
-            //SeedHashVisibility(toggle);
+            SetDetectionText();
         }
 
         private void WorldProgressToggle(object sender, RoutedEventArgs e)

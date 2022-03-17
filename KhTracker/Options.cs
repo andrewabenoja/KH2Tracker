@@ -1845,6 +1845,8 @@ namespace KhTracker
                 broadcast.ChestIconCol.Width = new GridLength(0.5, GridUnitType.Star);
                 broadcast.BarCol.Width = new GridLength(1, GridUnitType.Star);
             }
+
+            SetDetectionText();
         }
 
         private void OpenKHSeed(object sender, RoutedEventArgs e)
@@ -3729,6 +3731,40 @@ namespace KhTracker
             }
 
             return 17;
+        }
+
+        public void SetDetectionText()
+        {
+            string outputText = "";
+            //Alt hints
+            if (data.mode == Mode.AltHints || data.mode == Mode.OpenKHAltHints)
+                outputText = "Alt Hints";
+            //Regular Hints
+            else if ((data.mode == Mode.Hints || data.mode == Mode.OpenKHHints) && !TimedHintsOption.IsChecked)
+                outputText = "Hints";
+            //Timed hints
+            else if ((data.mode == Mode.Hints || data.mode == Mode.OpenKHHints) && TimedHintsOption.IsChecked)
+                outputText = "Timed Hints";
+            //Points
+            else if (data.mode == Mode.DAHints)
+                outputText = "Points";
+
+            if (AutoDetectOption.IsChecked)
+                outputText += " - Detecting...";
+
+            if (data.mode == Mode.None)
+                outputText = "";
+
+            HashText.Content = outputText;
+            if (!SeedHashOption.IsChecked)
+                SetHintText(outputText);
+        }
+
+        private void SetDetectionText(string txt)
+        {
+            HashText.Content = txt;
+            if (!SeedHashOption.IsChecked)
+                SetHintText(txt);
         }
     }
 }

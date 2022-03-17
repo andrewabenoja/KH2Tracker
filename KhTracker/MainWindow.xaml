@@ -112,7 +112,7 @@
                 <MenuItem Name="AutoDetectOption" Header="Auto-Detect" IsCheckable="True" IsChecked="False" Click="AutoDetectToggle"/>
             </MenuItem>
             <MenuItem Name="ModeDisplay" Header=" " Focusable="False" IsHitTestVisible="False"/>
-            <MenuItem Header="v2.7 -DA 1.5- Codename__Geek v1.2" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
+            <MenuItem Header="v2.7 -DA 1.5- Codename__Geek v1.3" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Right"/>
         </Menu>
 
         <Grid>
@@ -933,7 +933,7 @@
                     <ColumnDefinition Width="0.25*"/>
                 </Grid.ColumnDefinitions>
 
-                <Viewbox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1">
+                <Viewbox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" Margin="10,0,0,0">
                     <Label Name="HashText" Foreground="White" HorizontalAlignment="Center" FontSize="16" Padding="2" Content="Seed Hash:"/>
                 </Viewbox>
 

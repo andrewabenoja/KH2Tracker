@@ -120,10 +120,7 @@ namespace KhTracker
 
         private void SetAutoDetectTimer()
         {
-            if (AutoDetectOption.IsChecked)
-                HashText.Content = "Auto-Detecting...";
-            else
-                HashText.Content = "Seed Hash:";
+            SetDetectionText();
 
             if (isWorking)
                 return;
@@ -152,7 +149,7 @@ namespace KhTracker
             if (!AutoDetectOption.IsChecked)
             {
                 Console.WriteLine("disabling auto-detect");
-                HashText.Content = "Seed Hash:";
+                SetDetectionText();
                 autoTimer.Stop();
                 return;
             }
@@ -169,12 +166,12 @@ namespace KhTracker
                 if (alternateCheck)
                 {
                     Console.WriteLine("PCSX2 Found, starting Auto-Tracker");
-                    SetHintText("PCSX2 Detected - Tracking");
+                    SetHintText("PCSX2 Detected - Tracking", 30000, "");
                 }
                 else
                 {
                     Console.WriteLine("PC Found, starting Auto-Tracker");
-                    SetHintText("PC Detected - Connecting...");
+                    SetDetectionText("PC Detected - Connecting...");
                 }
 
                 if (storedDetectedVersion != alternateCheckInt && storedDetectedVersion != 0)
