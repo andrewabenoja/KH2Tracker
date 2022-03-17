@@ -937,13 +937,13 @@
                     <Label Name="HashText" Foreground="White" HorizontalAlignment="Center" FontSize="16" Padding="2" Content="Seed Hash:"/>
                 </Viewbox>
 
-                <local:Item x:Name="HashIcon2" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
-                <local:Item x:Name="HashIcon3" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="3"/>
-                <local:Item x:Name="HashIcon4" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="4"/>
-                <local:Item x:Name="HashIcon5" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="5"/>
-                <local:Item x:Name="HashIcon6" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="6"/>
-                <local:Item x:Name="HashIcon7" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="7"/>
-                <local:Item x:Name="HashIcon1" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="8"/>
+                <local:Item x:Name="HashIcon1" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
+                <local:Item x:Name="HashIcon2" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="3"/>
+                <local:Item x:Name="HashIcon3" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="4"/>
+                <local:Item x:Name="HashIcon4" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="5"/>
+                <local:Item x:Name="HashIcon5" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="6"/>
+                <local:Item x:Name="HashIcon6" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="7"/>
+                <local:Item x:Name="HashIcon7" Content="{DynamicResource party}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="8"/>
             </Grid>
 
             <!-- Drive Forms & Growth Abilities-->
