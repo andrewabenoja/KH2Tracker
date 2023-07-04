@@ -654,7 +654,7 @@ namespace KhTracker
                 return;
             }
 
-            if (worldValue == null || (data.UsingProgressionHints && !data.WorldsData[worldValue.Name.Substring(0, worldValue.Name.Length - 4)].hintedProgression))
+            if (worldValue == null || (data.UsingProgressionHints && !data.WorldsData[worldValue.Name.Substring(0, worldValue.Name.Length - 4)].hintedProgression && !data.BossRandoFound))
             {
                 if (data.mode == Mode.PointsHints)
                 {

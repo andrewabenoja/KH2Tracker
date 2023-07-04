@@ -113,6 +113,9 @@ namespace KhTracker
         public Dictionary<string, string> BossList = new Dictionary<string, string>();
         public List<string> enabledWorlds = new List<string>();
 
+        //for boss rando progression
+        public List<Tuple<string, string, int>> progBossInformation = new List<Tuple<string, string, int>>();
+
         //Progression JsmarteeHints stuff
         public bool UsingProgressionHints = false;
         public int ProgressionPoints = 0;

@@ -588,6 +588,132 @@ namespace KhTracker
             SetProgressionHints(data.UsingProgressionHints);
         }
 
+        private void RandomizeProgressionBossHints()
+        {
+            data.progBossInformation.Clear();
+
+            //get random based on seed hash
+            Random rand = new Random(data.convertedSeedHash);
+
+            //setup lists
+            List<string> keyList = new List<string>(data.BossList.Keys);
+
+            //Remove bosses for worlds not enabled and remove "duplicates"
+            foreach (var key in data.BossList.Keys)
+            {
+                //remove duplicates
+                if (Codes.bossDups.Contains(key))
+                {
+                    keyList.Remove(key);
+                    continue;
+                }
+
+                if (!data.enabledWorlds.Contains(Codes.bossLocations[key]))
+                    keyList.Remove(key);
+                else if (key.Contains("(Data)"))
+                {
+                    //special case for some datas. we normally don't want
+                    //to hint datas unless the world the normally are in is off
+                    // (only applies for datas where the data fight is in a different world)
+                    switch (key)
+                    {
+                        case "Axel (Data)":
+                            if (data.enabledWorlds.Contains("STT"))
+                                keyList.Remove(key);
+                            break;
+                        case "Luxord (Data)":
+                        case "Roxas (Data)":
+                        case "Xigbar (Data)":
+                            if (data.enabledWorlds.Contains("TWTNW"))
+                                keyList.Remove(key);
+                            break;
+                        default:
+                            keyList.Remove(key);
+                            break;
+                    }
+                }
+            }
+
+            //get report info
+            int totalBosses = 0;
+            foreach (var boss_ in data.BossList)
+            {
+                if (keyList.Count == 0)
+                {
+                    data.WorldsEnabled = totalBosses;
+                    return;
+                }
+                //get a boss
+                string boss = keyList[rand.Next(0, keyList.Count)];
+                //get boss types
+                string origType = Codes.FindBossType(boss);
+                string replaceType = Codes.FindBossType(data.BossList[boss]);
+
+                //prioritize special arenas and bosses (50%?)
+                while (origType == "boss_other" && replaceType == "boss_other")
+                {
+                    int reroll = rand.Next(1, 10);
+                    if (reroll > 5) //50% chance to keep basic bosses
+                    {
+                        break;
+                    }
+
+                    boss = keyList[rand.Next(0, keyList.Count)];
+                    origType = Codes.FindBossType(boss);
+                    replaceType = Codes.FindBossType(data.BossList[boss]);
+                }
+
+                //report location and final hint string
+                string worldhint;
+
+                if (boss == data.BossList[boss])
+                {
+                    string tmp_origBoss = boss;
+                    if (tmp_origBoss == "Hades II (1)" || tmp_origBoss == "Hades II" || tmp_origBoss == "Hades I")
+                    {
+                        tmp_origBoss = "Hades";
+                    }
+                    if (tmp_origBoss == "Pete OC II")
+                    {
+                        tmp_origBoss = "Pete OC";
+                    }
+
+                    worldhint = tmp_origBoss + " is unchanged";
+                }
+                else
+                {
+                    string tmp_origBoss = boss;
+                    string tmp_replBoss = data.BossList[boss];
+
+                    if (tmp_origBoss == "Hades II (1)" || tmp_origBoss == "Hades II" || tmp_origBoss == "Hades I")
+                    {
+                        tmp_origBoss = "Hades";
+                    }
+                    if (tmp_origBoss == "Pete OC II")
+                    {
+                        tmp_origBoss = "Pete OC";
+                    }
+
+                    if (tmp_replBoss == "Hades II (1)" || tmp_replBoss == "Hades II" || tmp_replBoss == "Hades I")
+                    {
+                        tmp_replBoss = "Hades";
+                    }
+                    if (tmp_replBoss == "Pete OC II")
+                    {
+                        tmp_replBoss = "Pete OC";
+                    }
+
+                    worldhint = tmp_origBoss + " became " + tmp_replBoss;
+                }
+
+                int dummyvalue = -12345; //use this for boss reports i guess
+                data.progBossInformation.Add(new Tuple<string, string, int>(worldhint, null, dummyvalue));
+
+                keyList.Remove(boss);
+                totalBosses++;
+            }
+        }
+
         private void ProgressionSpoilerHints(Dictionary<string, object> hintObject)
         {
             bool TMP_bossReports = false;
@@ -992,7 +1118,7 @@ namespace KhTracker
             }
 
             //set points for each world
-            if (!data.UsingProgressionHints)
+            if (!data.UsingProgressionHints || (data.UsingProgressionHints && data.BossRandoFound))
             {
                 foreach (var key in data.WorldsData.Keys.ToList())
                 {
@@ -1281,6 +1407,34 @@ namespace KhTracker
             if (!usingProgHints || data.mode == Mode.JsmarteeHints || data.mode == Mode.ShanHints)
                 return;
 
+            //fix later so if a specific variable/value from hint file was passed
+            if (data.BossRandoFound)
+            {
+                //data.WorldsEnabled = data.BossList.Count;
+                //data.HintCosts.Clear();
+                //data.HintCosts = new List<int> { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1, 1 };
+
+                ProgressionCollectedValue.Text = data.ProgressionPoints.ToString();
+                ProgressionTotalValue.Text = data.HintCosts[0].ToString();
+
+
+                RandomizeProgressionBossHints();
+
+                //Console.WriteLine("Bosses counted = " + data.BossList.Count);
+
+                //creations specific changes
+                if (!data.puzzlesOn && data.synthOn)
+                {
+                    //data.WorldsData["PuzzSynth"].value.Text = "";
+                    //let's just make the value invisible
+                    if (data.WorldsData["PuzzSynth"].value.Visibility == Visibility.Visible)
+                    {
+                        data.WorldsData["PuzzSynth"].value.Visibility = Visibility.Hidden;
+                    }
+                }
+                return;
+            }
+
             //Per Hint Mode Changes
             if (data.mode == Mode.OpenKHJsmarteeHints)
             {
@@ -1380,6 +1534,8 @@ namespace KhTracker
                     data.WorldsData["PuzzSynth"].value.Visibility = Visibility.Hidden;
                 }
             }
+
+            ProgressionTotalValue.Text = data.HintCosts[0].ToString();
         }
 
         public void AddProgressionPoints(int points)
@@ -1403,7 +1559,7 @@ namespace KhTracker
             data.TotalProgressionPoints += points;
 
             if (data.ProgressionCurrentHint >= data.HintCosts.Count - 1 || 
-                data.ProgressionCurrentHint == data.HintCosts.Count || data.ProgressionCurrentHint == data.HintRevealOrder.Count)
+                data.ProgressionCurrentHint == data.HintCosts.Count || data.ProgressionCurrentHint == data.WorldsEnabled)
             {
                 //update points anyway
                 ProgressionCollectedValue.Visibility = Visibility.Hidden;
@@ -1413,8 +1569,9 @@ namespace KhTracker
             }
 
             //loop in the event that one progression point rewards a lot
-            while (data.ProgressionPoints >= data.HintCosts[data.ProgressionCurrentHint] && data.ProgressionCurrentHint < data.HintCosts.Count && data.ProgressionCurrentHint < data.HintRevealOrder.Count)
+            while (data.ProgressionPoints >= data.HintCosts[data.ProgressionCurrentHint] && data.ProgressionCurrentHint < data.HintCosts.Count && data.ProgressionCurrentHint < data.WorldsEnabled)
             {
+                Console.WriteLine("HINT REVEAL ORDER COUNT = " + data.WorldsEnabled);
                 #region More Debug
                 //Console.WriteLine("Current Progression Hint = " + data.ProgressionCurrentHint);
                 //Console.WriteLine("data.HintCosts.count = " + data.HintCosts.Count);
@@ -1428,12 +1585,12 @@ namespace KhTracker
                 ProgressionReveal(data.ProgressionCurrentHint - 1);
 
                 if (data.ProgressionCurrentHint >= data.HintCosts.Count - 1 || data.ProgressionCurrentHint == data.HintCosts.Count || 
-                    data.ProgressionCurrentHint == data.HintRevealOrder.Count) //revealed last hint
+                    data.ProgressionCurrentHint == data.WorldsEnabled) //revealed last hint
                     break;
             }
 
             if (data.ProgressionCurrentHint >= data.HintCosts.Count - 1 || data.ProgressionCurrentHint == data.HintCosts.Count || 
-                data.ProgressionCurrentHint == data.HintRevealOrder.Count)
+                data.ProgressionCurrentHint == data.WorldsEnabled)
             {
                 //update points
                 ProgressionCollectedValue.Visibility = Visibility.Hidden;
@@ -1456,6 +1613,14 @@ namespace KhTracker
             //shouldn't ever get here but break in case
             if (!data.UsingProgressionHints || data.mode == Mode.JsmarteeHints || data.mode == Mode.ShanHints)
                 return;
+
+            //fix later so if a specific variable/value from hint file was passed 
+            if (data.BossRandoFound)
+            {
+                data.WorldsData["GoA"].worldGrid.ProgBossHint(hintNum);
+
+                return;
+            }
 
             else if (data.mode == Mode.OpenKHJsmarteeHints) //jsmartee
             {

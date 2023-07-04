@@ -2030,9 +2030,21 @@ namespace KhTracker
 
             if (data.UsingProgressionHints)
             {
-                CollectionGrid.Visibility = Visibility.Collapsed;
-                ScoreGrid.Visibility = Visibility.Collapsed;
-                ProgressionCollectionGrid.Visibility = Visibility.Visible;
+                if (mode == Mode.PointsHints && data.BossRandoFound)
+                {
+                    CollectionGrid.Visibility = Visibility.Collapsed;
+                    ScoreGrid.Visibility = Visibility.Visible;
+                    ProgressionCollectionGrid.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    CollectionGrid.Visibility = Visibility.Collapsed;
+                    ScoreGrid.Visibility = Visibility.Collapsed;
+                    ProgressionCollectionGrid.Visibility = Visibility.Visible;
+                }
+                //CollectionGrid.Visibility = Visibility.Collapsed;
+                //ScoreGrid.Visibility = Visibility.Collapsed;
+                //ProgressionCollectionGrid.Visibility = Visibility.Visible;
 
                 ChestIcon.SetResourceReference(ContentProperty, "ProgPoints");
 
@@ -2568,9 +2580,16 @@ namespace KhTracker
                                 {
                                     case "HintCosts":
                                         data.HintCosts.Clear();
-                                        foreach (int cost in setting.Value)
-                                            data.HintCosts.Add(cost);
-                                        data.HintCosts.Add(data.HintCosts[data.HintCosts.Count - 1] + 1); //duplicates the last cost for logic reasons
+                                        if (!data.BossRandoFound)
+                                        {
+                                            foreach (int cost in setting.Value)
+                                                data.HintCosts.Add(cost);
+                                            data.HintCosts.Add(data.HintCosts[data.HintCosts.Count - 1] + 1); //duplicates the last cost for logic reasons
+                                        }
+                                        else
+                                        {
+                                            data.HintCosts = new List<int> { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+                                        }
                                         break;
                                     case "SimulatedTwilightTown":
                                         data.STT_ProgressionValues.Clear();
@@ -2678,7 +2697,7 @@ namespace KhTracker
                             ProgressionCollectedValue.Visibility = Visibility.Visible;
                             ProgressionCollectedBar.Visibility = Visibility.Visible;
                             ProgressionCollectedValue.Text = "0";
-                            ProgressionTotalValue.Text = data.HintCosts[0].ToString();
+                            //ProgressionTotalValue.Text = data.HintCosts[0].ToString();
                         }
 
                         reader.Close();

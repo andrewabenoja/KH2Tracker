@@ -707,6 +707,41 @@ namespace KhTracker
             }
         }
 
+        public void ProgBossHint(int index)
+        {
+            Data data = MainWindow.data;
+
+            // hint text
+            if (data.progBossInformation[index].Item1 == "Empty") //normal reports
+            {
+                window.SetHintText("This report reveals nothing...");
+            }
+            else
+            {
+
+                //set alt text for a hinted world that has 0 checks
+                //(for when a world is toggled on, but happens to contain nothing)
+                if (data.progBossInformation[index].Item3 == -1)
+                {
+                    window.SetHintText(Codes.GetHintTextName(data.progBossInformation[index].Item1), "has no Important Checks", "", true, false, false);
+                }
+                else if (data.progBossInformation[index].Item3 == -12345)
+                {
+                    window.SetHintText(data.progBossInformation[index].Item1, "", "", false, false, false);
+                    data.HintRevealsStored.Add(new Tuple<string, string, string, bool, bool, bool>(data.progBossInformation[index].Item1, "", "", false, false, false));
+                }
+                else if (data.progBossInformation[index].Item3 == -999)
+                {
+                    ///nothing...
+                }
+                else
+                {
+                    window.SetHintText(Codes.GetHintTextName(data.progBossInformation[index].Item1), "has been revealed!", "", true, false, false);
+                    SpoilerWorldReveal(data.progBossInformation[index].Item1, "Report" + index);
+                }
+            }
+        }
+
         public void ProgressionReport_Spoiler(int index)
         {
             Data data = MainWindow.data;
