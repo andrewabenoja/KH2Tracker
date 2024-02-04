@@ -119,12 +119,14 @@ namespace KhTracker
         public string progressionType = "Disabled";
         public List<Tuple<string, string, string>> progBossInformation = new List<Tuple<string, string, string>>();
 
-        //Progression JsmarteeHints stuff
+        //Progression stuff
         public bool UsingProgressionHints = false;
         public int ProgressionPoints = 0;
         public int TotalProgressionPoints = 0;
         public int WorldsEnabled = 0;
         public bool revealFinalXemnas = false;
+        public int worldsToPreHint = 3;
+        public int currWorldsPreHinted = 0;
 
         #region Hint Order Logic
         public List<int> HintCosts = new List<int>() { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10 };
@@ -136,6 +138,7 @@ namespace KhTracker
         public bool puzzlesOn = false;
         public bool calulating = false;
         public List<string> previousWorldsHinted = new List<string>();
+        public List<string> previousWorldsPreHinted = new List<string>();
         #endregion
 
         #region Bonuses and Sora/Drive Levels
